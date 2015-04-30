@@ -1,0 +1,88 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), dir.props))\dir.props" />
+  <PropertyGroup>
+    <DefineConstants Condition="'$(IncludeSharpDx)' == 'true'">$(DefineConstants);FEATURE_SHARPDX</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{C29C63AB-7CFB-4EAA-BE26-9F225FB9E007}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>EngineCore</RootNamespace>
+    <AssemblyName>EngineCore</AssemblyName>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <NoWarn>3001;3003</NoWarn>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="Components\Component.cs" />
+    <Compile Include="Components\Transform.cs" />
+    <Compile Include="Entities\Behaviour.cs" />
+    <Compile Include="Graphics\GameWindowResizedEventArgs.cs" />
+    <Compile Include="Graphics\GraphicsSystem.cs" />
+    <Compile Include="Graphics\OpenGL\BatchedOpenGLMeshInfo.cs" />
+    <Compile Include="Graphics\OpenGL\GLEx.cs" />
+    <Compile Include="Graphics\OpenGL\TextRenderer.cs" />
+    <Compile Include="Graphics\OpenGL\TextureBuffer.cs" />
+    <Compile Include="Graphics\Texture2D.cs" />
+    <Compile Include="Input\InputSystem.cs" />
+    <Compile Include="Graphics\OpenGL\NativeWindowInputSystem.cs" />
+    <Compile Include="Graphics\OpenGL\OpenGLGraphicsSystem.cs" />
+    <Compile Include="Graphics\OpenGL\OpenGLMeshInfo.cs" />
+    <Compile Include="Graphics\OpenGL\RenderableObjectInfo.cs" />
+    <Compile Include="Input\KeyCode.cs" />
+    <Compile Include="Input\MouseButton.cs" />
+    <Compile Include="Physics\BoxCollider.cs" />
+    <Compile Include="Physics\CharacterController.cs" />
+    <Compile Include="Physics\Collider.cs" />
+    <Compile Include="Physics\PhysicsExtensions.cs" />
+    <Compile Include="Physics\SphereCollider.cs" />
+    <Compile Include="Time.cs" />
+    <Compile Include="Utility\Convert.cs" />
+    <Compile Include="Entities\BoxRenderer.cs" />
+    <Compile Include="GameObject.cs" />
+    <Compile Include="Game.cs" />
+    <Compile Include="Physics\BepuPhysicsSystem.cs" />
+    <Compile Include="Entities\EntityUpdateSystem.cs" />
+    <Compile Include="GameSystem.cs" />
+    <Compile Include="GameSystemCollection.cs" />
+    <Compile Include="Graphics\Color4f.cs" />
+    <Compile Include="Graphics\SimpleVertex.cs" />
+    <Compile Include="Graphics\IRenderable.cs" />
+    <Compile Include="Graphics\PolyMesh.cs" />
+    <Compile Include="Graphics\Camera.cs" />
+    <Compile Include="Graphics\FpsTracker.cs" />
+    <Compile Include="Entities\IUpdateableEntity.cs" />
+    <Compile Include="Utility\MathUtil.cs" />
+    <Compile Include="Utility\Resources.cs" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(IncludeSharpDx)' == 'true'">
+    <Compile Include="Graphics\DirectionalLight.cs" />
+    <Compile Include="Graphics\SimpleRenderer.cs" />
+    <Compile Include="Graphics\SimpleShader.cs" />
+    <Compile Include="Graphics\SharpDxGraphicsSystem.cs" />
+    <Compile Include="Graphics\ShaderCache.cs" />
+    <Compile Include="Graphics\SimpleText.cs" />
+    <Compile Include="Input\OLD_InputSystem.cs" />
+    <Compile Include="Physics\ConvexHullCollider.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+    <None Include="project.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="$(RefsDir)\OpenTK\Debug\OpenTK.dll" />
+    <Reference Include="$(RefsDir)\System.Drawing\System.Drawing.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\BEPU\BEPUphysics\BEPUphysics.csproj">
+      <Project>{c0d52c9f-14b8-4008-8ddc-109c27561a5c}</Project>
+      <Name>BEPUphysics</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\BEPU\BEPUutilities\BEPUutilities.csproj">
+      <Project>{34853dea-43a6-4f2f-a379-d1ee04d256d2}</Project>
+      <Name>BEPUutilities</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), dir.targets))\dir.targets" />
+</Project>
