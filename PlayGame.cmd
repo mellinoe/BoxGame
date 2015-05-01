@@ -15,5 +15,3 @@ call .\build.cmd
 
 :InvokeGame
 %runtimedir%\CoreRun.exe %runtimedir%\GameApplication.exe
-popd
-

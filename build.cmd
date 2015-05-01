@@ -8,13 +8,17 @@ setlocal
 
 if not defined VisualStudioVersion (
     if defined VS140COMNTOOLS (
-        call "%VS140COMNTOOLS%\VsDevCmd.bat"
-        goto :EnvSet
+        if exist "%VS140COMNTOOLS%\VsDevCmd.bat" (
+            call "%VS140COMNTOOLS%\VsDevCmd.bat"
+            goto :EnvSet
+        )
     )
 
     if defined VS120COMNTOOLS (
-        call "%VS120COMNTOOLS%\VsDevCmd.bat"
-        goto :EnvSet
+        if exist "%VS120COMNTOOLS%\VsDevCmd.bat" (
+            call "%VS120COMNTOOLS%\VsDevCmd.bat"
+            goto :EnvSet
+        )
     )
 
     echo Error: build.cmd requires Visual Studio 2013 or 2015.  
