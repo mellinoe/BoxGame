@@ -32,7 +32,7 @@ namespace EngineCore.Graphics
             return new Vector4(Position.X, Position.Y, Position.Z, 1);
         }
 
-        // Fields for use in an InputLayout struct.
+        // Fields denoting the relative offsets of each component (from the structure's base)
 
         public static readonly int PositionOffset = 0;
         public static readonly int NormalOffset = 12;

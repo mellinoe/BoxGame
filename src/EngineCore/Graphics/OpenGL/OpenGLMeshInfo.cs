@@ -178,7 +178,7 @@ namespace EngineCore.Graphics.OpenGL
             GL.GetBufferParameter(BufferTarget.ArrayBuffer, BufferParameterName.BufferSize, out bufferSize);
             if (vertices.Length * SimpleVertex.SizeInBytes != bufferSize)
                 throw new InvalidOperationException("Vertex array not uploaded correctly");
-            PrintCurrentArrayBufferSize();
+
             // Clear the buffer Binding
             GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
         }
