@@ -11,9 +11,9 @@ if exist %runtimedir%\CoreRun.exe (
 
 :BuildFirst
 echo Game doesn't exist, building...
-.\build.cmd
+call .\build.cmd
 
 :InvokeGame
-start cmd /c "pushd %runtimedir% && CoreRun.exe GameApplication.exe"
+%runtimedir%\CoreRun.exe %runtimedir%\GameApplication.exe
 popd
 
