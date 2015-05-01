@@ -9,7 +9,7 @@
   <Import Project="dir.targets" />
 
   <Import Project="dir.traversal.targets" />
-
+  
   <!-- Override clean from dir.traversal.targets and just remove the full BinDir -->
   <Target Name="Clean">
     <RemoveDir Directories="$(BinDir)" />

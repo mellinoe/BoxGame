@@ -103,5 +103,7 @@
   <Target Name="BuildAndTest" DependsOnTargets="Build;Test" />
 
   <Target Name="Test" />
+  
+  <Import Project="publishgame.targets" />
 
 </Project>

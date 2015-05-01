@@ -13,6 +13,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "BEPU", "BEPU", "{D5C5DADA-8
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EngineCore", "EngineCore\EngineCore.csproj", "{C29C63AB-7CFB-4EAA-BE26-9F225FB9E007}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{743CD2F5-32A5-4561-975A-80BEB61376F5}"
+	ProjectSection(SolutionItems) = preProject
+		.nuget\packages.config = .nuget\packages.config
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,14 +26,12 @@ Global
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{8DAA5ABB-7DF7-4FA9-BA02-7FFC5D8C934F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8DAA5ABB-7DF7-4FA9-BA02-7FFC5D8C934F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8DAA5ABB-7DF7-4FA9-BA02-7FFC5D8C934F}.Debug|Any CPU.ActiveCfg = Debug|x86
 		{8DAA5ABB-7DF7-4FA9-BA02-7FFC5D8C934F}.Debug|x86.ActiveCfg = Debug|x86
 		{8DAA5ABB-7DF7-4FA9-BA02-7FFC5D8C934F}.Debug|x86.Build.0 = Debug|x86
-		{8DAA5ABB-7DF7-4FA9-BA02-7FFC5D8C934F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8DAA5ABB-7DF7-4FA9-BA02-7FFC5D8C934F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{8DAA5ABB-7DF7-4FA9-BA02-7FFC5D8C934F}.Release|x86.ActiveCfg = Release|x86
-		{8DAA5ABB-7DF7-4FA9-BA02-7FFC5D8C934F}.Release|x86.Build.0 = Release|x86
+		{8DAA5ABB-7DF7-4FA9-BA02-7FFC5D8C934F}.Release|Any CPU.ActiveCfg = Debug|x86
+		{8DAA5ABB-7DF7-4FA9-BA02-7FFC5D8C934F}.Release|x86.ActiveCfg = Debug|x86
+		{8DAA5ABB-7DF7-4FA9-BA02-7FFC5D8C934F}.Release|x86.Build.0 = Debug|x86
 		{C0D52C9F-14B8-4008-8DDC-109C27561A5C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{C0D52C9F-14B8-4008-8DDC-109C27561A5C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C0D52C9F-14B8-4008-8DDC-109C27561A5C}.Debug|x86.ActiveCfg = Debug|Any CPU

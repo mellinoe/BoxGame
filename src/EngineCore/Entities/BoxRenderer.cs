@@ -17,7 +17,7 @@ namespace EngineCore.Entities
         private readonly PolyMesh _cubeMesh;
         private readonly Bitmap _bitmap;
 
-        private static readonly string s_defaultBitmapPath = Path.Combine(Directory.GetCurrentDirectory(), "Textures", "Stone.png");
+        private static readonly string s_defaultBitmapPath = Path.Combine(AppContext.BaseDirectory, "Textures", "Stone.png");
         private static readonly Bitmap s_defaultBitmap = new Bitmap(s_defaultBitmapPath);
 
         public BoxRenderer()

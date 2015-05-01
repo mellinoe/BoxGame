@@ -3,8 +3,8 @@
   <Import Project="BuildValues.props" />
 
   <ItemGroup>
-    <Project Include="*\src\*.csproj" Exclude="$(ExcludeProjects)" />
-    <Project Include="*\src\*.vbproj" Exclude="$(ExcludeProjects)" />
+    <Project Include="*\*.csproj" Exclude="$(ExcludeProjects)" />
+    <Project Include="*\*.vbproj" Exclude="$(ExcludeProjects)" />
     <Project Include="*\tests\**\*.csproj" Exclude="$(ExcludeProjects)" />
     <Project Include="*\tests\**\*.vbproj" Exclude="$(ExcludeProjects)" />
   </ItemGroup>

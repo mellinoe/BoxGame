@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <UsingTask TaskName="ResolveNuGetPackageAssets" AssemblyFile="$(ToolsDir)Microsoft.DotNet.Build.Tasks.dll"/>
+
+  <PropertyGroup>
+    <CoreClrNuGetName>Microsoft.DotNet.CoreClr.1.0.4-prerelease</CoreClrNuGetName>
+    <TestHostNuGetName>Microsoft.DotNet.TestHost.1.0.4-prerelease</TestHostNuGetName>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <GameRuntimePath>$(ProjectDir)\Runtime</GameRuntimePath>
+  </PropertyGroup>
+
+  <Target Name="PublishFilesToRuntime" AfterTargets="CopyFilesToOutputDirectory">    
+    <ItemGroup>
+      <PublishedRuntimeItems Include="@(Reference)"
+                             Condition="$([System.String]::new(%(FullPath)).Contains('refs'))">
+        <DestinationRelativePath>%(FileName)%(Extension)</DestinationRelativePath>
+      </PublishedRuntimeItems>
+    </ItemGroup>
+
+    <ItemGroup>
+      <PublishedRuntimeItems Include="@(Content)">
+        <DestinationRelativePath>%(Identity)</DestinationRelativePath>
+      </PublishedRuntimeItems>
+      <PublishedRuntimeItems Include="@(IntermediateAssembly)">
+        <DestinationRelativePath>%(Filename)%(Extension)</DestinationRelativePath>
+      </PublishedRuntimeItems>
+      <PublishedRuntimeItems Include="@(None)">
+        <DestinationRelativePath>%(Filename)%(Extension)</DestinationRelativePath>
+      </PublishedRuntimeItems>
+    </ItemGroup>
+
+    <Copy SourceFiles="@(PublishedRuntimeItems)" DestinationFiles="$(GameRuntimePath)\%(DestinationRelativePath)" SkipUnchangedFiles="true" />
+  </Target>
+  
+  <Target Name="PublishCoreClrToRuntime" AfterTargets="BuildAllProjects">
+    <ItemGroup>
+      <CoreClrFiles Include="$(PackagesDir)\$(CoreClrNuGetName)\lib\aspnetcore50\*" />
+      <CoreClrFiles Include="$(PackagesDir)\$(TestHostNuGetName)\lib\aspnetcore50\*" />
+    </ItemGroup>
+    <Copy 
+      SourceFiles="@(CoreClrFiles)"
+      DestinationFolder="$(GameRuntimePath)"
+      />
+  </Target>
+
+</Project>
