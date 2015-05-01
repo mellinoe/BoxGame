@@ -3,6 +3,7 @@ using EngineCore.Entities;
 using EngineCore.Graphics;
 using EngineCore.Physics;
 using GameApplication.Behaviours;
+using Noise;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -42,8 +43,45 @@ namespace GameApplication
                 camera.AddComponent<BoxLauncher>();
                 var fpsLookController = camera.AddComponent<FpsLookController>();
                 fpsLookController.Tracked = character.Transform;
-                //camera.AddComponent<CameraProjectionSwitcher>();
 
+                //CreateStandardBoxArena();
+                CreateNoiseGeneratedWorld();
+
+                var textRendererObj = new GameObject();
+                EngineCore.Graphics.OpenGL.TextRenderer textRenderer = new EngineCore.Graphics.OpenGL.TextRenderer();
+                textRendererObj.AddComponent(textRenderer);
+                FpsTracker fpsTracker = new FpsTracker();
+                textRendererObj.AddComponent(fpsTracker);
+                fpsTracker.FramesPerSecondUpdated += (value) => textRenderer.DrawText("FPS: " + value.ToString("###.00"), 15, 15);
+
+            }
+
+            private void CreateNoiseGeneratedWorld()
+            {
+                float xScale = 1.5f;
+                float yScale = 1.5f;
+
+                NoiseGen noiseGen = new NoiseGen(xScale, yScale, 6);
+
+                for (int x = -20; x < 20; x++)
+                {
+                    for (int z = -20; z < 20; z++)
+                    {
+                        for (int y = -15; y < -3; y++)
+                        {
+                            float generatedNoise = noiseGen.GetNoise(x, y, z);
+                            //Console.WriteLine(string.Format("Generated noise at <{0}, {1}, {2}>: {3}", x, y, z, generatedNoise));
+                            if (generatedNoise > .6f)
+                            {
+                                GameObject.CreateStaticBox(1.5f, 1.5f, 1.5f).Transform.Position = new Vector3(x, y, z) * 1.5f;
+                            }
+                        }
+                    }
+                }
+            }
+
+            private static void CreateStandardBoxArena()
+            {
                 var box = GameObject.CreateBox(3.0f, 3.0f, 3.0f, 6f);
                 box.Transform.Position = new Vector3(0, 5, 15);
 
@@ -81,14 +119,6 @@ namespace GameApplication
 
                 var wall4 = GameObject.CreateStaticBox(0.5f, 11.0f, 50f);
                 wall4.Transform.Position = new Vector3(-25f, 5.5f, 0f);
-
-                var textRendererObj = new GameObject();
-                EngineCore.Graphics.OpenGL.TextRenderer textRenderer = new EngineCore.Graphics.OpenGL.TextRenderer();
-                textRendererObj.AddComponent(textRenderer);
-                FpsTracker fpsTracker = new FpsTracker();
-                textRendererObj.AddComponent(fpsTracker);
-                fpsTracker.FramesPerSecondUpdated += (value) => textRenderer.DrawText("FPS: " + value.ToString("###.00"), 15, 15);
-
             }
         }
     }
