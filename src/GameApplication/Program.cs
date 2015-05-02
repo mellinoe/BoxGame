@@ -12,7 +12,6 @@ using System.Threading.Tasks;
 
 namespace GameApplication
 {
-
     static class Program
     {
         /// <summary>
@@ -28,60 +27,78 @@ namespace GameApplication
         {
             protected override void PerformCustomInitialization()
             {
-                AddStartingStuff();
+               // CreateStandardBoxArena();
+                CreateNoiseGeneratedWorld();
+                CreateFpsTracker();
             }
 
-            private void AddStartingStuff()
+            private static void CreateFpsTracker()
             {
-                var character = new GameObject();
-                character.AddComponent<CharacterController>();
-                character.AddComponent<SimpleFpsController>();
-                character.Transform.Position = new Vector3(0, 2f, 5f);
-
-                var camera = new GameObject();
-                camera.AddComponent<Camera>();
-                camera.AddComponent<BoxLauncher>();
-                var fpsLookController = camera.AddComponent<FpsLookController>();
-                fpsLookController.Tracked = character.Transform;
-
-                //CreateStandardBoxArena();
-                CreateNoiseGeneratedWorld();
-
                 var textRendererObj = new GameObject();
                 EngineCore.Graphics.OpenGL.TextRenderer textRenderer = new EngineCore.Graphics.OpenGL.TextRenderer();
                 textRendererObj.AddComponent(textRenderer);
                 FpsTracker fpsTracker = new FpsTracker();
                 textRendererObj.AddComponent(fpsTracker);
                 fpsTracker.FramesPerSecondUpdated += (value) => textRenderer.DrawText("FPS: " + value.ToString("###.00"), 15, 15);
-
             }
 
-            private void CreateNoiseGeneratedWorld()
+            private static void AddArenaStartingStuff()
             {
-                float xScale = 1.5f;
-                float yScale = 1.5f;
+                var character = new GameObject();
+                character.AddComponent<CharacterController>().BepuController.BodyRadius = .3f;
+                character.AddComponent<SimpleFpsController>();
+                character.Transform.Position = new Vector3(0, 10f, 0f);
 
-                NoiseGen noiseGen = new NoiseGen(xScale, yScale, 6);
+                var camera = new GameObject();
+                camera.AddComponent<Camera>();
+                camera.AddComponent<BoxLauncher>();
+                var fpsLookController = camera.AddComponent<FpsLookController>();
+                fpsLookController.Tracked = character.Transform;
+            }
 
-                for (int x = -20; x < 20; x++)
+            private static void CreateNoiseGeneratedWorld()
+            {
+                AddNoiseWorldStartingStuff();
+
+                float xScale = 1f;
+                float yScale = 1f;
+
+                NoiseGen noiseGen = new NoiseGen(xScale, yScale, 4);
+
+                int xMax = 60;
+                int yMax = 15;
+                int zMax = 60;
+                float frequency = 1.0f / (float)xMax;
+
+                for (int x = 0; x < xMax; x++)
                 {
-                    for (int z = -20; z < 20; z++)
+                    for (int y = 0; y < yMax; y++)
                     {
-                        for (int y = -15; y < -3; y++)
+                        for (int z = 0; z < zMax; z++)
                         {
-                            float generatedNoise = noiseGen.GetNoise(x, y, z);
-                            //Console.WriteLine(string.Format("Generated noise at <{0}, {1}, {2}>: {3}", x, y, z, generatedNoise));
-                            if (generatedNoise > .6f)
+                            float noiseVal = noiseGen.GetNoise(x * frequency, y * frequency, z * frequency);
+                            if (noiseVal > .61f)
                             {
-                                GameObject.CreateStaticBox(1.5f, 1.5f, 1.5f).Transform.Position = new Vector3(x, y, z) * 1.5f;
+                                GameObject.CreateStaticBox(1f, 1f, 1f).Transform.Position
+                                    = new Vector3(x - (xMax / 2f), y - yMax, z - (zMax / 2f));
                             }
                         }
                     }
                 }
             }
 
+            private static void AddNoiseWorldStartingStuff()
+            {
+                var camera = new GameObject();
+                camera.AddComponent<Camera>();
+                camera.AddComponent<BoxLauncher>();
+                camera.AddComponent<FreeFlyMovement>();
+            }
+
             private static void CreateStandardBoxArena()
             {
+                AddArenaStartingStuff();
+
                 var box = GameObject.CreateBox(3.0f, 3.0f, 3.0f, 6f);
                 box.Transform.Position = new Vector3(0, 5, 15);
 

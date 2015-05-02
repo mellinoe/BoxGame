@@ -27,6 +27,9 @@
       <PublishedRuntimeItems Include="@(IntermediateAssembly)">
         <DestinationRelativePath>%(Filename)%(Extension)</DestinationRelativePath>
       </PublishedRuntimeItems>
+      <PublishedRuntimeItems Include="@(_DebugSymbolsOutputPath)">
+        <DestinationRelativePath>%(Filename)%(Extension)</DestinationRelativePath>
+      </PublishedRuntimeItems>
       <PublishedRuntimeItems Include="@(None)">
         <DestinationRelativePath>%(Filename)%(Extension)</DestinationRelativePath>
       </PublishedRuntimeItems>

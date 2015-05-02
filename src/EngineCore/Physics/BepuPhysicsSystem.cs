@@ -55,5 +55,17 @@ namespace EngineCore.Physics
         {
             return space.RayCast(ray, out result);
         }
+
+        public Vector3 Gravity
+        {
+            get
+            {
+                return space.ForceUpdater.Gravity;
+            }
+            set
+            {
+                space.ForceUpdater.Gravity = value;
+            }
+        }
     }
 }

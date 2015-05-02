@@ -14,6 +14,11 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <NoWarn>3001;3003</NoWarn>
   </PropertyGroup>
+
+  <!-- Default configurations to help VS understand the configurations -->
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' " />
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' " />
+
   <ItemGroup>
     <Compile Include="Components\Component.cs" />
     <Compile Include="Components\Transform.cs" />
@@ -71,7 +76,8 @@
     <None Include="project.json" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="$(RefsDir)\OpenTK\Debug\OpenTK.dll" />
+    <Reference Condition="'$(Configuration)' == 'Release'" Include="$(RefsDir)\OpenTK\Release\OpenTK.dll" />
+    <Reference Condition="'$(Configuration)' == 'Debug'" Include="$(RefsDir)\OpenTK\Debug\OpenTK.dll" />
     <Reference Include="$(RefsDir)\System.Drawing\System.Drawing.dll" />
   </ItemGroup>
   <ItemGroup>

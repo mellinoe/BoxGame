@@ -11,7 +11,11 @@
     <AssemblyName>GameApplication</AssemblyName>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
+  <!-- Default configurations to help VS understand the configurations -->
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' " />
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' " />
   <ItemGroup>
+    <Compile Include="Behaviours\FreeFlyMovement.cs" />
     <Compile Include="Behaviours\MouseClickRayCaster.cs" />
     <Compile Include="Noise.cs" />
     <Compile Include="Program.cs" />
