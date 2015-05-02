@@ -2,7 +2,8 @@ syntax: glob
 
 ### NetCoreGameEngine-specific ###
 
-Runtime
+Play*.cmd
+*Runtime
 !Runtime/README.txt
 
 ### VisualStudio ###

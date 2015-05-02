@@ -9,13 +9,19 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <GameRuntimePath>$(ProjectDir)\Runtime</GameRuntimePath>
+    <GameRuntimePath>$(ProjectDir)$(AssemblyName)-Runtime</GameRuntimePath>
   </PropertyGroup>
 
-  <Target Name="PublishFilesToRuntime" AfterTargets="CopyFilesToOutputDirectory">    
+  <Target Name="PublishFilesToRuntime" AfterTargets="CopyFilesToOutputDirectory"
+          Condition="'$(OutputType)' == 'Exe'">
+
     <ItemGroup>
       <PublishedRuntimeItems Include="@(Reference)"
-                             Condition="$([System.String]::new(%(FullPath)).Contains('refs'))">
+                             Condition="'%(Reference.NuGetPackageName)' == ''">
+        <DestinationRelativePath>%(FileName)%(Extension)</DestinationRelativePath>
+      </PublishedRuntimeItems>
+      
+      <PublishedRuntimeItems Include="@(ReferenceCopyLocalPaths)">
         <DestinationRelativePath>%(FileName)%(Extension)</DestinationRelativePath>
       </PublishedRuntimeItems>
     </ItemGroup>
@@ -35,18 +41,26 @@
       </PublishedRuntimeItems>
     </ItemGroup>
 
-    <Copy SourceFiles="@(PublishedRuntimeItems)" DestinationFiles="$(GameRuntimePath)\%(DestinationRelativePath)" SkipUnchangedFiles="true" />
+    <Message Text="PublishedRuntimeItems@(PublishedRuntimeItems)" Importance="high" />
+    <Message Text="GameRuntimePath:$(GameRuntimePath)" Importance="high" />
+    
+    <Copy SourceFiles="%(PublishedRuntimeItems.Identity)" DestinationFiles="$(GameRuntimePath)\%(DestinationRelativePath)" SkipUnchangedFiles="true" />
   </Target>
   
-  <Target Name="PublishCoreClrToRuntime" AfterTargets="BuildAllProjects">
+  <Target Name="PublishCoreClrToRuntime" AfterTargets="PublishFilesToRuntime"
+                    Condition="'$(OutputType)' == 'Exe'">
     <ItemGroup>
       <CoreClrFiles Include="$(PackagesDir)\$(CoreClrNuGetName)\lib\aspnetcore50\*" />
       <CoreClrFiles Include="$(PackagesDir)\$(TestHostNuGetName)\lib\aspnetcore50\*" />
     </ItemGroup>
-    <Copy 
-      SourceFiles="@(CoreClrFiles)"
-      DestinationFolder="$(GameRuntimePath)"
-      />
+    <Copy SourceFiles="@(CoreClrFiles)" DestinationFolder="$(GameRuntimePath)" />
+    
+    <WriteLinesToFile File="$(ProjectDir)Play-$(AssemblyName).cmd" Lines="%~dp0_PlayGame.cmd $(AssemblyName)" Overwrite="true" />
+    
+    <ItemGroup>
+      <FileWrites Include="@(CoreClrFiles)" />
+      <FileWrites Include="$(ProjectDir)Play-$(AssemblyName).cmd" />
+    </ItemGroup>
   </Target>
 
 </Project>
