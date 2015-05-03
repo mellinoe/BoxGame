@@ -4,10 +4,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace VoxelGame
+namespace VoxelGame.World
 {
     public struct BlockData
     {
-        private byte _data;
+        public readonly BlockType Type;
+
+        public BlockData(BlockType type)
+        {
+            Type = type;
+        }
     }
 }
