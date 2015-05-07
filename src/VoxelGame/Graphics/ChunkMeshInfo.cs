@@ -15,8 +15,6 @@ namespace VoxelGame.Graphics
         private Chunk _chunk;
         private PolyMesh _mesh;
 
-        private static readonly Bitmap s_cubeFaceTextures = new Bitmap("Textures/CubeFaceTextures.png");
-
         public ChunkMeshInfo(Chunk chunk)
         {
             _chunk = chunk;

@@ -20,6 +20,7 @@ namespace VoxelGame.World
         {
             _graphicsSystem = (OpenGLGraphicsSystem)Game.GraphicsSystem;
             _chunkManager = new ChunkManager();
+            _graphicsSystem.AddSelfManagedRenderable(_chunkManager);
         }
 
         public override void Stop()

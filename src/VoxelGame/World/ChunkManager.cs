@@ -1,20 +1,28 @@
-﻿using Noise;
+﻿using EngineCore.Graphics.OpenGL;
+using Noise;
+using OpenTK.Graphics.OpenGL;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
+using VoxelGame.Graphics;
 
 namespace VoxelGame.World
 {
-    public class ChunkManager
+    public class ChunkManager : IRenderableObjectInfo
     {
         private int _loadedChunkDistance = 10;
         private NoiseGen _noiseGen = new NoiseGen(1f, 1f, 4);
-        private SpatialStorageBuffer<Chunk> _chunks;
+        private SpatialStorageBuffer<Tuple<Chunk, ChunkMeshInfo>> _chunks;
+
+        private static readonly Bitmap s_cubeFaceTextures = new Bitmap("Textures/CubeFaceTextures.png");
+        private TextureBuffer _textureBuffer = new TextureBuffer(s_cubeFaceTextures);
+
 
         public ChunkManager()
         {
-            _chunks = new SpatialStorageBuffer<Chunk>(_loadedChunkDistance);
+            _chunks = new SpatialStorageBuffer<Tuple<Chunk, ChunkMeshInfo>>(_loadedChunkDistance);
             for (int x = 0; x < _loadedChunkDistance; x++)
                 for (int y = 0; y < _loadedChunkDistance; y++)
                     for (int z = 0; z < _loadedChunkDistance; z++)
@@ -22,7 +30,9 @@ namespace VoxelGame.World
                         int worldX = x * Chunk.ChunkLength;
                         int worldY = y * Chunk.ChunkLength;
                         int worldZ = z * Chunk.ChunkLength;
-                        _chunks[x, y, z] = GenChunk(worldX, worldY, worldZ);
+                        Chunk chunk = GenChunk(worldX, worldY, worldZ);
+                        ChunkMeshInfo mesh = new ChunkMeshInfo(chunk);
+                        _chunks[x, y, z] = Tuple.Create(chunk, mesh);
                     }
 
         }
@@ -45,11 +55,25 @@ namespace VoxelGame.World
                         {
                             chunk[x, y, z] = new BlockData(BlockType.Stone);
                         }
+                        else
+                        {
+                            chunk[x, y, z] = new BlockData(BlockType.Air);
+                        }
                     }
                 }
             }
 
             return chunk;
+        }
+
+        public void Render(ref System.Numerics.Matrix4x4 lookatMatrix)
+        {
+            for (int x = 0; x < _loadedChunkDistance; x++)
+                for (int y = 0; y < _loadedChunkDistance; y++)
+                    for (int z = 0; z < _loadedChunkDistance; z++)
+                    {
+
+                    }
         }
     }
 }
