@@ -52,7 +52,7 @@ namespace EngineCore.Graphics.OpenGL
             _bitmap.UnlockBits(data);
         }
 
-        public void Render(ref System.Numerics.Matrix4x4 lookatMatrix, OpenTK.Graphics.GraphicsContext graphicsContext)
+        public void Render(ref System.Numerics.Matrix4x4 lookatMatrix)
         {
             GL.PushMatrix();
             GL.LoadIdentity();

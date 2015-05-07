@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace VoxelGame.World
 {
-    public class Chunk : IDictionary<Vector3, BlockData>
+    public class Chunk
     {
         public const int ChunkLength = 16;
         public const float BlockLength = 1f;
@@ -17,6 +17,11 @@ namespace VoxelGame.World
         public Chunk()
         {
             _blockData = new BlockData[ChunkLength * ChunkLength * ChunkLength];
+        }
+
+        public Chunk(BlockData[] blockData)
+        {
+            _blockData = blockData;
         }
 
         public BlockData this[int x, int y, int z]

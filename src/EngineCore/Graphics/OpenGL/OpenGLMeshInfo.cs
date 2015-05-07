@@ -33,7 +33,7 @@ namespace EngineCore.Graphics.OpenGL
             GenerateIndicesBuffer();
         }
 
-        private void RenderImmediateMode(ref Matrix4x4 viewMatrix, OpenTK.Graphics.GraphicsContext graphicsContext)
+        private void RenderImmediateMode(ref Matrix4x4 viewMatrix)
         {
             GL.MatrixMode(MatrixMode.Modelview);
 
@@ -62,9 +62,9 @@ namespace EngineCore.Graphics.OpenGL
             GL.End();
         }
 
-        public virtual unsafe void Render(ref Matrix4x4 viewMatrix, OpenTK.Graphics.GraphicsContext graphicsContext)
+        public virtual unsafe void Render(ref Matrix4x4 viewMatrix)
         {
-            //RenderImmediateMode(ref viewMatrix, graphicsContext);
+            //RenderImmediateMode(ref viewMatrix);
             RenderWithVbo(ref viewMatrix);
         }
 
