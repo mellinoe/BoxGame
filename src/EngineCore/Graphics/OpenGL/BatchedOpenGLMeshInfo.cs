@@ -15,7 +15,7 @@ namespace EngineCore.Graphics.OpenGL
 
         private List<IRenderable> _renderables = new List<IRenderable>();
 
-        public override unsafe void Render(ref Matrix4x4 viewMatrix, OpenTK.Graphics.GraphicsContext graphicsContext)
+        public override unsafe void Render(ref Matrix4x4 viewMatrix)
         {
             // Push current Array Buffer state so we can restore it later
             // (is this necessary...?)

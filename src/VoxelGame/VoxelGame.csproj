@@ -9,6 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>VoxelGame</RootNamespace>
     <AssemblyName>VoxelGame</AssemblyName>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <SharedSourcePath>..\BoxArenaGame\</SharedSourcePath>
   </PropertyGroup>
   <!-- Default configurations to help VS understand the configurations -->
@@ -17,14 +18,20 @@
   <ItemGroup>
     <Compile Include="$(SharedSourcePath)Behaviours\FreeFlyMovement.cs" />
     <Compile Include="$(SharedSourcePath)Behaviours\MouseClickRayCaster.cs" />
-    <Compile Include="$(SharedSourcePath)Noise.cs" />
     <Compile Include="$(SharedSourcePath)Behaviours\BoxLauncher.cs" />
     <Compile Include="$(SharedSourcePath)Behaviours\SimpleFpsController.cs" />
     <Compile Include="$(SharedSourcePath)Behaviours\FpsLookController.cs" />
-    <Compile Include="BlockData.cs" />
-    <Compile Include="BlockType.cs" />
-    <Compile Include="Chunk.cs" />
+    <Compile Include="Noise.cs" />
+    <Compile Include="Graphics\ChunkMeshInfo.cs" />
+    <Compile Include="Graphics\ChunkRenderInfo.cs" />
+    <Compile Include="World\BlockData.cs" />
+    <Compile Include="World\BlockType.cs" />
+    <Compile Include="World\Chunk.cs" />
     <Compile Include="Program.cs" />
+    <Compile Include="World\ChunkManager.cs" />
+    <Compile Include="World\SpatialStorageBuffer.cs" />
+    <Compile Include="World\ChunkStorage.cs" />
+    <Compile Include="World\VoxelWorldSystem.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -43,8 +50,12 @@
       <Project>{c29c63ab-7cfb-4eaa-be26-9f225fb9e007}</Project>
       <Name>EngineCore</Name>
     </ProjectReference>
+    <Reference Include="$(RefsDir)\System.Drawing\System.Drawing.dll" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Textures\CubeFaceTextures.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Textures\Stone.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

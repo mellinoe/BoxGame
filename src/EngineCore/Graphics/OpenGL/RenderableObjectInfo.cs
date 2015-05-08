@@ -10,6 +10,6 @@ namespace EngineCore.Graphics.OpenGL
 {
     public interface IRenderableObjectInfo
     {
-        void Render(ref Matrix4x4 lookatMatrix, GraphicsContext graphicsContext);
+        void Render(ref Matrix4x4 lookatMatrix);
     }
 }

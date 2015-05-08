@@ -103,7 +103,7 @@ namespace EngineCore.Graphics.OpenGL
 
             foreach (IRenderableObjectInfo roi in this._renderableObjects)
             {
-                roi.Render(ref _viewMatrix, _graphicsContext);
+                roi.Render(ref _viewMatrix);
             }
             _graphicsContext.SwapBuffers();
         }
@@ -144,13 +144,13 @@ namespace EngineCore.Graphics.OpenGL
         }
 
         // Shouldn't use this for many things
-        internal void AddSelfManagedRenderable(IRenderableObjectInfo info)
+        public void AddSelfManagedRenderable(IRenderableObjectInfo info)
         {
             _renderableObjects.Add(info);
         }
 
         // Shouldn't use this for many things
-        internal unsafe void RemoveSelfManagedRenderable(IRenderableObjectInfo info)
+        public void RemoveSelfManagedRenderable(IRenderableObjectInfo info)
         {
             _renderableObjects.Remove(info);
         }
