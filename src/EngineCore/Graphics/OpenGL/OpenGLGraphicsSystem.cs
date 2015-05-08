@@ -25,6 +25,7 @@ namespace EngineCore.Graphics.OpenGL
         private bool _supportsMeshBatching = true;
 
         private List<IRenderableObjectInfo> _renderableObjects = new List<IRenderableObjectInfo>();
+        private List<IRenderableObjectInfo2D> _renderableObjects2D = new List<IRenderableObjectInfo2D>();
         private Dictionary<PolyMesh, BatchedOpenGLMeshInfo> _batchedModels = new Dictionary<PolyMesh, BatchedOpenGLMeshInfo>();
 
         public OpenGLGraphicsSystem(Game game)
@@ -105,6 +106,11 @@ namespace EngineCore.Graphics.OpenGL
             {
                 roi.Render(ref _viewMatrix);
             }
+
+            foreach (IRenderableObjectInfo2D roi2D in this._renderableObjects2D)
+            {
+                roi2D.Render();
+            }
             _graphicsContext.SwapBuffers();
         }
 
@@ -153,6 +159,17 @@ namespace EngineCore.Graphics.OpenGL
         public void RemoveSelfManagedRenderable(IRenderableObjectInfo info)
         {
             _renderableObjects.Remove(info);
+        }
+
+        public void AddSelfManagedRenderable(IRenderableObjectInfo2D info)
+        {
+            _renderableObjects2D.Add(info);
+        }
+
+        // Shouldn't use this for many things
+        public void RemoveSelfManagedRenderable(IRenderableObjectInfo2D info)
+        {
+            _renderableObjects2D.Remove(info);
         }
 
         public override Size WindowSize

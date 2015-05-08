@@ -56,8 +56,8 @@ namespace EngineCore
         {
             Debug.WriteLine("Starting main game loop.");
             this.running = true;
-            StartSystems();
             PerformCustomInitialization();
+            StartSystems();
             RunMainLoop();
         }
 

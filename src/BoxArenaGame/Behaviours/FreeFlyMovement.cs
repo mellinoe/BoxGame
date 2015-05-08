@@ -19,31 +19,41 @@ namespace GameApplication.Behaviours
         private InputSystem _input;
         private float _speed = 5f;
 
+        private float _turboMultiplier = 3f;
+
         protected override void Update()
         {
+            Vector3 moveDirection = Vector3.Zero;
+
             if (_input.GetKey(KeyCode.W))
             {
-                Transform.Position += Transform.Forward * _speed * Time.DeltaTime;
+                moveDirection += Transform.Forward;
             }
             if (_input.GetKey(KeyCode.S))
             {
-                Transform.Position -= Transform.Forward * _speed * Time.DeltaTime;
+                moveDirection -= Transform.Forward;
             }
             if (_input.GetKey(KeyCode.A))
             {
-                Transform.Position += Transform.Right * _speed * Time.DeltaTime;
+                moveDirection += Transform.Right;
             }
             if (_input.GetKey(KeyCode.D))
             {
-                Transform.Position -= Transform.Right * _speed * Time.DeltaTime;
+                moveDirection -= Transform.Right;
             }
             if (_input.GetKey(KeyCode.E))
             {
-                Transform.Position += Transform.Up * _speed * Time.DeltaTime;
+                moveDirection += Transform.Up;
             }
             if (_input.GetKey(KeyCode.Q))
             {
-                Transform.Position -= Transform.Up * _speed * Time.DeltaTime;
+                moveDirection -= Transform.Up;
+            }
+
+            if (moveDirection != Vector3.Zero)
+            {
+                float totalSpeed = _speed * (_input.GetKey(KeyCode.ShiftLeft) ? _turboMultiplier : 1.0f);
+                Transform.Position += Vector3.Normalize(moveDirection) * totalSpeed * Time.DeltaTime;
             }
 
             HandleMouseMovement();

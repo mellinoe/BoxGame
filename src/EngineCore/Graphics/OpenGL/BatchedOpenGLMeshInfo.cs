@@ -23,9 +23,9 @@ namespace EngineCore.Graphics.OpenGL
             BindAllBuffers();
             BindTexture();
 
+            GL.MatrixMode(MatrixMode.Modelview);
             foreach (IRenderable renderable in _renderables)
             {
-                GL.MatrixMode(MatrixMode.Modelview);
                 Matrix4x4 modelViewMatrix = renderable.WorldMatrix * viewMatrix;
                 GLEx.LoadMatrix(ref modelViewMatrix);
 

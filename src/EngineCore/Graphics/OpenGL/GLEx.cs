@@ -25,7 +25,7 @@ namespace EngineCore.Graphics.OpenGL
             GL.Normal3(vector3.X, vector3.Y, vector3.Z);
         }
 
-        internal unsafe static void LoadMatrix(ref Matrix4x4 matrix)
+        public unsafe static void LoadMatrix(ref Matrix4x4 matrix)
         {
             fixed (float* ptr = &matrix.M11)
             {

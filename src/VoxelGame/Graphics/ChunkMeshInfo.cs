@@ -45,12 +45,15 @@ namespace VoxelGame.Graphics
 
         private void AddBlock(List<SimpleVertex> vertices, List<int> indices, BlockType blockType, Vector3 center)
         {
-            AddFace(vertices, indices, blockType, BlockFace.Back, center);
-            AddFace(vertices, indices, blockType, BlockFace.Bottom, center);
-            AddFace(vertices, indices, blockType, BlockFace.Front, center);
-            AddFace(vertices, indices, blockType, BlockFace.Left, center);
-            AddFace(vertices, indices, blockType, BlockFace.Right, center);
-            AddFace(vertices, indices, blockType, BlockFace.Top, center);
+            if (blockType != BlockType.Air)
+            {
+                AddFace(vertices, indices, blockType, BlockFace.Back, center);
+                AddFace(vertices, indices, blockType, BlockFace.Bottom, center);
+                AddFace(vertices, indices, blockType, BlockFace.Front, center);
+                AddFace(vertices, indices, blockType, BlockFace.Left, center);
+                AddFace(vertices, indices, blockType, BlockFace.Right, center);
+                AddFace(vertices, indices, blockType, BlockFace.Top, center);
+            }
         }
 
         private void AddFace(List<SimpleVertex> vertices, List<int> indices, BlockType blockType, BlockFace face, Vector3 center)

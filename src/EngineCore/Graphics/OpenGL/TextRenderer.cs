@@ -11,7 +11,7 @@ using System.Numerics;
 
 namespace EngineCore.Graphics.OpenGL
 {
-    public class TextRenderer : Component<OpenGLGraphicsSystem>, IRenderableObjectInfo, IDisposable
+    public class TextRenderer : Component<OpenGLGraphicsSystem>, IRenderableObjectInfo2D, IDisposable
     {
         private int _width, _height;
         private Bitmap _bitmap;
@@ -52,23 +52,21 @@ namespace EngineCore.Graphics.OpenGL
             _bitmap.UnlockBits(data);
         }
 
-        public void Render(ref System.Numerics.Matrix4x4 lookatMatrix)
+        public void Render()
         {
+            GL.MatrixMode(MatrixMode.Modelview);
             GL.PushMatrix();
             GL.LoadIdentity();
 
             GL.MatrixMode(MatrixMode.Projection);
-            Matrix4x4 ortho_projection = Matrix4x4.CreateOrthographicOffCenter(0, _width, _height, 0, -1, 1);
-
             GL.PushMatrix();
+            Matrix4x4 ortho_projection = Matrix4x4.CreateOrthographicOffCenter(0, _width, _height, 0, -1, 1);
             GLEx.LoadMatrix(ref ortho_projection);
 
             GL.Enable(EnableCap.Blend);
             GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
-            //GL.BlendFunc(BlendingFactorSrc.One, BlendingFactorDest.DstAlpha);
             GL.Enable(EnableCap.Texture2D);
             GL.BindTexture(TextureTarget.Texture2D, _textTextureId);
-
 
             GL.Begin(PrimitiveType.Quads);
             GL.TexCoord2(0, 0);
@@ -87,7 +85,6 @@ namespace EngineCore.Graphics.OpenGL
 
             GL.MatrixMode(MatrixMode.Modelview);
             GL.PopMatrix();
-
         }
 
         protected override void Initialize(OpenGLGraphicsSystem system)

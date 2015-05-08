@@ -3,7 +3,6 @@ using EngineCore.Entities;
 using EngineCore.Graphics;
 using EngineCore.Physics;
 using GameApplication.Behaviours;
-using Noise;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,8 +27,6 @@ namespace GameApplication
             protected override void PerformCustomInitialization()
             {
                 CreateStandardBoxArena();
-                //CreateNoiseGeneratedWorld();
-                //CreateSimpleWorld();
                 CreateFpsTracker();
             }
 
@@ -60,43 +57,12 @@ namespace GameApplication
             private void CreateSimpleWorld()
             {
                 Random rand = new Random();
- 
+
                 for (int x = -20; x < 20; x++)
                 {
                     for (int z = -20; z < 20; z++)
                     {
                         GameObject.CreateStaticBox(1.5f, 1.5f, 1.5f).Transform.Position = new Vector3(x, x + z, z) * 1.5f;
-                    }
-                }
-            }
-
-            private static void CreateNoiseGeneratedWorld()
-            {
-                AddNoiseWorldStartingStuff();
-
-                float xScale = 1f;
-                float yScale = 1f;
-
-                NoiseGen noiseGen = new NoiseGen(xScale, yScale, 4);
-
-                int xMax = 60;
-                int yMax = 15;
-                int zMax = 60;
-                float frequency = 1.0f / (float)xMax;
-
-                for (int x = 0; x < xMax; x++)
-                {
-                    for (int y = 0; y < yMax; y++)
-                    {
-                        for (int z = 0; z < zMax; z++)
-                        {
-                            float noiseVal = noiseGen.GetNoise(x * frequency, y * frequency, z * frequency);
-                            if (noiseVal > .61f)
-                            {
-                                GameObject.CreateStaticBox(1f, 1f, 1f).Transform.Position
-                                    = new Vector3(x - (xMax / 2f), y - yMax, z - (zMax / 2f));
-                            }
-                        }
                     }
                 }
             }

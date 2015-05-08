@@ -12,4 +12,9 @@ namespace EngineCore.Graphics.OpenGL
     {
         void Render(ref Matrix4x4 lookatMatrix);
     }
+
+    public interface IRenderableObjectInfo2D
+    {
+        void Render();
+    }
 }

@@ -65,7 +65,6 @@ namespace EngineCore.Graphics.OpenGL
 
         public virtual unsafe void Render(ref Matrix4x4 viewMatrix)
         {
-            //RenderImmediateMode(ref viewMatrix);
             RenderWithVbo(ref viewMatrix);
         }
 
@@ -115,23 +114,17 @@ namespace EngineCore.Graphics.OpenGL
             GL.EnableClientState(ArrayCap.NormalArray);
 
             // Texture coordinate array
-            GL.BindBuffer(BufferTarget.ArrayBuffer, _vertexBufferId);
             GL.TexCoordPointer(2, TexCoordPointerType.Float, SimpleVertex.SizeInBytes, SimpleVertex.TexCoordOffset);
 
             // Enable texture coordinate array
             GL.EnableClientState(ArrayCap.TextureCoordArray);
 
             // Position Array Buffer
-
-            // Bind to the Array Buffer ID
-            GL.BindBuffer(BufferTarget.ArrayBuffer, _vertexBufferId);
-            // Set the Pointer to the current bound array describing how the data ia stored
             GL.VertexPointer(3, VertexPointerType.Float, SimpleVertex.SizeInBytes, SimpleVertex.PositionOffset);
             // Enable the client state so it will use this array buffer pointer
             GL.EnableClientState(ArrayCap.VertexArray);
 
             // Element Array Buffer
-            // Bind to the Array Buffer ID
             GL.BindBuffer(BufferTarget.ElementArrayBuffer, _indexBufferId);
         }
 

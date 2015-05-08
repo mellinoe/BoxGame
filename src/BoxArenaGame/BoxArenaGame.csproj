@@ -17,7 +17,6 @@
   <ItemGroup>
     <Compile Include="Behaviours\FreeFlyMovement.cs" />
     <Compile Include="Behaviours\MouseClickRayCaster.cs" />
-    <Compile Include="Noise.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Behaviours\BoxLauncher.cs" />
     <Compile Include="Behaviours\SimpleFpsController.cs" />
