@@ -7,12 +7,13 @@ using System.Text;
 
 namespace EngineCore.Graphics.OpenGL
 {
-    public class OpenGLMeshInfo : IRenderableObjectInfo
+    public class OpenGLMeshInfo : IRenderableObjectInfo, IDisposable
     {
         private IRenderable _renderable;
         private PolyMesh _mesh;
-        private TextureBuffer _textureBuffer;
 
+        // Buffers
+        private TextureBuffer _textureBuffer;
         private uint _vertexBufferId;
         private uint _indexBufferId;
 
@@ -208,5 +209,22 @@ namespace EngineCore.Graphics.OpenGL
             _numElements = _mesh.Indices.Count;
         }
         #endregion Buffer Binding and Initialization
+
+        public virtual void Dispose()
+        {
+            _textureBuffer.Dispose();
+
+            if (_vertexBufferId != 0)
+            {
+                GL.DeleteBuffer(_vertexBufferId);
+                _vertexBufferId = 0;
+            }
+
+            if (_indexBufferId != 0)
+            {
+                GL.DeleteBuffer(_indexBufferId);
+                _indexBufferId = 0;
+            }
+        }
     }
 }

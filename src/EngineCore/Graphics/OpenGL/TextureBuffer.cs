@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace EngineCore.Graphics.OpenGL
 {
-    public class TextureBuffer
+    public class TextureBuffer : IDisposable
     {
         private int _textureBufferId;
 
@@ -61,6 +61,15 @@ namespace EngineCore.Graphics.OpenGL
         public void Bind()
         {
             GL.BindTexture(TextureTarget.Texture2D, _textureBufferId);
+        }
+
+        public void Dispose()
+        {
+            if (_textureBufferId != 0)
+            {
+                GL.DeleteTexture(_textureBufferId);
+                _textureBufferId = 0;
+            }
         }
     }
 }

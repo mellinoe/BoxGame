@@ -11,7 +11,7 @@ using System.Numerics;
 
 namespace EngineCore.Graphics.OpenGL
 {
-    public class TextRenderer : Component<OpenGLGraphicsSystem>, IRenderableObjectInfo
+    public class TextRenderer : Component<OpenGLGraphicsSystem>, IRenderableObjectInfo, IDisposable
     {
         private int _width, _height;
         private Bitmap _bitmap;
@@ -141,6 +141,16 @@ namespace EngineCore.Graphics.OpenGL
         {
             system.OnScreenResized -= OnScreenResized;
             system.RemoveSelfManagedRenderable(this);
+            Dispose();
+        }
+
+        public void Dispose()
+        {
+            if (_textTextureId != 0)
+            {
+                GL.DeleteTexture(_textTextureId);
+                _textTextureId = 0;
+            }
         }
     }
 }
