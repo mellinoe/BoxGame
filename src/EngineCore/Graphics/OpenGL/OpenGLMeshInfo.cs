@@ -84,10 +84,12 @@ namespace EngineCore.Graphics.OpenGL
                 return;
 
             BindTexture();
-            BindAllBuffers();
-            DrawElements();
-            UnbindTexture();
 
+            using (_textureBuffer.BeginBindingBlock())
+            {
+                BindAllBuffers();
+                DrawElements();
+            }
             // Restore the state
             GL.PopClientAttrib();
         }

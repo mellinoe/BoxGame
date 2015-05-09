@@ -16,17 +16,29 @@ namespace VoxelGame.Graphics
     {
         private Chunk _chunk;
         private ChunkMeshInfo _meshInfo;
+        private Vector3 _chunkCenter;
 
         private uint _vertexBufferId;
         private uint _indexBufferId;
         private int _numElements;
 
-        public OpenGLChunkRenderInfo(Chunk chunk)
+        public OpenGLChunkRenderInfo(Chunk chunk, Vector3 center)
         {
             _chunk = chunk;
             _meshInfo = new ChunkMeshInfo(chunk);
+            _chunkCenter = center;
             GenerateMeshBuffers(_meshInfo.Mesh, out _vertexBufferId, out _indexBufferId, out _numElements);
         }
+
+        public OpenGLChunkRenderInfo(Chunk chunk, ChunkMeshInfo meshInfo, Vector3 center)
+        {
+            _chunk = chunk;
+            _meshInfo = meshInfo;
+            _chunkCenter = center;
+            GenerateMeshBuffers(_meshInfo.Mesh, out _vertexBufferId, out _indexBufferId, out _numElements);
+        }
+
+        public Vector3 ChunkCenter { get { return _chunkCenter; } }
 
         public void DrawMeshElements()
         {

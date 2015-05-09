@@ -8,6 +8,11 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using VoxelGame.Graphics;
+using System.IO;
+using EngineCore.Graphics;
+using System.Threading.Tasks;
+using System.Diagnostics;
+using OpenTK.Graphics;
 
 namespace VoxelGame.World
 {
@@ -17,25 +22,68 @@ namespace VoxelGame.World
         private NoiseGen _noiseGen = new NoiseGen(1f, 1f, 4);
         private SpatialStorageBuffer<Tuple<Chunk, OpenGLChunkRenderInfo>> _chunks;
 
-        private static readonly Bitmap s_cubeFaceTextures = new Bitmap("Textures/CubeFaceTextures.png");
+        private static Texture2D s_cubeFaceTextures = new Texture2D("Textures/CubeFaceTextures.png");
         private TextureBuffer _textureBuffer = new TextureBuffer(s_cubeFaceTextures);
 
 
-        public ChunkManager()
+        public ChunkManager(OpenGLGraphicsSystem graphicsSystem)
         {
+            Stopwatch sw = Stopwatch.StartNew();
+
+            //_chunks = new SpatialStorageBuffer<Tuple<Chunk, OpenGLChunkRenderInfo>>(_loadedChunkDistance);
+            //for (int x = 0; x < _loadedChunkDistance; x++)
+            //    for (int y = 0; y < _loadedChunkDistance; y++)
+            //        for (int z = 0; z < _loadedChunkDistance; z++)
+            //        {
+            //            int worldX = x * Chunk.ChunkLength;
+            //            int worldY = y * Chunk.ChunkLength;
+            //            int worldZ = z * Chunk.ChunkLength;
+            //            Chunk chunk = GenChunk(worldX, worldY, worldZ);
+            //            OpenGLChunkRenderInfo renderInfo = new OpenGLChunkRenderInfo(chunk);
+            //            _chunks[x, y, z] = Tuple.Create(chunk, renderInfo);
+            //        }
+
             _chunks = new SpatialStorageBuffer<Tuple<Chunk, OpenGLChunkRenderInfo>>(_loadedChunkDistance);
+            List<Task> tasks = new List<Task>();
+
             for (int x = 0; x < _loadedChunkDistance; x++)
                 for (int y = 0; y < _loadedChunkDistance; y++)
                     for (int z = 0; z < _loadedChunkDistance; z++)
                     {
-                        int worldX = x * Chunk.ChunkLength;
-                        int worldY = y * Chunk.ChunkLength;
-                        int worldZ = z * Chunk.ChunkLength;
-                        Chunk chunk = GenChunk(worldX, worldY, worldZ);
-                        OpenGLChunkRenderInfo renderInfo = new OpenGLChunkRenderInfo(chunk);
-                        _chunks[x, y, z] = Tuple.Create(chunk, renderInfo);
+                        int localX = x;
+                        int localY = y;
+                        int localZ = z;
+
+                        tasks.Add(Task.Run(() =>
+                            {
+                                try
+                                {
+                                    int worldX = localX * Chunk.ChunkLength;
+                                    int worldY = localY * Chunk.ChunkLength;
+                                    int worldZ = localZ * Chunk.ChunkLength;
+
+                                    Chunk chunk = GenChunk(worldX, worldY, worldZ);
+
+                                    if (GraphicsContext.CurrentContext == null)
+                                    {
+                                        GraphicsContext context = new GraphicsContext(GraphicsMode.Default, graphicsSystem.Window.WindowInfo);
+                                    }
+
+                                    OpenGLChunkRenderInfo renderInfo = new OpenGLChunkRenderInfo(chunk, new Vector3(worldX, worldY, worldZ));
+                                    _chunks[localX, localY, localZ] = Tuple.Create(chunk, renderInfo);
+                                }
+                                catch (Exception e)
+                                {
+                                    Console.WriteLine("Error encountered in worker thread: " + e);
+                                    throw;
+                                }
+                            }));
                     }
 
+            //Task.WaitAll(tasks.ToArray());
+
+            sw.Stop();
+            Console.WriteLine("Total elapsed chunk generation time: " + sw.Elapsed.TotalSeconds);
         }
 
         public int CurrentLength { get { return _chunks.Length; } }
@@ -74,12 +122,14 @@ namespace VoxelGame.World
             // Set the Matrix Mode before loop
             GL.MatrixMode(MatrixMode.Modelview);
 
-            for (int x = 0; x < _loadedChunkDistance; x++)
-                for (int y = 0; y < _loadedChunkDistance; y++)
-                    for (int z = 0; z < _loadedChunkDistance; z++)
-                    {
-                        RenderSingleChunk(_chunks[x, y, z].Item2, new Vector3(x, y, z) * Chunk.ChunkLength, ref viewMatrix);
-                    }
+            for (int index = 0; index < _chunks.NumItems; index++)
+            {
+                if (_chunks[index] != null)
+                {
+                    OpenGLChunkRenderInfo renderInfo = _chunks[index].Item2;
+                    RenderSingleChunk(_chunks[index].Item2, renderInfo.ChunkCenter * Chunk.ChunkLength, ref viewMatrix);
+                }
+            }
 
             UnbindTexture();
         }

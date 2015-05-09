@@ -18,6 +18,11 @@ namespace EngineCore.Graphics.OpenGL
             GenerateTexture(bitmap);
         }
 
+        public TextureBuffer(Texture2D texture2D)
+        {
+            GenerateTexture(texture2D.Bitmap);
+        }
+
         private void GenerateTexture(Bitmap bitmap)
         {
             BitmapData bitmapData = bitmap.LockBits(
@@ -71,5 +76,24 @@ namespace EngineCore.Graphics.OpenGL
                 _textureBufferId = 0;
             }
         }
+
+        public TextureBufferBinding BeginBindingBlock()
+        {
+            return new TextureBufferBinding(_textureBufferId);
+        }
+
+        public struct TextureBufferBinding : IDisposable
+        {
+            public TextureBufferBinding(int id)
+            {
+                GL.BindTexture(TextureTarget.Texture2D, id);
+            }
+
+            public void Dispose()
+            {
+                GL.BindTexture(TextureTarget.Texture2D, 0);
+            }
+        }
+
     }
 }

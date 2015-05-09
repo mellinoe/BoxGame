@@ -12,9 +12,10 @@ namespace EngineCore.Graphics
     {
         private readonly Bitmap _bitmap;
 
-        public Texture2D(string filename)
+        public Texture2D(string projectRelativePath)
         {
-            _bitmap = new Bitmap(filename);
+            string fullPath = Path.Combine(AppContext.BaseDirectory, projectRelativePath);
+            _bitmap = new Bitmap(fullPath);
         }
 
         public Bitmap Bitmap

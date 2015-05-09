@@ -183,5 +183,7 @@ namespace EngineCore.Graphics.OpenGL
                 _window.Size = value;
             }
         }
+
+        public OpenTK.NativeWindow Window { get { return _window; } }
     }
 }
