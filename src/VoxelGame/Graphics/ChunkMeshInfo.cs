@@ -25,8 +25,13 @@ namespace VoxelGame.Graphics
 
         private PolyMesh RegenerateMesh()
         {
-            List<SimpleVertex> vertices = new List<SimpleVertex>();
-            List<int> indices = new List<int>();
+            int numBlocks = Chunk.ChunkLength * Chunk.ChunkLength * Chunk.ChunkLength;
+            float density = .7f;
+            int verticesPerFace = 4;
+            int indicesPerFace = 6;
+            int estimatedNumFaces = (int)(numBlocks * density) * 6;
+            List<SimpleVertex> vertices = new List<SimpleVertex>(estimatedNumFaces * verticesPerFace);
+            List<int> indices = new List<int>(estimatedNumFaces * indicesPerFace);
 
             for (int x = 0; x < Chunk.ChunkLength; x++)
             {
@@ -40,7 +45,7 @@ namespace VoxelGame.Graphics
                 }
             }
 
-            return new PolyMesh(vertices.ToArray(), indices.ToArray());
+            return new PolyMesh(vertices, indices);
         }
 
         private void AddBlock(List<SimpleVertex> vertices, List<int> indices, BlockType blockType, Vector3 center)

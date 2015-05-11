@@ -42,5 +42,19 @@ namespace EngineCore.Graphics.OpenGL
         {
             return *(Matrix4x4*)&mat;
         }
+
+        public static void PrintCurrentArrayBufferSize()
+        {
+            int value;
+            GL.GetBufferParameter(BufferTarget.ArrayBuffer, BufferParameterName.BufferSize, out value);
+            Console.WriteLine("Size of current ArrayBuffer: " + value);
+        }
+
+        public static void PrintCurrentElementBufferSize()
+        {
+            int value;
+            GL.GetBufferParameter(BufferTarget.ElementArrayBuffer, BufferParameterName.BufferSize, out value);
+            Console.WriteLine("Size of current ElementArrayBuffer: " + value);
+        }
     }
 }

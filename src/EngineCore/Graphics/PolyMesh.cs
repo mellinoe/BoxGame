@@ -23,10 +23,10 @@ namespace EngineCore.Graphics
         /// </summary>
         public IList<int> Indices { get { return this._indices; } }
 
-        public PolyMesh(SimpleVertex[] vertices, int[] indices)
+        public PolyMesh(IList<SimpleVertex> vertices, IList<int> indices)
         {
-            this._vertices = vertices;
-            this._indices = indices;
+            _vertices = vertices;
+            _indices = indices;
         }
 
         #region Legacy SharpDx Implementation

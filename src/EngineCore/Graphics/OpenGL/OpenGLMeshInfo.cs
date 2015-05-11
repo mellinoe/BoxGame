@@ -139,9 +139,6 @@ namespace EngineCore.Graphics.OpenGL
             // Of course we would have to reorder our data to be in the correct primitive order
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
         private void PrintCurrentArrayBufferSize()
         {
             int value;

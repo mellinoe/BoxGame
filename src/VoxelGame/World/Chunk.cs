@@ -11,6 +11,7 @@ namespace VoxelGame.World
     {
         public const int ChunkLength = 16;
         public const float BlockLength = 1f;
+        public const int BlocksPerChunk = ChunkLength * ChunkLength * ChunkLength;
 
         private readonly BlockData[] _blockData;
 

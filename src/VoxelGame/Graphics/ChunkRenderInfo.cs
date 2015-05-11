@@ -21,6 +21,7 @@ namespace VoxelGame.Graphics
         private uint _vertexBufferId;
         private uint _indexBufferId;
         private int _numElements;
+        private Chunk chunk;
 
         public OpenGLChunkRenderInfo(Chunk chunk, Vector3 center)
         {
@@ -36,6 +37,43 @@ namespace VoxelGame.Graphics
             _meshInfo = meshInfo;
             _chunkCenter = center;
             GenerateMeshBuffers(_meshInfo.Mesh, out _vertexBufferId, out _indexBufferId, out _numElements);
+        }
+
+        public OpenGLChunkRenderInfo(Chunk chunk, uint vertexBufferId, uint indexBufferId, IntPtr vertexBufferMapping, IntPtr indexBufferMapping, Vector3 chunkCenter)
+        {
+            _chunk = chunk;
+            _chunkCenter = chunkCenter;
+
+            _meshInfo = new ChunkMeshInfo(chunk);
+
+            _vertexBufferId = vertexBufferId;
+            _indexBufferId = indexBufferId;
+
+            SendMeshDataToExistingMappings(vertexBufferMapping, indexBufferMapping);
+        }
+
+        private unsafe void SendMeshDataToExistingMappings(IntPtr vertexBufferMapping, IntPtr indexBufferMapping)
+        {
+            Console.WriteLine("vertex buffer mapping: " + vertexBufferMapping);
+            Console.WriteLine("index buffer mapping: " + indexBufferMapping);
+
+            SimpleVertex* vertexBufferBasePtr = (SimpleVertex*)vertexBufferMapping;
+            int* indexBufferBasePtr = (int*)indexBufferMapping;
+
+            IList<SimpleVertex> vertices = _meshInfo.Mesh.Vertices;
+            Console.WriteLine("Will buffer " + vertices.Count * SimpleVertex.SizeInBytes + " bytes for vertex mapping loc " + vertexBufferMapping);
+            IList<int> indices = _meshInfo.Mesh.Indices;
+            Console.WriteLine("Will buffer " + indices.Count * sizeof(Int32) + " bytes for index mapping loc " + indexBufferMapping);
+
+            for (int i = 0; i < vertices.Count; i++)
+            {
+                vertexBufferBasePtr[i] = vertices[i];
+            }
+
+            for (int i = 0; i < indices.Count; i++)
+            {
+                indexBufferBasePtr[i] = indices[i];
+            }
         }
 
         public Vector3 ChunkCenter { get { return _chunkCenter; } }
@@ -95,10 +133,12 @@ namespace VoxelGame.Graphics
                 // Send data to buffer
                 GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(vertices.Length * SimpleVertex.SizeInBytes), vertices, BufferUsageHint.DynamicDraw);
 
+#if DEBUG
                 // Validate that the buffer is the correct size
                 GL.GetBufferParameter(BufferTarget.ArrayBuffer, BufferParameterName.BufferSize, out bufferSize);
                 if (vertices.Length * SimpleVertex.SizeInBytes != bufferSize)
                     throw new InvalidOperationException("Vertex array not uploaded correctly");
+#endif
 
                 // Clear the buffer Binding
                 GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
@@ -117,10 +157,12 @@ namespace VoxelGame.Graphics
                 // Send data to buffer
                 GL.BufferData(BufferTarget.ElementArrayBuffer, (IntPtr)(polyMesh.Indices.Count * sizeof(int)), polyMesh.Indices.ToArray(), BufferUsageHint.StaticDraw);
 
+#if DEBUG
                 // Validate that the buffer is the correct size
                 GL.GetBufferParameter(BufferTarget.ElementArrayBuffer, BufferParameterName.BufferSize, out bufferSize);
                 if (polyMesh.Indices.Count * sizeof(int) != bufferSize)
                     throw new InvalidOperationException("Element array not uploaded correctly");
+#endif
 
                 // Clear the buffer Binding
                 GL.BindBuffer(BufferTarget.ElementArrayBuffer, 0);

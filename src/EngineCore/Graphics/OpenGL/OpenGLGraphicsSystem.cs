@@ -32,7 +32,11 @@ namespace EngineCore.Graphics.OpenGL
             : base(game)
         {
             _window = new OpenTK.NativeWindow(960, 600, s_windowTitle, OpenTK.GameWindowFlags.Default, GraphicsMode.Default, OpenTK.DisplayDevice.Default);
-            _graphicsContext = new GraphicsContext(GraphicsMode.Default, _window.WindowInfo, 3, 0, GraphicsContextFlags.Default);
+            GraphicsContextFlags flags = GraphicsContextFlags.Default;
+#if DEBUG
+            //flags |= GraphicsContextFlags.Debug;
+#endif
+            _graphicsContext = new GraphicsContext(GraphicsMode.Default, _window.WindowInfo, 3, 0, flags);
             _graphicsContext.MakeCurrent(_window.WindowInfo);
             ((IGraphicsContextInternal)_graphicsContext).LoadAll(); // wtf is this?
 
@@ -90,7 +94,6 @@ namespace EngineCore.Graphics.OpenGL
         public override void Update()
         {
             RenderFrame();
-
             _window.ProcessEvents();
         }
 
@@ -102,15 +105,16 @@ namespace EngineCore.Graphics.OpenGL
             _viewMatrix = _camera.GetViewMatrix();
             SetProjectionMatrix(_camera.GetProjectionMatrix());
 
-            foreach (IRenderableObjectInfo roi in this._renderableObjects)
+            foreach (IRenderableObjectInfo roi in _renderableObjects)
             {
                 roi.Render(ref _viewMatrix);
             }
 
-            foreach (IRenderableObjectInfo2D roi2D in this._renderableObjects2D)
+            foreach (IRenderableObjectInfo2D roi2D in _renderableObjects2D)
             {
                 roi2D.Render();
             }
+
             _graphicsContext.SwapBuffers();
         }
 

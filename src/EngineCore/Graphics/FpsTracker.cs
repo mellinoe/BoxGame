@@ -21,7 +21,16 @@ namespace EngineCore.Graphics
 
         private Stopwatch stopwatch;
 
+        private double _updateFrequency = 0f;
+        private double _elapsed = 0f;
+
         public event Action<double> FramesPerSecondUpdated;
+
+        public double UpdateFrequency
+        {
+            get { return _updateFrequency; }
+            set { _updateFrequency = value; }
+        }
 
         protected override void Initialize(Entities.EntityUpdateSystem system)
         {
@@ -64,7 +73,12 @@ namespace EngineCore.Graphics
             frameTimes.AddLast(firstNode);
             totalFrameTime += (newDiff - oldDiff);
 
-            RaiseFpsUpdated();
+            _elapsed += (float)newDiff;
+            if (_elapsed >= _updateFrequency)
+            {
+                RaiseFpsUpdated();
+                _elapsed -= _updateFrequency;
+            }
         }
 
         private void RaiseFpsUpdated()

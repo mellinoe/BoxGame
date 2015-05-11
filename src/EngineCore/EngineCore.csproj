@@ -13,6 +13,7 @@
     <AssemblyName>EngineCore</AssemblyName>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <NoWarn>3001;3003</NoWarn>
+    <DefineConstants>$(DefineConstants);USE_SLEEP0</DefineConstants>
   </PropertyGroup>
 
   <!-- Default configurations to help VS understand the configurations -->

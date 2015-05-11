@@ -29,6 +29,7 @@ namespace VoxelGame
             protected override void PerformCustomInitialization()
             {
                 CreateFpsTracker();
+                AddNoiseWorldStartingStuff();
                 CreateNoiseGeneratedWorld();
             }
 
@@ -38,13 +39,13 @@ namespace VoxelGame
                 EngineCore.Graphics.OpenGL.TextRenderer textRenderer = new EngineCore.Graphics.OpenGL.TextRenderer();
                 textRendererObj.AddComponent(textRenderer);
                 FpsTracker fpsTracker = new FpsTracker();
+                fpsTracker.UpdateFrequency = 1.0 / 3.0;
                 textRendererObj.AddComponent(fpsTracker);
                 fpsTracker.FramesPerSecondUpdated += (value) => textRenderer.DrawText("FPS: " + value.ToString("###.00"), 15, 15);
             }
 
             private void CreateNoiseGeneratedWorld()
             {
-                AddNoiseWorldStartingStuff();
                 VoxelWorldSystem voxelWorldSystem = new VoxelWorldSystem(this);
                 this.Systems.Add(voxelWorldSystem);
             }
