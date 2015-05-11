@@ -3,7 +3,8 @@ setlocal
 
 if "%1" == "" (
   echo No game specified.
-  goto :Usage
+  echo "Usage: PlayGame.cmd <game-name>"
+  exit /b
 )
 
 set gamename=%1
@@ -27,7 +28,3 @@ goto :FindGameLoc
 
 :InvokeGame
 %runtimedir%\CoreRun.exe %runtimedir%\%gamename%.exe
-
-:Usage
-echo "Usage: PlayGame.cmd <game-name>"
-exit /b
