@@ -92,18 +92,18 @@ namespace VoxelGame.Graphics
             // Set the Pointer to the current bound array describing how the data ia stored
             GL.NormalPointer(NormalPointerType.Float, SimpleVertex.SizeInBytes, SimpleVertex.NormalOffset);
             // Enable the client state so it will use this array buffer pointer
-            GL.EnableClientState(ArrayCap.NormalArray);
+            //GL.EnableClientState(ArrayCap.NormalArray);
 
             // Texture coordinate array
             GL.TexCoordPointer(2, TexCoordPointerType.Float, SimpleVertex.SizeInBytes, SimpleVertex.TexCoordOffset);
 
             // Enable texture coordinate array
-            GL.EnableClientState(ArrayCap.TextureCoordArray);
+            //GL.EnableClientState(ArrayCap.TextureCoordArray);
 
             // Position Array Buffer
             GL.VertexPointer(3, VertexPointerType.Float, SimpleVertex.SizeInBytes, SimpleVertex.PositionOffset);
             // Enable the client state so it will use this array buffer pointer
-            GL.EnableClientState(ArrayCap.VertexArray);
+            //GL.EnableClientState(ArrayCap.VertexArray);
 
             // Element Array Buffer
             GL.BindBuffer(BufferTarget.ElementArrayBuffer, _indexBufferId);

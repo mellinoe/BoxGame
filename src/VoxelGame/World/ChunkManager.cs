@@ -219,6 +219,11 @@ namespace VoxelGame.World
             // Set the Matrix Mode before loop
             GL.MatrixMode(MatrixMode.Modelview);
 
+            // Set the client state used by the render infos
+            GL.EnableClientState(ArrayCap.NormalArray);
+            GL.EnableClientState(ArrayCap.TextureCoordArray);
+            GL.EnableClientState(ArrayCap.VertexArray);
+
             for (int index = 0; index < _chunks.NumItems; index++)
             {
                 if (_chunks[index] != null)
