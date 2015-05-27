@@ -1,6 +1,5 @@
 ﻿using EngineCore.Components;
 using EngineCore.Graphics;
-using EngineCore.Graphics.OpenGL;
 using EngineCore.Utility;
 using System;
 using System.Collections.Generic;

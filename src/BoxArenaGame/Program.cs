@@ -18,8 +18,15 @@ namespace GameApplication
         /// </summary>
         static void Main()
         {
-            Game game = new BoxGame();
-            game.Start();
+            try
+            {
+                Game game = new BoxGame();
+                game.Start();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Unexpected exception encountered:" + Environment.NewLine +e);
+            }
         }
 
         public class BoxGame : Game
@@ -27,7 +34,7 @@ namespace GameApplication
             protected override void PerformCustomInitialization()
             {
                 CreateStandardBoxArena();
-                CreateFpsTracker();
+                //CreateFpsTracker();
             }
 
             private static void CreateFpsTracker()
@@ -65,14 +72,6 @@ namespace GameApplication
                         GameObject.CreateStaticBox(1.5f, 1.5f, 1.5f).Transform.Position = new Vector3(x, x + z, z) * 1.5f;
                     }
                 }
-            }
-
-            private static void AddNoiseWorldStartingStuff()
-            {
-                var camera = new GameObject();
-                camera.AddComponent<Camera>();
-                camera.AddComponent<BoxLauncher>();
-                camera.AddComponent<FreeFlyMovement>();
             }
 
             private static void CreateStandardBoxArena()

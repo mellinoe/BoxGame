@@ -10,7 +10,7 @@ using System.Threading;
 
 namespace EngineCore.Graphics
 {
-    public class SharpDxGraphicsSystem : GameSystem
+    public class SharpDxGraphicsSystem : GraphicsSystem
     {
         private ShaderCache shaderCache = new ShaderCache();
         public ShaderCache ShaderCache { get { return shaderCache; } }
@@ -21,6 +21,9 @@ namespace EngineCore.Graphics
             get { return renderer; }
             set { renderer = value; }
         }
+
+        private EngineCore.Graphics.OpenGL.NativeWindowInputSystem _inputSystem;
+        internal EngineCore.Graphics.OpenGL.NativeWindowInputSystem InputSystem { get { return _inputSystem; } }
 
         private Thread thread;
         private bool active;
@@ -35,6 +38,9 @@ namespace EngineCore.Graphics
         {
             renderer = new SimpleRenderer();
             renderer.Window.Closing += OnWindowClosing;
+
+            _inputSystem = new OpenGL.NativeWindowInputSystem(Game, renderer.Window);
+
             this.active = true;
         }
 
@@ -68,9 +74,26 @@ namespace EngineCore.Graphics
 
         }
 
-        internal void SetCamera(Camera camera)
+        public override void SetCamera(Camera camera)
         {
             renderer.MainCamera = camera;
+        }
+
+        public override void RegisterSimpleMesh(IRenderable renderable, PolyMesh _cubeMesh, System.Drawing.Bitmap bitmap)
+        {
+            Console.WriteLine("I should be registering a simple mesh now...");
+        }
+
+        public override System.Drawing.Size WindowSize
+        {
+            get
+            {
+                return renderer.Window.ClientSize;
+            }
+            set
+            {
+                renderer.Window.ClientSize = value;
+            }
         }
     }
 }

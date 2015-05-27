@@ -43,9 +43,9 @@ namespace EngineCore
             this.Systems = new GameSystemCollection();
             this.Systems.Add(new EntityUpdateSystem(this));
             this.Systems.Add(new BepuPhysicsSystem(this));
-            graphicsSystem = new OpenGLGraphicsSystem(this);
+            graphicsSystem = new SharpDxGraphicsSystem(this);
             this.Systems.Add(graphicsSystem);
-            this.Systems.Add(((OpenGLGraphicsSystem)graphicsSystem).InputSystem);
+            this.Systems.Add(((SharpDxGraphicsSystem)graphicsSystem).InputSystem);
 
             GameObject.GameObjectConstructed += AddGameObject;  // Todo: Make this less ridiculous
 

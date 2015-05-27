@@ -98,6 +98,7 @@ namespace EngineCore.Graphics
         {
             string title = "SharpDX Renderer";
             _nativeWindow = new OpenTK.NativeWindow(960, 600, title, OpenTK.GameWindowFlags.Default, OpenTK.Graphics.GraphicsMode.Default, OpenTK.DisplayDevice.Default);
+
             this.renderables = ImmutableArray<IRenderable>.Empty;
             CreateAndInitializeDevice();
             _nativeWindow.Visible = true;
@@ -153,7 +154,7 @@ namespace EngineCore.Graphics
         {
             this.worldViewProjectionMatrixBuffer = new SharpDX.Direct3D11.Buffer(
                 device,
-                Marshal.SizeOf(typeof(MatricesBuffer)),
+                Marshal.SizeOf<MatricesBuffer>(),
                 ResourceUsage.Default,
                 BindFlags.ConstantBuffer,
                 CpuAccessFlags.None,
@@ -162,7 +163,7 @@ namespace EngineCore.Graphics
 
             this.ambientLightBuffer = new SharpDX.Direct3D11.Buffer(
                 device,
-                Marshal.SizeOf(typeof(AmbientLightBuffer)),
+                Marshal.SizeOf<AmbientLightBuffer>(),
                 ResourceUsage.Default,
                 BindFlags.ConstantBuffer,
                 CpuAccessFlags.None,

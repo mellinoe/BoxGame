@@ -30,7 +30,7 @@ namespace EngineCore.Graphics
             this.diffuseColor = color;
             this.lightMatrixBuffer = new SharpDX.Direct3D11.Buffer(
                 device,
-                Marshal.SizeOf(typeof(LightBuffer)),
+                Marshal.SizeOf<LightBuffer>(),
                 ResourceUsage.Default,
                 BindFlags.ConstantBuffer,
                 CpuAccessFlags.None,
