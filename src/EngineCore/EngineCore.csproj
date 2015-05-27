@@ -14,12 +14,12 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <NoWarn>3001;3003</NoWarn>
     <DefineConstants>$(DefineConstants);USE_SLEEP0</DefineConstants>
+    <IncludeSharpDx>true</IncludeSharpDx>
+	<SkipSigning>true</SkipSigning>
   </PropertyGroup>
-
   <!-- Default configurations to help VS understand the configurations -->
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' " />
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' " />
-
   <ItemGroup>
     <Compile Include="Components\Component.cs" />
     <Compile Include="Components\Transform.cs" />
@@ -63,23 +63,29 @@
     <Compile Include="Utility\Resources.cs" />
   </ItemGroup>
   <ItemGroup Condition="'$(IncludeSharpDx)' == 'true'">
-    <Compile Include="Graphics\DirectionalLight.cs" />
-    <Compile Include="Graphics\SimpleRenderer.cs" />
-    <Compile Include="Graphics\SimpleShader.cs" />
-    <Compile Include="Graphics\SharpDxGraphicsSystem.cs" />
-    <Compile Include="Graphics\ShaderCache.cs" />
-    <Compile Include="Graphics\SimpleText.cs" />
-    <Compile Include="Input\OLD_InputSystem.cs" />
+    <Compile Include="Graphics\SharpDX\DirectionalLight.cs" />
+    <Compile Include="Graphics\SharpDX\SimpleRenderer.cs" />
+    <Compile Include="Graphics\SharpDX\SimpleShader.cs" />
+    <Compile Include="Graphics\SharpDX\SharpDxGraphicsSystem.cs" />
+    <Compile Include="Graphics\SharpDX\ShaderCache.cs" />
+    <Compile Include="Graphics\SharpDX\SimpleText.cs" />
+    <Compile Include="Graphics\SharpDX\OLD_InputSystem.cs" />
     <Compile Include="Physics\ConvexHullCollider.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
     <None Include="project.json" />
   </ItemGroup>
   <ItemGroup>
     <Reference Condition="'$(Configuration)' == 'Release'" Include="$(RefsDir)\OpenTK\Release\OpenTK.dll" />
     <Reference Condition="'$(Configuration)' == 'Debug'" Include="$(RefsDir)\OpenTK\Debug\OpenTK.dll" />
     <Reference Include="$(RefsDir)\System.Drawing\System.Drawing.dll" />
+	<Reference Include="$(RefsDir)\ExperimentalCollections\Microsoft.Experimental.Collections.dll" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(IncludeSharpDx)' == 'true'">
+    <Reference Include="$(RefsDir)\SharpDx\SharpDX.dll" />
+    <Reference Include="$(RefsDir)\SharpDx\SharpDX.D3DCompiler.dll" />
+    <Reference Include="$(RefsDir)\SharpDx\SharpDX.Direct3D11.dll" />
+    <Reference Include="$(RefsDir)\SharpDx\SharpDX.DXGI.dll" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\BEPU\BEPUphysics\BEPUphysics.csproj">

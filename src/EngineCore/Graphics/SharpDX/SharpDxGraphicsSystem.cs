@@ -1,14 +1,12 @@
 ﻿using EngineCore.Entities;
 using EngineCore.Graphics;
 using EngineCore.Physics;
-using SharpDX.Windows;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading;
-using System.Windows.Forms;
 
 namespace EngineCore.Graphics
 {
@@ -23,8 +21,10 @@ namespace EngineCore.Graphics
             get { return renderer; }
             set { renderer = value; }
         }
+
         private Thread thread;
         private bool active;
+
         public SharpDxGraphicsSystem(Game game)
             : base(game)
         {
@@ -34,28 +34,13 @@ namespace EngineCore.Graphics
         private void ThreadStartFunc(object obj)
         {
             renderer = new SimpleRenderer();
-            renderer.Form.MouseDown += OnMouseDown;
-            renderer.Form.FormClosing += OnFormClosing;
+            renderer.Window.Closing += OnWindowClosing;
             this.active = true;
-            Application.Run(renderer.Form);
         }
 
-        private void OnFormClosing(object sender, FormClosingEventArgs e)
+        private void OnWindowClosing(object sender, EventArgs e)
         {
             Game.Exit();
-        }
-
-        private void OnMouseDown(object sender, MouseEventArgs e)
-        {
-            Debug.WriteLine("Clicked at " + e.X + ", " + e.Y);
-            if (e.Button == MouseButtons.Left)
-            {
-                renderer.Form.Text += "+";
-            }
-            else if (e.Button == MouseButtons.Right)
-            {
-                renderer.Form.Text = renderer.Form.Text.Length != 0 ? renderer.Form.Text.Substring(0, renderer.Form.Text.Length - 1) : "Empty";
-            }
         }
 
         public override void Update()
@@ -63,6 +48,7 @@ namespace EngineCore.Graphics
             if (this.active)
             {
                 renderer.RenderFrame();
+                renderer.Window.ProcessEvents();
             }
         }
 
@@ -71,7 +57,7 @@ namespace EngineCore.Graphics
             this.thread.Start();
             while (this.renderer == null)
             {
-                Thread.Yield();
+                Thread.Sleep(0);
             }
         }
 

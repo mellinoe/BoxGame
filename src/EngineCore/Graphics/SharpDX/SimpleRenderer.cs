@@ -1,7 +1,6 @@
 ﻿using SharpDX;
 using SharpDX.Direct3D11;
 using SharpDX.DXGI;
-using SharpDX.Windows;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -16,6 +15,7 @@ using Vector3 = System.Numerics.Vector3;
 using Matrix4x4 = System.Numerics.Matrix4x4;
 using EngineCore.Entities;
 using System.Collections.Immutable;
+using SharpDX.Mathematics.Interop;
 
 namespace EngineCore.Graphics
 {
@@ -25,7 +25,6 @@ namespace EngineCore.Graphics
         // Direct3D Device and State Objects
         private SharpDX.Direct3D11.Device device;
         private DeviceContext deviceContext;
-        private SharpDX.Toolkit.Graphics.GraphicsDevice __2dGraphicsDevice;
         private SwapChain swapChain;
         private RenderTargetView backBufferView;
         private DepthStencilView depthStencilView;
@@ -46,19 +45,19 @@ namespace EngineCore.Graphics
         // Misc
         private ImmutableArray<IRenderable> renderables;
         private Camera camera;
-        private RenderForm renderForm;
         private bool needsResizing = false;
+        private OpenTK.NativeWindow _nativeWindow;
 
         #endregion Private Fields
 
         #region Public Accessors And Methods
-        public RenderForm Form { get { return renderForm; } }
-
         public DeviceContext DeviceContext { get { return deviceContext; } }
 
         public SwapChain SwapChain { get { return swapChain; } }
 
         public SharpDX.Direct3D11.Device Device { get { return device; } }
+
+        public OpenTK.NativeWindow Window { get { return _nativeWindow; } }
 
         public Color4f AmbientColor
         {
@@ -97,12 +96,11 @@ namespace EngineCore.Graphics
         #region Constructor
         public SimpleRenderer()
         {
-            string title = "SharpDX Renderer (SIMD " + (Vector.IsHardwareAccelerated ? "Enabled" : "Disabled") + ")";
-            title += Environment.Is64BitProcess ? " 64-bit" : " 32-bit";
-            this.renderForm = new RenderForm(title);
+            string title = "SharpDX Renderer";
+            _nativeWindow = new OpenTK.NativeWindow(960, 600, title, OpenTK.GameWindowFlags.Default, OpenTK.Graphics.GraphicsMode.Default, OpenTK.DisplayDevice.Default);
             this.renderables = ImmutableArray<IRenderable>.Empty;
             CreateAndInitializeDevice();
-            renderForm.Show();
+            _nativeWindow.Visible = true;
             AmbientColor = new Color4f(.25f, .25f, .25f, 1);
 #if TEXT_RENDERER
             this.TextRenderer = new SimpleText(this.Get2DGraphicsDevice(), "Fonts/textfont.dds");
@@ -114,8 +112,8 @@ namespace EngineCore.Graphics
             {
                 BufferCount = 1,
                 IsWindowed = true,
-                ModeDescription = new ModeDescription(renderForm.ClientSize.Width, renderForm.ClientSize.Height, new Rational(60, 1), Format.R8G8B8A8_UNorm),
-                OutputHandle = renderForm.Handle,
+                ModeDescription = new ModeDescription(_nativeWindow.ClientSize.Width, _nativeWindow.ClientSize.Height, new Rational(60, 1), Format.R8G8B8A8_UNorm),
+                OutputHandle = _nativeWindow.WindowInfo.Handle,
                 SampleDescription = new SampleDescription(1, 0),
                 SwapEffect = SwapEffect.Discard,
                 Usage = Usage.RenderTargetOutput
@@ -130,14 +128,14 @@ namespace EngineCore.Graphics
             __2dGraphicsDevice = SharpDX.Toolkit.Graphics.GraphicsDevice.New(device);
 #endif
             var factory = SwapChain.GetParent<Factory>();
-            factory.MakeWindowAssociation(renderForm.Handle, WindowAssociationFlags.IgnoreAll);
+            factory.MakeWindowAssociation(_nativeWindow.WindowInfo.Handle, WindowAssociationFlags.IgnoreAll);
 
             SetRasterizerState();
             SetDepthBufferState();
             SetSamplerState();
             SetBlendState();
             CreateConstantBuffers();
-            renderForm.Resize += OnFormResized;
+            _nativeWindow.Resize += OnWindowResized;
             PerformResizing();
             SetRegularTargets();
         }
@@ -175,7 +173,7 @@ namespace EngineCore.Graphics
         private void SetRegularTargets()
         {
             // Setup targets and viewport for rendering
-            DeviceContext.Rasterizer.SetViewport(0, 0, renderForm.ClientSize.Width, renderForm.ClientSize.Height);
+            DeviceContext.Rasterizer.SetViewport(0, 0, _nativeWindow.ClientSize.Width, _nativeWindow.ClientSize.Height);
             DeviceContext.OutputMerger.SetTargets(depthStencilView, backBufferView);
         }
 
@@ -227,7 +225,7 @@ namespace EngineCore.Graphics
             }
 
             SetAllDeviceStates();
-            Clear(Color.CornflowerBlue);
+            Clear(Color4f.Cyan);
 
             UpdateViewProjectionBuffers();
             if (Light != null)
@@ -240,23 +238,16 @@ namespace EngineCore.Graphics
                 Type = QueryType.PipelineStatistics
             });
             deviceContext.Begin(statisticsQuery);
-#if TEXT_RENDERER
-            TextRenderer.BeginDraw();
-#endif
+
             foreach (var renderable in renderables)
             {
-                renderable.Render(this);
+                Console.WriteLine("Would be rendering: " + renderable);
+                //renderable.Render(this);
             }
+
             deviceContext.End(statisticsQuery);
             QueryDataPipelineStatistics result;
             while (!deviceContext.GetData(statisticsQuery, out result)) { }
-#if TEXT_RENDERER
-            TextRenderer.DrawText("VS Invocations: " + result.VSInvocationCount, new Vector2(0, 50));
-            TextRenderer.DrawText("PS Invocations: " + result.PSInvocationCount, new Vector2(0, 75));
-            TextRenderer.DrawText("Input Vertices: " + result.IAVerticeCount, new Vector2(0, 100));
-
-            TextRenderer.EndDraw();
-#endif
 
             swapChain.Present(0, PresentFlags.None);
         }
@@ -267,16 +258,16 @@ namespace EngineCore.Graphics
             viewMatrix = camera.GetViewMatrix();
         }
 
-        private void Clear(Color4 color)
+        private unsafe void Clear(Color4f color)
         {
             // Clear the back buffer
-            deviceContext.ClearRenderTargetView(backBufferView, color);
+            deviceContext.ClearRenderTargetView(backBufferView, *(RawColor4*)&color);
 
             // Clear the depth buffer
             DeviceContext.ClearDepthStencilView(depthStencilView, DepthStencilClearFlags.Depth, 1.0f, 0);
         }
 
-        private void OnFormResized(object sender, EventArgs e)
+        private void OnWindowResized(object sender, EventArgs e)
         {
             this.needsResizing = true;
         }
@@ -292,10 +283,10 @@ namespace EngineCore.Graphics
                 depthStencilView.Dispose();
             }
 
-            swapChain.ResizeBuffers(1, renderForm.ClientSize.Width, renderForm.ClientSize.Height, Format.R8G8B8A8_UNorm, SwapChainFlags.AllowModeSwitch);
+            swapChain.ResizeBuffers(1, _nativeWindow.ClientSize.Width, _nativeWindow.ClientSize.Height, Format.R8G8B8A8_UNorm, SwapChainFlags.AllowModeSwitch);
 
             // Get the backbuffer from the swapchain
-            using (var backBufferTexture = SwapChain.GetBackBuffer<Texture2D>(0))
+            using (var backBufferTexture = SwapChain.GetBackBuffer<SharpDX.Direct3D11.Texture2D>(0))
             {
                 // Backbuffer
                 backBufferView = new RenderTargetView(Device, backBufferTexture);
@@ -303,13 +294,13 @@ namespace EngineCore.Graphics
 
             // Depth buffer
 
-            using (var zbufferTexture = new Texture2D(Device, new Texture2DDescription()
+            using (var zbufferTexture = new SharpDX.Direct3D11.Texture2D(Device, new Texture2DDescription()
             {
                 Format = Format.D16_UNorm,
                 ArraySize = 1,
                 MipLevels = 1,
-                Width = Math.Max(1, renderForm.ClientSize.Width),
-                Height = Math.Max(1, renderForm.ClientSize.Height),
+                Width = Math.Max(1, _nativeWindow.ClientSize.Width),
+                Height = Math.Max(1, _nativeWindow.ClientSize.Height),
                 SampleDescription = new SampleDescription(1, 0),
                 Usage = ResourceUsage.Default,
                 BindFlags = BindFlags.DepthStencil,
@@ -340,11 +331,6 @@ namespace EngineCore.Graphics
         internal void RenderFrame()
         {
             this.OnRendering();
-        }
-
-        internal SharpDX.Toolkit.Graphics.GraphicsDevice Get2DGraphicsDevice()
-        {
-            return this.__2dGraphicsDevice;
         }
         #endregion Private/Internal Implementation
     }

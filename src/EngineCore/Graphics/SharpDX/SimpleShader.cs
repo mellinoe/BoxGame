@@ -2,6 +2,7 @@
 using SharpDX.Direct3D11;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -32,8 +33,11 @@ namespace EngineCore.Graphics
             string psEntryPoint,
             InputElement[] inputElements)
         {
-            var compiledVertexShader = ShaderBytecode.CompileFromFile(fileName, vsEntryPoint, "vs_5_0", defaultShaderFlags);
-            var compiledPixelShader = ShaderBytecode.CompileFromFile(fileName, psEntryPoint, "ps_5_0", defaultShaderFlags);
+            string shaderSource = File.ReadAllText(fileName);
+
+            CompilationResult compiledVertexShader = ShaderBytecode.Compile(shaderSource, vsEntryPoint, "vs_5_0", defaultShaderFlags, EffectFlags.None, fileName);
+            CompilationResult compiledPixelShader = ShaderBytecode.Compile(shaderSource, psEntryPoint, "ps_5_0", defaultShaderFlags, EffectFlags.None, fileName);
+
             CoreInitialize(device, deviceContext, compiledVertexShader, compiledPixelShader, inputElements);
         }
 
@@ -66,8 +70,8 @@ namespace EngineCore.Graphics
 
             this.vertexShader = new VertexShader(device, compiledVertexShader);
             this.pixelShader = new PixelShader(device, compiledPixelShader);
-
-            var shaderSignature = ShaderSignature.GetInputSignature(compiledVertexShader);
+            
+            var shaderSignature = new ShaderSignature(compiledVertexShader.Data);
             this.inputLayout = new InputLayout(device, shaderSignature, inputElements);
         }
 

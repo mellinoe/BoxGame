@@ -39,7 +39,7 @@ namespace EngineCore.Physics
 
         protected override ConvexHull InitPhysicsEntity()
         {
-            return new ConvexHull(this.Transform.Position, mesh.Vertices);
+            return new ConvexHull(this.Transform.Position, mesh.Vertices.Select(sv => sv.Position).ToArray());
         }
     }
 }

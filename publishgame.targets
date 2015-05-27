@@ -41,8 +41,9 @@
       </PublishedRuntimeItems>
     </ItemGroup>
 
-    <Message Text="PublishedRuntimeItems@(PublishedRuntimeItems)" Importance="high" />
-    <Message Text="GameRuntimePath:$(GameRuntimePath)" Importance="high" />
+	<Message Text="None: @(None)" Importance="high" />
+    <Message Text="PublishedRuntimeItems: @(PublishedRuntimeItems)" Importance="high" />
+    <Message Text="GameRuntimePath: $(GameRuntimePath)" Importance="high" />
     
     <Copy SourceFiles="%(PublishedRuntimeItems.Identity)" DestinationFiles="$(GameRuntimePath)\%(DestinationRelativePath)" SkipUnchangedFiles="true" />
   </Target>
