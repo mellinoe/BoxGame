@@ -78,6 +78,9 @@ namespace GameApplication
             {
                 AddArenaStartingStuff();
 
+                var light = new GameObject();
+                LightComponent lightComponent = light.AddComponent(new LightComponent(LightKind.Directional, new Vector3(-.5f, -1f, -.5f), Color4f.White));
+
                 var box = GameObject.CreateBox(3.0f, 3.0f, 3.0f, 6f);
                 box.Transform.Position = new Vector3(0, 5, 15);
 

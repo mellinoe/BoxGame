@@ -41,28 +41,6 @@ namespace EngineCore.Graphics
             CoreInitialize(device, deviceContext, compiledVertexShader, compiledPixelShader, inputElements);
         }
 
-        public SimpleShader(
-            Device device,
-            DeviceContext context,
-            string compiledVertexShaderFileName,
-            string compiledPixelShaderFileName,
-            InputElement[] inputElements)
-        {
-            var compiledVertexShader = ShaderBytecode.FromFile(compiledVertexShaderFileName);
-            var compiledPixelShader = ShaderBytecode.FromFile(compiledPixelShaderFileName);
-            CoreInitialize(device, context, compiledVertexShader, compiledPixelShader, inputElements);
-        }
-
-        public SimpleShader(
-            Device device,
-            DeviceContext deviceContext,
-            ShaderBytecode compiledVertexShader,
-            ShaderBytecode compiledPixelShader,
-            InputElement[] inputElements)
-        {
-            CoreInitialize(device, deviceContext, compiledVertexShader, compiledPixelShader, inputElements);
-        }
-
         private void CoreInitialize(Device device, DeviceContext deviceContext, ShaderBytecode compiledVertexShader, ShaderBytecode compiledPixelShader, InputElement[] inputElements)
         {
             this.device = device;

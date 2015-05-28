@@ -29,6 +29,7 @@ struct PixelInput
     float4 position : SV_POSITION;
     float3 normal : NORMAL;
     float4 color : COLOR;
+    float2 texCoord : TEXCOORD0;
 };
 
 PixelInput VS(VertexInput input)
@@ -44,15 +45,30 @@ PixelInput VS(VertexInput input)
 
     output.normal = mul(input.normal, (float3x3)world);
     output.normal = normalize(output.normal);
+
+    output.texCoord = input.texCoord;
+
     return output;
 }
 
+/////////////
+// GLOBALS //
+/////////////
+Texture2D shaderTexture;
+SamplerState MeshTextureSampler
+{
+    Filter = MIN_MAG_MIP_LINEAR;
+    MaxLOD = 0.0f;
+    AddressU = Wrap;
+    AddressV = Wrap;
+};
+
 float4 PS(PixelInput input) : SV_Target
 {
-    float4 color;
+    float4 color = shaderTexture.Sample(MeshTextureSampler, input.texCoord);
     float3 lightDir = -normalize(lightDirection).xyz;
     float effectiveness = dot(input.normal, lightDir);
     float lightEffectiveness = saturate(effectiveness);
     float4 lightColor = saturate(diffuseColor * lightEffectiveness);
-    return saturate((lightColor * input.color) + (ambientColor * input.color));
+    return saturate((lightColor * color) + (ambientColor * color));
 }

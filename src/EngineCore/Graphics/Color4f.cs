@@ -29,6 +29,7 @@ namespace EngineCore.Graphics
         public static readonly Color4f White = new Color4f(1, 1, 1, 1);
         public static readonly Color4f Silver = new Color4f(0xC0 / 255f, 0xC0 / 255f, 0xC0 / 255f, 1);
         public static readonly Color4f Orange = new Color4f(0xFF / 255f, 0xA5 / 255f, 0x00 / 255f, 1);
+        public static readonly Color4f CornflowerBlue = new Color4f(0x64 / 255f, 0x95 / 255f, 0xED / 255f, 0xff / 255f);
 
         public Int32 ToRgba32()
         {

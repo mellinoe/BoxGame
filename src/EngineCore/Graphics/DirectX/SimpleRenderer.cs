@@ -217,12 +217,11 @@ namespace EngineCore.Graphics
             }
 
             SetAllDeviceStates();
-            Clear(Color4f.Cyan);
+            Clear(Color4f.CornflowerBlue);
 
             UpdateViewProjectionBuffers();
             if (DirectionalLight != null)
             {
-                Console.WriteLine("Setting directional light buffer.");
                 DirectionalLight.SetLightBuffer();
             }
 
