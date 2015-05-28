@@ -23,6 +23,8 @@ namespace EngineCore.Graphics
 
         public abstract void RegisterSimpleMesh(IRenderable renderable, PolyMesh _cubeMesh, Bitmap bitmap);
 
+        public abstract void RegisterLight(ILightInfo lightInfo);
+
         public abstract void SetCamera(Camera camera);
 
         public abstract Size WindowSize { get; set; }

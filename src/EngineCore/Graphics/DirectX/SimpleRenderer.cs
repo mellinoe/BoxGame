@@ -43,7 +43,7 @@ namespace EngineCore.Graphics
         private Color4f ambientColor;
 
         // Misc
-        private ImmutableArray<IRenderable> renderables;
+        private ImmutableArray<IRenderableObjectInfo> renderables;
         private Camera camera;
         private bool needsResizing = false;
         private OpenTK.NativeWindow _nativeWindow;
@@ -75,22 +75,19 @@ namespace EngineCore.Graphics
             set { camera = value; }
         }
 
-        public void AddRenderable(IRenderable renderable)
+        public void AddRenderable(IRenderableObjectInfo renderable)
         {
             this.renderables = this.renderables.Add(renderable);
         }
 
-        public void RemoveRenderable(IRenderable renderable)
+        public void RemoveRenderable(IRenderableObjectInfo renderable)
         {
             this.renderables = this.renderables.Remove(renderable);
         }
 
-        public IReadOnlyCollection<IRenderable> Renderables { get { return renderables; } }
-        public DirectionalLight Light { get; set; }
+        public IReadOnlyCollection<IRenderableObjectInfo> Renderables { get { return renderables; } }
+        public DirectionalLight DirectionalLight { get; set; }
 
-#if TEXT_RENDERER
-        public SimpleText TextRenderer { get; private set; }
-#endif
         #endregion Public Accessors And Methods
 
         #region Constructor
@@ -99,13 +96,10 @@ namespace EngineCore.Graphics
             string title = "SharpDX Renderer";
             _nativeWindow = new OpenTK.NativeWindow(960, 600, title, OpenTK.GameWindowFlags.Default, OpenTK.Graphics.GraphicsMode.Default, OpenTK.DisplayDevice.Default);
 
-            this.renderables = ImmutableArray<IRenderable>.Empty;
+            this.renderables = ImmutableArray<IRenderableObjectInfo>.Empty;
             CreateAndInitializeDevice();
             _nativeWindow.Visible = true;
             AmbientColor = new Color4f(.25f, .25f, .25f, 1);
-#if TEXT_RENDERER
-            this.TextRenderer = new SimpleText(this.Get2DGraphicsDevice(), "Fonts/textfont.dds");
-#endif
         }
         private void CreateAndInitializeDevice()
         {
@@ -125,9 +119,6 @@ namespace EngineCore.Graphics
 #endif
             SharpDX.Direct3D11.Device.CreateWithSwapChain(SharpDX.Direct3D.DriverType.Hardware, flags, swapChainDescription, out device, out swapChain);
             deviceContext = device.ImmediateContext;
-#if TEXT_RENDERER
-            __2dGraphicsDevice = SharpDX.Toolkit.Graphics.GraphicsDevice.New(device);
-#endif
             var factory = SwapChain.GetParent<Factory>();
             factory.MakeWindowAssociation(_nativeWindow.WindowInfo.Handle, WindowAssociationFlags.IgnoreAll);
 
@@ -229,9 +220,10 @@ namespace EngineCore.Graphics
             Clear(Color4f.Cyan);
 
             UpdateViewProjectionBuffers();
-            if (Light != null)
+            if (DirectionalLight != null)
             {
-                Light.SetLightBuffer();
+                Console.WriteLine("Setting directional light buffer.");
+                DirectionalLight.SetLightBuffer();
             }
 
             var statisticsQuery = new Query(device, new QueryDescription()
@@ -242,8 +234,7 @@ namespace EngineCore.Graphics
 
             foreach (var renderable in renderables)
             {
-                Console.WriteLine("Would be rendering: " + renderable);
-                //renderable.Render(this);
+                renderable.Render(ref viewMatrix);
             }
 
             deviceContext.End(statisticsQuery);
@@ -333,7 +324,16 @@ namespace EngineCore.Graphics
         {
             this.OnRendering();
         }
+
         #endregion Private/Internal Implementation
+
+        internal void AddLight(ILightInfo lightInfo)
+        {
+            if (lightInfo.Kind == LightKind.Directional)
+            {
+                DirectionalLight = new DirectionalLight(device, deviceContext, lightInfo.Direction, lightInfo.Color);
+            }
+        }
     }
 
     #region Shader Constant Buffer Definitions

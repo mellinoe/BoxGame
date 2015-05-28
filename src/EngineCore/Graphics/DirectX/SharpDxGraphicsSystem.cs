@@ -1,5 +1,6 @@
 ﻿using EngineCore.Entities;
 using EngineCore.Graphics;
+using EngineCore.Graphics.DirectX;
 using EngineCore.Physics;
 using System;
 using System.Collections.Generic;
@@ -15,31 +16,25 @@ namespace EngineCore.Graphics
         private ShaderCache shaderCache = new ShaderCache();
         public ShaderCache ShaderCache { get { return shaderCache; } }
 
-        SimpleRenderer renderer;
+        SimpleRenderer _renderer;
         public SimpleRenderer Renderer
         {
-            get { return renderer; }
-            set { renderer = value; }
+            get { return _renderer; }
+            set { _renderer = value; }
         }
 
         private EngineCore.Graphics.OpenGL.NativeWindowInputSystem _inputSystem;
         internal EngineCore.Graphics.OpenGL.NativeWindowInputSystem InputSystem { get { return _inputSystem; } }
 
-        private Thread thread;
         private bool active;
 
         public SharpDxGraphicsSystem(Game game)
             : base(game)
         {
-            this.thread = new Thread(ThreadStartFunc);
-        }
+            _renderer = new SimpleRenderer();
+            _renderer.Window.Closing += OnWindowClosing;
 
-        private void ThreadStartFunc(object obj)
-        {
-            renderer = new SimpleRenderer();
-            renderer.Window.Closing += OnWindowClosing;
-
-            _inputSystem = new OpenGL.NativeWindowInputSystem(Game, renderer.Window);
+            _inputSystem = new OpenGL.NativeWindowInputSystem(Game, _renderer.Window);
 
             this.active = true;
         }
@@ -53,47 +48,48 @@ namespace EngineCore.Graphics
         {
             if (this.active)
             {
-                renderer.RenderFrame();
-                renderer.Window.ProcessEvents();
+                _renderer.RenderFrame();
+                _renderer.Window.ProcessEvents();
             }
         }
 
         public override void Start()
         {
-            this.thread.Start();
-            while (this.renderer == null)
-            {
-                Thread.Sleep(0);
-            }
+
         }
 
         public override void Stop()
         {
             Debug.WriteLine("Stopping SharpDxGraphicsSystem");
             this.active = false;
-
         }
 
         public override void SetCamera(Camera camera)
         {
-            renderer.MainCamera = camera;
+            _renderer.MainCamera = camera;
         }
 
-        public override void RegisterSimpleMesh(IRenderable renderable, PolyMesh _cubeMesh, System.Drawing.Bitmap bitmap)
+        public override void RegisterSimpleMesh(IRenderable renderable, PolyMesh cubeMesh, System.Drawing.Bitmap bitmap)
         {
-            Console.WriteLine("I should be registering a simple mesh now...");
+            Direct3DMeshInfo meshInfo = new Direct3DMeshInfo(_renderer, renderable, cubeMesh.Vertices.ToArray(), cubeMesh.Indices.ToArray(), bitmap);
+            _renderer.AddRenderable(meshInfo);
         }
 
         public override System.Drawing.Size WindowSize
         {
             get
             {
-                return renderer.Window.ClientSize;
+                return _renderer.Window.ClientSize;
             }
             set
             {
-                renderer.Window.ClientSize = value;
+                _renderer.Window.ClientSize = value;
             }
+        }
+
+        public override void RegisterLight(ILightInfo lightInfo)
+        {
+            _renderer.AddLight(lightInfo);
         }
     }
 }

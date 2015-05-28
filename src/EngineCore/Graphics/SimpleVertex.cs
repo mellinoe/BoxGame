@@ -3,11 +3,6 @@ using System.Numerics;
 using Vector3 = System.Numerics.Vector3;
 using Vector4 = System.Numerics.Vector4;
 using System;
-#if FEATURE_SHARPDX
-using SharpDX;
-using SharpDX.Direct3D11;
-using SharpDX.DXGI;
-#endif
 
 namespace EngineCore.Graphics
 {
@@ -41,13 +36,12 @@ namespace EngineCore.Graphics
 
         public static unsafe int SizeInBytes { get { return sizeof(SimpleVertex); } }
 
-#if FEATURE_SHARPDX
-        public static readonly InputElement[] VertexInputLayout = new InputElement[]
+        public static readonly SharpDX.Direct3D11.InputElement[] VertexInputLayout = new SharpDX.Direct3D11.InputElement[]
         {
-            new InputElement("Position",    0,      Format.R32G32B32A32_Float,  PositionOffset, 0),
-            new InputElement("Normal",      0,      Format.R32G32B32_Float,     NormalOffset,   0),
-            new InputElement("Color",       0,      Format.R32G32B32A32_Float,  ColorOffset,    0)
+            new SharpDX.Direct3D11.InputElement("Position",     0,  SharpDX.DXGI.Format.R32G32B32A32_Float,     PositionOffset,     0),
+            new SharpDX.Direct3D11.InputElement("Normal",       0,  SharpDX.DXGI.Format.R32G32B32_Float,        NormalOffset,       0),
+            new SharpDX.Direct3D11.InputElement("Color",        0,  SharpDX.DXGI.Format.R32G32B32A32_Float,     ColorOffset,        0),
+            new SharpDX.Direct3D11.InputElement("TexCoord",     0,  SharpDX.DXGI.Format.R32G32_Float,           TexCoordOffset,     0)
         };
-#endif
     }
 }

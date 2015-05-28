@@ -189,5 +189,10 @@ namespace EngineCore.Graphics.OpenGL
         }
 
         public OpenTK.NativeWindow Window { get { return _window; } }
+
+        public override void RegisterLight(ILightInfo lightInfo)
+        {
+            Console.WriteLine("OpenGLGraphicsSystem does not support lights yet.");
+        }
     }
 }
