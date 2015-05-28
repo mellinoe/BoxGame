@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Numerics;
+using System.Globalization;
 
 namespace EngineCore.Graphics
 {
@@ -27,10 +28,66 @@ namespace EngineCore.Graphics
         public static readonly Color4f Grey = new Color4f(.25f, .25f, .25f, 1);
         public static readonly Color4f Cyan = new Color4f(0, 1, 1, 1);
         public static readonly Color4f White = new Color4f(1, 1, 1, 1);
-        public static readonly Color4f Silver = new Color4f(0xC0 / 255f, 0xC0 / 255f, 0xC0 / 255f, 1);
-        public static readonly Color4f Orange = new Color4f(0xFF / 255f, 0xA5 / 255f, 0x00 / 255f, 1);
-        public static readonly Color4f CornflowerBlue = new Color4f(0x64 / 255f, 0x95 / 255f, 0xED / 255f, 0xff / 255f);
+        public static readonly Color4f Silver = FromHexString("C0C0C0FF", HexColorFormat.RGBA);
+        public static readonly Color4f Orange = FromHexString("FFA500FF", HexColorFormat.RGBA);
+        public static readonly Color4f CornflowerBlue = FromHexString("ff6495ed", HexColorFormat.ARGB);
 
+        public static Color4f FromHexString(string hexColor, HexColorFormat format)
+        {
+            switch (format)
+            {
+                case HexColorFormat.ARGB:
+                    {
+                        if (hexColor.Length != 8)
+                        {
+                            throw new ArgumentException("ARGB format must have exacly 8 characters.");
+                        }
+
+                        float a = byte.Parse(hexColor.Substring(0, 2), NumberStyles.HexNumber) / 255f;
+                        float r = byte.Parse(hexColor.Substring(2, 2), NumberStyles.HexNumber) / 255f;
+                        float g = byte.Parse(hexColor.Substring(4, 2), NumberStyles.HexNumber) / 255f;
+                        float b = byte.Parse(hexColor.Substring(6, 2), NumberStyles.HexNumber) / 255f;
+
+                        return new Color4f(r, g, b, a);
+                    }
+                case HexColorFormat.RGBA:
+                    {
+                        if (hexColor.Length != 8)
+                        {
+                            throw new ArgumentException("RGBA format must have exacly 8 characters.");
+                        }
+
+                        float r = byte.Parse(hexColor.Substring(0, 2), NumberStyles.HexNumber) / 255f;
+                        float g = byte.Parse(hexColor.Substring(2, 2), NumberStyles.HexNumber) / 255f;
+                        float b = byte.Parse(hexColor.Substring(4, 2), NumberStyles.HexNumber) / 255f;
+                        float a = byte.Parse(hexColor.Substring(6, 2), NumberStyles.HexNumber) / 255f;
+
+                        return new Color4f(r, g, b, a);
+                    }
+                case HexColorFormat.RGB:
+                    {
+                        if (hexColor.Length != 6)
+                        {
+                            throw new ArgumentException("RGB format must have exacly 6 characters.");
+                        }
+                        float r = byte.Parse(hexColor.Substring(0, 2), NumberStyles.HexNumber) / 255f;
+                        float g = byte.Parse(hexColor.Substring(2, 2), NumberStyles.HexNumber) / 255f;
+                        float b = byte.Parse(hexColor.Substring(4, 2), NumberStyles.HexNumber) / 255f;
+
+                        return new Color4f(r, g, b, 1.0f);
+                    }
+
+                default:
+                    throw new InvalidOperationException("Invalid format: " + format);
+            }
+        }
+
+        public enum HexColorFormat
+        {
+            ARGB,
+            RGBA,
+            RGB
+        }
         public Int32 ToRgba32()
         {
             uint value =
