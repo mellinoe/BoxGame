@@ -41,7 +41,7 @@ namespace EngineCore.Graphics.DirectX
             _indexCount = indices.Length;
             _shader = new SimpleShader(simpleRenderer.Device,
                 simpleRenderer.Device.ImmediateContext,
-                "Shaders/LightShader.hlsl",
+                AppContext.BaseDirectory + "/Shaders/LightShader.hlsl",
                 "VS",
                 "PS",
                 SimpleVertex.VertexInputLayout);
