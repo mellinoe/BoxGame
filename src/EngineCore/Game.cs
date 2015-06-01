@@ -41,6 +41,15 @@ namespace EngineCore
         public Game()
         {
             this.Systems = new GameSystemCollection();
+            AddInitialGameSystems();
+
+            GameObject.GameObjectConstructed += AddGameObject;  // Todo: Make this less ridiculous
+
+            this.previousFrameStartTime = DateTime.UtcNow;
+        }
+
+        protected virtual void AddInitialGameSystems()
+        {
             this.Systems.Add(new EntityUpdateSystem(this));
             this.Systems.Add(new BepuPhysicsSystem(this));
 
@@ -57,10 +66,6 @@ namespace EngineCore
                 this.Systems.Add(graphicsSystem);
                 this.Systems.Add(((OpenGLGraphicsSystem)graphicsSystem).InputSystem);
             }
-
-            GameObject.GameObjectConstructed += AddGameObject;  // Todo: Make this less ridiculous
-
-            this.previousFrameStartTime = DateTime.UtcNow;
         }
 
         public void Start()
