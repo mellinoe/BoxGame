@@ -13,6 +13,9 @@ namespace EngineCore.Graphics
 {
     public class SharpDxGraphicsSystem : GraphicsSystem
     {
+        private bool _supportsBatching = true;
+        private Dictionary<PolyMesh, Direct3DBatchedMeshInfo> _batchedMeshInfos = new Dictionary<PolyMesh, Direct3DBatchedMeshInfo>();
+
         private ShaderCache shaderCache = new ShaderCache();
         public ShaderCache ShaderCache { get { return shaderCache; } }
 
@@ -69,10 +72,25 @@ namespace EngineCore.Graphics
             _renderer.MainCamera = camera;
         }
 
-        public override void RegisterSimpleMesh(IRenderable renderable, PolyMesh cubeMesh, System.Drawing.Bitmap bitmap)
+        public override void RegisterSimpleMesh(IRenderable renderable, PolyMesh mesh, System.Drawing.Bitmap bitmap)
         {
-            Direct3DMeshInfo meshInfo = new Direct3DMeshInfo(_renderer, renderable, cubeMesh.Vertices.ToArray(), cubeMesh.Indices.ToArray(), bitmap);
-            _renderer.AddRenderable(meshInfo);
+            if (_supportsBatching)
+            {
+                Direct3DBatchedMeshInfo batchedInfo;
+                if (!_batchedMeshInfos.TryGetValue(mesh, out batchedInfo))
+                {
+                    batchedInfo = new Direct3DBatchedMeshInfo(Renderer, renderable, mesh.Vertices.ToArray(), mesh.Indices.ToArray(), bitmap);
+                    _batchedMeshInfos.Add(mesh, batchedInfo);
+                    _renderer.AddRenderable(batchedInfo);
+                }
+
+                batchedInfo.AddRenderable(renderable);
+            }
+            else
+            {
+                Direct3DMeshInfo meshInfo = new Direct3DMeshInfo(_renderer, renderable, mesh.Vertices.ToArray(), mesh.Indices.ToArray(), bitmap);
+                _renderer.AddRenderable(meshInfo);
+            }
         }
 
         public override System.Drawing.Size WindowSize
