@@ -53,7 +53,7 @@ namespace EngineCore
             this.Systems.Add(new EntityUpdateSystem(this));
             this.Systems.Add(new BepuPhysicsSystem(this));
 
-            bool useDirectX = true;
+            bool useDirectX = false;
             if (useDirectX)
             {
                 graphicsSystem = new SharpDxGraphicsSystem(this);

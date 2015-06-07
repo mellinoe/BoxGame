@@ -52,7 +52,6 @@
     </ProjectReference>
     <Reference Condition="'$(Configuration)' == 'Release'" Include="$(RefsDir)\OpenTK\Release\OpenTK.dll" />
     <Reference Condition="'$(Configuration)' == 'Debug'" Include="$(RefsDir)\OpenTK\Debug\OpenTK.dll" />
-    <Reference Include="$(RefsDir)\System.Drawing\System.Drawing.dll" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Textures\CubeFaceTextures.png">

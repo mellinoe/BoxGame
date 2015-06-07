@@ -83,7 +83,6 @@
   <ItemGroup>
     <Reference Condition="'$(Configuration)' == 'Release'" Include="$(RefsDir)\OpenTK\Release\OpenTK.dll" />
     <Reference Condition="'$(Configuration)' == 'Debug'" Include="$(RefsDir)\OpenTK\Debug\OpenTK.dll" />
-    <Reference Include="$(RefsDir)\System.Drawing\System.Drawing.dll" />
     <Reference Include="$(RefsDir)\ExperimentalCollections\Microsoft.Experimental.Collections.dll" />
   </ItemGroup>
   <ItemGroup Condition="'$(IncludeSharpDx)' == 'true'">
