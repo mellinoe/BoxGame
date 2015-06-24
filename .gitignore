@@ -1,8 +1,8 @@
 syntax: glob
 
-### NetCoreGameEngine-specific ###
+### .NET Core exe Build Artifacts ###
 
-Play*.cmd
+Launch*.cmd
 *Runtime
 !Runtime/README.txt
 
@@ -27,7 +27,10 @@ bld/
 [Oo]bj/
 msbuild.log
 
-# Roslyn stuff
+# Visual Studio 2015
+.vs/
+
+# Visual Studio 2015 Pre-CTP6
 *.sln.ide
 *.ide/
 
@@ -141,9 +144,6 @@ publish/
 # NuGet Packages
 *.nupkg
 **/packages/*
-
-# NuGet restore cache
-project.lock.json
 
 # Windows Azure Build Output
 csx/

@@ -8,21 +8,17 @@ setlocal
 
 if not defined VisualStudioVersion (
     if defined VS140COMNTOOLS (
-        if exist "%VS140COMNTOOLS%\VsDevCmd.bat" (
-            call "%VS140COMNTOOLS%\VsDevCmd.bat"
-            goto :EnvSet
-        )
+        call "%VS140COMNTOOLS%\VsDevCmd.bat"
+        goto :EnvSet
     )
 
     if defined VS120COMNTOOLS (
-        if exist "%VS120COMNTOOLS%\VsDevCmd.bat" (
-            call "%VS120COMNTOOLS%\VsDevCmd.bat"
-            goto :EnvSet
-        )
+        call "%VS120COMNTOOLS%\VsDevCmd.bat"
+        goto :EnvSet
     )
 
     echo Error: build.cmd requires Visual Studio 2013 or 2015.  
-    echo        Please see https://github.com/dotnet/corefx/wiki/Developer-Guide for build instructions.
+    echo        Please see https://github.com/dotnet/corefx/blob/master/Documentation/developer-guide.md for build instructions.
     exit /b 1
 )
 
