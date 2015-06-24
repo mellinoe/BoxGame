@@ -8,19 +8,13 @@
     <OsEnvironment Condition="'$(OsEnvironment)'==''">$(OS)</OsEnvironment>
   </PropertyGroup>
 
-  <!-- Skip all signing -->
-  <PropertyGroup>
-    <SkipSigning>true</SkipSigning>
-  </PropertyGroup>
-
   <!-- Build Tools Versions -->
   <PropertyGroup>
-    <BuildToolsVersion>1.0.25-prerelease-00047</BuildToolsVersion>
-    <DnxVersion Condition="'$(OsEnvironment)'!='Unix'">1.0.0-beta5-11682</DnxVersion>
-    <DnxVersion Condition="'$(OsEnvironment)'=='Unix'">1.0.0-beta5-11624</DnxVersion>
+    <BuildToolsVersion>1.0.25-prerelease-00056</BuildToolsVersion>
+    <DnxVersion>1.0.0-beta5-12101</DnxVersion>
     <DnxPackageName Condition="'$(DnxPackageName)' == '' and '$(OsEnvironment)'!='Unix'">dnx-coreclr-win-x86.$(DnxVersion)</DnxPackageName>
     <DnxPackageName Condition="'$(DnxPackageName)' == '' and '$(OsEnvironment)'=='Unix'">dnx-mono.$(DnxVersion)</DnxPackageName>
-    <RoslynVersion>1.0.0-rc2-20150421-01</RoslynVersion>
+    <RoslynVersion>1.0.0-rc3-20150510-01</RoslynVersion>
     <RoslynPackageName>Microsoft.Net.ToolsetCompilers</RoslynPackageName>
   </PropertyGroup>
 
@@ -34,7 +28,7 @@
   <PropertyGroup>
     <ProjectDir>$(MSBuildThisFileDirectory)</ProjectDir>
     <SourceDir>$(ProjectDir)src/</SourceDir>
-	<RefsDir>$(MSBuildThisFileDirectory)refs</RefsDir>
+    <RefsDir>$(ProjectDir)refs/</RefsDir>
 
     <!-- Output directories -->
     <BinDir Condition="'$(BinDir)'==''">$(ProjectDir)bin/</BinDir>
@@ -49,8 +43,8 @@
 
   <!-- Common nuget properties -->
   <PropertyGroup>
-    <NuGetToolPath Condition="'$(NuGetToolPath)' == ''">$(PackagesDir)NuGet.exe</NuGetToolPath>
-    <NuGetConfigFile Condition="'$(NuGetConfigFile)' == ''">$(SourceDir)NuGet.Config</NuGetConfigFile>
+    <NuGetToolPath Condition="'$(NuGetToolPath)'==''">$(PackagesDir)NuGet.exe</NuGetToolPath>
+    <NuGetConfigFile Condition="'$(NuGetConfigFile)'==''">$(SourceDir)NuGet.Config</NuGetConfigFile>
     <NuGetConfigCommandLine>-ConfigFile "$(NuGetConfigFile)"</NuGetConfigCommandLine>
 
     <NugetRestoreCommand>"$(NuGetToolPath)"</NugetRestoreCommand>
@@ -58,7 +52,9 @@
     <NugetRestoreCommand>$(NugetRestoreCommand) -OutputDirectory "$(PackagesDir.TrimEnd('/'))"</NugetRestoreCommand>
     <NugetRestoreCommand>$(NugetRestoreCommand) $(NuGetConfigCommandLine)</NugetRestoreCommand>
     <NugetRestoreCommand>$(NugetRestoreCommand) -Verbosity detailed</NugetRestoreCommand>
+    <NugetRestoreCommand Condition="'$(OsEnvironment)'=='Unix'">mono $(NuGetRestoreCommand)</NugetRestoreCommand>
   </PropertyGroup>
+
 
   <PropertyGroup>
     <DnxPackageDir Condition="'$(DnxPackageDir)'==''">$(PackagesDir)/$(DnxPackageName)/</DnxPackageDir>
@@ -67,11 +63,14 @@
 
     <DnuRestoreCommand>"$(DnuToolPath)"</DnuRestoreCommand>
     <DnuRestoreCommand>$(DnuRestoreCommand) restore</DnuRestoreCommand>
+    <DnuRestoreCommand>$(DnuRestoreCommand) --parallel</DnuRestoreCommand>
     <DnuRestoreCommand>$(DnuRestoreCommand) --packages "$(PackagesDir.TrimEnd('/'))"</DnuRestoreCommand>
+    <DnuRestoreCommand Condition="'$(LockDependencies)' == 'true'">$(DnuRestoreCommand) --lock</DnuRestoreCommand>
+  </PropertyGroup>
 
-    <!-- Current version of DNX does not support all semantics used in our packages, 
-         so we ignore the pre-calculation in the lock file and calculate asset applicability in the build task -->
-    <NuGetIngoreLockFile>true</NuGetIngoreLockFile>
+  <PropertyGroup Condition="'$(BuildAllProjects)'=='true'">
+    <!-- When we do a traversal build we get all packages up front, don't restore them again -->
+    <RestorePackages>false</RestorePackages>
   </PropertyGroup>
 
   <!--
@@ -100,11 +99,6 @@
       https://github.com/dotnet/corefx/issues/1609
     -->
     <ExcludeProjects Include="System.Diagnostics.Debug/tests/System.Diagnostics.Debug.Tests.csproj" />
-    <!--
-      The OpenSourceSign target complains about System.Diagnostics.FileVersionInfo.TestAssembly.dll not being delay signed.
-      https://github.com/dotnet/corefx/issues/1610
-    -->
-    <ExcludeProjects Include="System.Diagnostics.FileVersionInfo/tests/System.Diagnostics.FileVersionInfo.Tests.csproj" />
   </ItemGroup>
 
   <PropertyGroup Condition="'$(OsEnvironment)'=='Unix'">
@@ -144,6 +138,7 @@
     <OSGroup Condition="'$(OSGroup)'=='' and $(Configuration.StartsWith('Windows'))">Windows_NT</OSGroup>
     <OSGroup Condition="'$(OSGroup)'=='' and $(Configuration.StartsWith('Linux'))">Linux</OSGroup>
     <OSGroup Condition="'$(OSGroup)'=='' and $(Configuration.StartsWith('OSX'))">OSX</OSGroup>
+    <OSGroup Condition="'$(OSGroup)'=='' and $(Configuration.StartsWith('FreeBSD'))">FreeBSD</OSGroup>
     <OSGroup Condition="'$(OSGroup)'==''">Windows_NT</OSGroup>
   </PropertyGroup>
 
@@ -196,8 +191,9 @@
     <TargetsWindows Condition="'$(OSGroup)' == 'Windows_NT'">true</TargetsWindows>
     <TargetsLinux Condition="'$(OSGroup)' == 'Linux'">true</TargetsLinux>
     <TargetsOSX Condition="'$(OSGroup)' == 'OSX'">true</TargetsOSX>
+    <TargetsFreeBSD Condition="'$(OSGroup)' == 'FreeBSD'">true</TargetsFreeBSD>
 
-    <TargetsUnix Condition="'$(TargetsLinux)' == 'true' or '$(TargetsOSX)' == 'true'">true</TargetsUnix>
+    <TargetsUnix Condition="'$(TargetsLinux)' == 'true' or '$(TargetsOSX)' == 'true' or '$(TargetsFreeBSD)' == 'true'">true</TargetsUnix>
   </PropertyGroup>
 
   <PropertyGroup>

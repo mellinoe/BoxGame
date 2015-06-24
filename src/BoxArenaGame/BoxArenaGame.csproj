@@ -10,6 +10,7 @@
     <RootNamespace>BoxArenaGame</RootNamespace>
     <AssemblyName>BoxArenaGame</AssemblyName>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
   <!-- Default configurations to help VS understand the configurations -->
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' " />
