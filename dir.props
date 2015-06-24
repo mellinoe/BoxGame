@@ -217,4 +217,5 @@
     <Warning Condition="!Exists('$(RoslynPropsFile)')"
              Text="The Roslyn targets do not exist- Roslyn will not be used for this build, but the package should be restored if you build again." />
   </Target>
+  <Import Project="$(MSBuildThisFileDirectory)\gameengine.props" />
 </Project>
