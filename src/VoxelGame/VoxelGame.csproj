@@ -1,22 +1,27 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), dir.props))\dir.props" />
+
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <MinimumVisualStudioVersion>14.0</MinimumVisualStudioVersion>
     <ProjectGuid>{DF9A0BD7-D59E-4274-B35E-2F966C44B217}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>VoxelGame</RootNamespace>
     <AssemblyName>VoxelGame</AssemblyName>
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <SharedSourcePath>..\BoxArenaGame\</SharedSourcePath>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <PlatformTarget>x64</PlatformTarget>
+    <BaseNuGetRuntimeIdentifier>win10</BaseNuGetRuntimeIdentifier>
+    <NoStdLib>true</NoStdLib>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
+
   <!-- Default configurations to help VS understand the configurations -->
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' " />
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' " />
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x64' " />
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x64' " />
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' " />
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' " />
+
   <ItemGroup>
     <Compile Include="$(SharedSourcePath)Behaviours\FreeFlyMovement.cs" />
     <Compile Include="$(SharedSourcePath)Behaviours\MouseClickRayCaster.cs" />
@@ -35,9 +40,11 @@
     <Compile Include="World\ChunkStorage.cs" />
     <Compile Include="World\VoxelWorldSystem.cs" />
   </ItemGroup>
+
   <ItemGroup>
     <None Include="project.json" />
   </ItemGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\BEPU\BEPUphysics\BEPUphysics.csproj">
       <Project>{c0d52c9f-14b8-4008-8ddc-109c27561a5c}</Project>
@@ -54,6 +61,7 @@
     <Reference Condition="'$(Configuration)' == 'Release'" Include="$(RefsDir)\OpenTK\Release\OpenTK.dll" />
     <Reference Condition="'$(Configuration)' == 'Debug'" Include="$(RefsDir)\OpenTK\Debug\OpenTK.dll" />
   </ItemGroup>
+
   <ItemGroup>
     <Content Include="Textures\CubeFaceTextures.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -62,5 +70,10 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
+
   <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), dir.targets))\dir.targets" />
+  <PropertyGroup>
+    <NuGetTargetMoniker>DNXCore,Version=v5.0</NuGetTargetMoniker>
+  </PropertyGroup>
+
 </Project>

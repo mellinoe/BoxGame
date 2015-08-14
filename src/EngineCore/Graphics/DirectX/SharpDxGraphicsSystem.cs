@@ -93,7 +93,7 @@ namespace EngineCore.Graphics
             }
         }
 
-        public override System.Drawing.Size WindowSize
+        public override OpenTK.Size WindowSize
         {
             get
             {

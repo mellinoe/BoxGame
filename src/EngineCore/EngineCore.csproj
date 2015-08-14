@@ -1,21 +1,18 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), dir.props))\dir.props" />
   <PropertyGroup>
-    <DefineConstants Condition="'$(IncludeSharpDx)' == 'true'">$(DefineConstants);FEATURE_SHARPDX</DefineConstants>
-  </PropertyGroup>
-  <PropertyGroup>
+    <MinimumVisualStudioVersion>14.0</MinimumVisualStudioVersion>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{C29C63AB-7CFB-4EAA-BE26-9F225FB9E007}</ProjectGuid>
     <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>EngineCore</RootNamespace>
     <AssemblyName>EngineCore</AssemblyName>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <NoWarn>3001;3003</NoWarn>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <DefineConstants>$(DefineConstants);USE_SLEEP0</DefineConstants>
-    <IncludeSharpDx>true</IncludeSharpDx>
-    <SkipSigning>true</SkipSigning>
   </PropertyGroup>
   <!-- Default configurations to help VS understand the configurations -->
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' " />
@@ -66,8 +63,6 @@
     <Compile Include="Entities\IUpdateableEntity.cs" />
     <Compile Include="Utility\MathUtil.cs" />
     <Compile Include="Utility\Resources.cs" />
-  </ItemGroup>
-  <ItemGroup Condition="'$(IncludeSharpDx)' == 'true'">
     <Compile Include="Graphics\DirectX\DirectionalLight.cs" />
     <Compile Include="Graphics\DirectX\SimpleRenderer.cs" />
     <Compile Include="Graphics\DirectX\SimpleShader.cs" />
@@ -81,11 +76,8 @@
     <None Include="project.json" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Condition="'$(Configuration)' == 'Release'" Include="$(RefsDir)\OpenTK\Release\OpenTK.dll" />
-    <Reference Condition="'$(Configuration)' == 'Debug'" Include="$(RefsDir)\OpenTK\Debug\OpenTK.dll" />
+    <Reference Include="$(RefsDir)\OpenTK\Release\OpenTK.dll" />
     <Reference Include="$(RefsDir)\ExperimentalCollections\Microsoft.Experimental.Collections.dll" />
-  </ItemGroup>
-  <ItemGroup Condition="'$(IncludeSharpDx)' == 'true'">
     <Reference Include="$(RefsDir)\SharpDx\SharpDX.dll" />
     <Reference Include="$(RefsDir)\SharpDx\SharpDX.D3DCompiler.dll" />
     <Reference Include="$(RefsDir)\SharpDx\SharpDX.Direct3D11.dll" />

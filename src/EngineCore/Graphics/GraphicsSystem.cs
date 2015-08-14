@@ -27,6 +27,6 @@ namespace EngineCore.Graphics
 
         public abstract void SetCamera(Camera camera);
 
-        public abstract Size WindowSize { get; set; }
+        public abstract OpenTK.Size WindowSize { get; set; }
     }
 }

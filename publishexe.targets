@@ -1,48 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-
-  <PropertyGroup>
-    <RuntimePath>$(ProjectDir)$(AssemblyName)-Runtime</RuntimePath>
-  </PropertyGroup>
+<Project ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 
   <Target Name="PublishFilesToRuntime" AfterTargets="CopyFilesToOutputDirectory"
-          Condition="'$(OutputType)' == 'Exe' and '$(IsDesktopLibrary)' != 'true'">
+          Condition="'$(OutputType)' == 'Exe' ">
+    <CallTarget Targets="FixUpCoreConsoleNames" Condition="Exists('$(Outdir)CoreConsole.exe')" />
+  </Target>
 
-    <ItemGroup>
-      <PublishedRuntimeItems Include="@(Reference)"
-                             Condition="'%(Reference.NuGetPackageName)' == ''">
-        <DestinationRelativePath>%(FileName)%(Extension)</DestinationRelativePath>
-      </PublishedRuntimeItems>
-
-      <PublishedRuntimeItems Include="@(ReferenceCopyLocalPaths)">
-        <DestinationRelativePath>%(FileName)%(Extension)</DestinationRelativePath>
-      </PublishedRuntimeItems>
-
-      <PublishedRuntimeItems Include="@(Content)">
-        <DestinationRelativePath>%(Identity)</DestinationRelativePath>
-      </PublishedRuntimeItems>
-
-      <PublishedRuntimeItems Include="@(IntermediateAssembly)">
-        <DestinationRelativePath>%(Filename)%(Extension)</DestinationRelativePath>
-      </PublishedRuntimeItems>
-
-      <PublishedRuntimeItems Include="@(_DebugSymbolsOutputPath)">
-        <DestinationRelativePath>%(Filename)%(Extension)</DestinationRelativePath>
-      </PublishedRuntimeItems>
-
-      <PublishedRuntimeItems Include="@(None)">
-        <DestinationRelativePath>%(Filename)%(Extension)</DestinationRelativePath>
-      </PublishedRuntimeItems>
-    </ItemGroup>
-
-    <Copy SourceFiles="%(PublishedRuntimeItems.Identity)" DestinationFiles="$(RuntimePath)\%(DestinationRelativePath)" SkipUnchangedFiles="true" />
-    <Message Text="Published $(AssemblyName) executable to $(RuntimePath)" Importance="high" />
-
-    <PropertyGroup>
-      <LaunchExeLines1>@echo off</LaunchExeLines1>
-      <LaunchExeLines2>%~dp0_LaunchExe.cmd $(AssemblyName) %*</LaunchExeLines2>
-    </PropertyGroup>
-    <WriteLinesToFile File="$(ProjectDir)Launch-$(AssemblyName).cmd" Lines="$(LaunchExeLines1);$(LaunchExeLines2)" Overwrite="true" />
+  <!-- If CoreConsole.exe is being used, rename it and the actual project's exe to their correct names -->
+  <Target Name="FixUpCoreConsoleNames">
+    <Move SourceFiles="$(Outdir)$(AssemblyName).exe" DestinationFiles="$(Outdir)$(AssemblyName).dll" />
+    <Move SourceFiles="$(Outdir)CoreConsole.exe" DestinationFiles="$(Outdir)$(AssemblyName).exe" />
   </Target>
 
 </Project>

@@ -64,7 +64,7 @@ namespace EngineCore.Graphics.OpenGL
 
         private void SetInitialStates()
         {
-            GL.ClearColor(System.Drawing.Color.CornflowerBlue);
+            GL.ClearColor(OpenTK.Color.CornflowerBlue);
             GL.Enable(EnableCap.DepthTest);
             GL.Enable(EnableCap.PolygonSmooth);
         }
@@ -176,7 +176,7 @@ namespace EngineCore.Graphics.OpenGL
             _renderableObjects2D.Remove(info);
         }
 
-        public override Size WindowSize
+        public override OpenTK.Size WindowSize
         {
             get
             {
