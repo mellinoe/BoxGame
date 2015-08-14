@@ -5,6 +5,7 @@ using EngineCore.Physics;
 using GameApplication.Behaviours;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Numerics;
 using System.Threading.Tasks;
@@ -23,9 +24,13 @@ namespace GameApplication
                 Game game = new BoxGame();
                 game.Start();
             }
-            catch (Exception e)
+            catch (Exception e) when (!Debugger.IsAttached)
             {
-                Console.WriteLine("Unexpected exception encountered:" + Environment.NewLine +e);
+                if (!Debugger.IsAttached)
+                {
+                    Console.WriteLine("Unexpected exception encountered:" + Environment.NewLine + e);
+                }
+                else throw;
             }
         }
 
@@ -34,7 +39,12 @@ namespace GameApplication
             protected override void PerformCustomInitialization()
             {
                 CreateStandardBoxArena();
-                //CreateFpsTracker();
+
+                // Fix when the text renderer isn't OpenGL-specific
+                if (GraphicsSystem is EngineCore.Graphics.OpenGL.OpenGLGraphicsSystem)
+                {
+                    CreateFpsTracker();
+                }
             }
 
             private static void CreateFpsTracker()
