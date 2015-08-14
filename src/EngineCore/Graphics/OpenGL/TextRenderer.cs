@@ -123,7 +123,7 @@ namespace EngineCore.Graphics.OpenGL
 
             // Ensure Bitmap and texture match window size
             _bitmap.Dispose();
-            _bitmap = new Bitmap(_width, _height);
+            _bitmap = new Bitmap(Math.Max(1, _width), Math.Max(1, _height));
 
             GL.BindTexture(TextureTarget.Texture2D, _textTextureId);
             //GL.TexSubImage2D(TextureTarget.Texture2D, 0, 0, 0, _bitmap.Width, _bitmap.Height,
