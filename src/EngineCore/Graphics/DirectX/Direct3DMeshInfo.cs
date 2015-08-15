@@ -39,12 +39,7 @@ namespace EngineCore.Graphics.DirectX
             VertexBuffer = SharpDX.Direct3D11.Buffer.Create<SimpleVertex>(simpleRenderer.Device, BindFlags.VertexBuffer, vertices);
             IndexBuffer = SharpDX.Direct3D11.Buffer.Create<int>(simpleRenderer.Device, BindFlags.IndexBuffer, indices);
             _indexCount = indices.Length;
-            _shader = new SimpleShader(simpleRenderer.Device,
-                simpleRenderer.Device.ImmediateContext,
-                AppContext.BaseDirectory + "/Shaders/LightShader.hlsl",
-                "VS",
-                "PS",
-                SimpleVertex.VertexInputLayout);
+            _shader = simpleRenderer.DefaultShaders.LightShader;
             _renderable = renderable;
 
             Texture2DDescription desc;
