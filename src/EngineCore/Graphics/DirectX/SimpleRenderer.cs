@@ -16,6 +16,7 @@ using Matrix4x4 = System.Numerics.Matrix4x4;
 using EngineCore.Entities;
 using System.Collections.Immutable;
 using SharpDX.Mathematics.Interop;
+using EngineCore.Graphics.DirectX;
 
 namespace EngineCore.Graphics
 {
@@ -47,6 +48,7 @@ namespace EngineCore.Graphics
         private Camera camera;
         private bool needsResizing = false;
         private OpenTK.NativeWindow _nativeWindow;
+        private DefaultShaders _defaultShaders;
 
         #endregion Private Fields
 
@@ -88,6 +90,8 @@ namespace EngineCore.Graphics
         public IReadOnlyCollection<IRenderableObjectInfo> Renderables { get { return renderables; } }
         public DirectionalLight DirectionalLight { get; set; }
 
+        public DefaultShaders DefaultShaders { get { return _defaultShaders; } }
+
         #endregion Public Accessors And Methods
 
         #region Constructor
@@ -98,6 +102,7 @@ namespace EngineCore.Graphics
 
             this.renderables = ImmutableArray<IRenderableObjectInfo>.Empty;
             CreateAndInitializeDevice();
+            _defaultShaders = new DefaultShaders(device, deviceContext);
             _nativeWindow.Visible = true;
             AmbientColor = new Color4f(.25f, .25f, .25f, 1);
         }

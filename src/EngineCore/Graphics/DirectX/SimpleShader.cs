@@ -41,6 +41,24 @@ namespace EngineCore.Graphics
             CoreInitialize(device, deviceContext, compiledVertexShader, compiledPixelShader, inputElements);
         }
 
+        public static SimpleShader CreateFromSource(
+            Device device,
+            DeviceContext deviceContext,
+            string shaderSource,
+            string vsEntryPoint,
+            string psEntryPoint,
+            InputElement[] inputElements)
+        {
+            CompilationResult compiledVertexShader = ShaderBytecode.Compile(shaderSource, vsEntryPoint, "vs_5_0", defaultShaderFlags, EffectFlags.None);
+            CompilationResult compiledPixelShader = ShaderBytecode.Compile(shaderSource, psEntryPoint, "ps_5_0", defaultShaderFlags, EffectFlags.None);
+
+            SimpleShader shader = new SimpleShader();
+            shader.CoreInitialize(device, deviceContext, compiledVertexShader, compiledPixelShader, inputElements);
+            return shader;
+        }
+
+        private SimpleShader() { }
+
         private void CoreInitialize(Device device, DeviceContext deviceContext, ShaderBytecode compiledVertexShader, ShaderBytecode compiledPixelShader, InputElement[] inputElements)
         {
             this.device = device;
@@ -48,7 +66,7 @@ namespace EngineCore.Graphics
 
             this.vertexShader = new VertexShader(device, compiledVertexShader);
             this.pixelShader = new PixelShader(device, compiledPixelShader);
-            
+
             var shaderSignature = new ShaderSignature(compiledVertexShader.Data);
             this.inputLayout = new InputLayout(device, shaderSignature, inputElements);
         }
