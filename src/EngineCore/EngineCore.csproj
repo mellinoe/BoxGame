@@ -21,6 +21,7 @@
     <Compile Include="Components\Component.cs" />
     <Compile Include="Components\Transform.cs" />
     <Compile Include="Entities\Behaviour.cs" />
+    <Compile Include="Graphics\DirectX\DefaultShaders.cs" />
     <Compile Include="Graphics\DirectX\RenderableObjectBase.cs" />
     <Compile Include="Graphics\GameWindowResizedEventArgs.cs" />
     <Compile Include="Graphics\GraphicsSystem.cs" />
@@ -74,6 +75,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="project.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Graphics\DirectX\DefaultShaders\LightShader.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="$(RefsDir)\OpenTK\Release\OpenTK.dll" />

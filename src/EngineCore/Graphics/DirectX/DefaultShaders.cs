@@ -6,7 +6,7 @@ using System.Reflection;
 namespace EngineCore.Graphics.DirectX
 {
     public class DefaultShaders
-    {
+    { 
         private DeviceContext _context;
         private Device _device;
         private Lazy<Assembly> _thisAssembly = new Lazy<Assembly>(() => typeof(DefaultShaders).GetTypeInfo().Assembly);
