@@ -1,7 +1,6 @@
 ﻿using OpenTK.Graphics.OpenGL;
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
 using System.Numerics;
 using System.Text;
@@ -11,7 +10,7 @@ namespace EngineCore.Graphics.OpenGL
 {
     class BatchedOpenGLMeshInfo : OpenGLMeshInfo
     {
-        public BatchedOpenGLMeshInfo(PolyMesh mesh, Bitmap bitmap) : base(null, mesh, bitmap) { }
+        public BatchedOpenGLMeshInfo(PolyMesh mesh) : base(null, mesh) { }
 
         private List<IRenderable> _renderables = new List<IRenderable>();
 

@@ -13,17 +13,15 @@ namespace EngineCore.Graphics.OpenGL
         private PolyMesh _mesh;
 
         // Buffers
-        private TextureBuffer _textureBuffer;
         private uint _vertexBufferId;
         private uint _indexBufferId;
 
         private int _numElements;
 
-        public OpenGLMeshInfo(IRenderable renderable, PolyMesh mesh, System.Drawing.Bitmap texture)
+        public OpenGLMeshInfo(IRenderable renderable, PolyMesh mesh)
         {
             this._renderable = renderable;
             this._mesh = mesh;
-            this._textureBuffer = new TextureBuffer(texture);
 
             GenerateBuffers();
         }
@@ -83,13 +81,9 @@ namespace EngineCore.Graphics.OpenGL
             if (_indexBufferId == 0)
                 return;
 
-            BindTexture();
+            BindAllBuffers();
+            DrawElements();
 
-            using (_textureBuffer.BeginBindingBlock())
-            {
-                BindAllBuffers();
-                DrawElements();
-            }
             // Restore the state
             GL.PopClientAttrib();
         }
@@ -102,7 +96,6 @@ namespace EngineCore.Graphics.OpenGL
         protected void BindTexture()
         {
             GL.Enable(EnableCap.Texture2D);
-            _textureBuffer.Bind();
         }
 
         protected unsafe void BindAllBuffers()
@@ -115,11 +108,9 @@ namespace EngineCore.Graphics.OpenGL
             // Enable the client state so it will use this array buffer pointer
             GL.EnableClientState(ArrayCap.NormalArray);
 
-            // Texture coordinate array
-            GL.TexCoordPointer(2, TexCoordPointerType.Float, SimpleVertex.SizeInBytes, SimpleVertex.TexCoordOffset);
-
-            // Enable texture coordinate array
-            GL.EnableClientState(ArrayCap.TextureCoordArray);
+            // Color Array Buffer
+            GL.ColorPointer(3, ColorPointerType.Float, SimpleVertex.SizeInBytes, SimpleVertex.ColorOffset);
+            GL.EnableClientState(ArrayCap.ColorArray);
 
             // Position Array Buffer
             GL.VertexPointer(3, VertexPointerType.Float, SimpleVertex.SizeInBytes, SimpleVertex.PositionOffset);
@@ -204,8 +195,6 @@ namespace EngineCore.Graphics.OpenGL
 
         public virtual void Dispose()
         {
-            _textureBuffer.Dispose();
-
             if (_vertexBufferId != 0)
             {
                 GL.DeleteBuffer(_vertexBufferId);

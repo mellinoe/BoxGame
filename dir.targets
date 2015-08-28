@@ -3,7 +3,7 @@
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <Import Project="$(MSBuildThisFileDirectory)/publishexe.targets" />
 
-<!-- Set up the debug target for portable executables -->
+  <!-- Set up the debug target for portable executables -->
   <PropertyGroup Condition="'$(OutputType)'=='Exe'">
     <StartWorkingDirectory Condition="'$(StartWorkingDirectory)' == ''">$(OutDir)</StartWorkingDirectory>
     <StartAction Condition="'$(StartAction)' == ''">Program</StartAction>

@@ -33,7 +33,9 @@
     <Compile Include="Graphics\OpenGL\TextRenderer.cs" />
     <Compile Include="Graphics\OpenGL\TextureBuffer.cs" />
     <Compile Include="Graphics\DirectX\Direct3DMeshInfo.cs" />
+    <Compile Include="Graphics\OpenTKNativeWindowInfo.cs" />
     <Compile Include="Graphics\Texture2D.cs" />
+    <Compile Include="Graphics\WindowInfo.cs" />
     <Compile Include="Input\InputSystem.cs" />
     <Compile Include="Graphics\OpenGL\NativeWindowInputSystem.cs" />
     <Compile Include="Graphics\OpenGL\OpenGLGraphicsSystem.cs" />

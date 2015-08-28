@@ -74,10 +74,12 @@ namespace EngineCore
             this.running = true;
             PerformCustomInitialization();
             StartSystems();
+            PostSystemsStart();
             RunMainLoop();
         }
 
         protected abstract void PerformCustomInitialization();
+        protected virtual void PostSystemsStart() { }
 
         private void StartSystems()
         {

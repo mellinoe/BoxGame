@@ -26,20 +26,29 @@ namespace GameApplication
             }
             catch (Exception e) when (!Debugger.IsAttached)
             {
-                if (!Debugger.IsAttached)
+                Console.WriteLine("Unexpected exception encountered:" + Environment.NewLine + e);
+                Console.WriteLine("Enter D to attach debugger.");
+
+                int input = Console.Read();
+                if (input == 100 || input == 68)
                 {
-                    Console.WriteLine("Unexpected exception encountered:" + Environment.NewLine + e);
+                    Debugger.Launch();
                 }
-                else throw;
             }
         }
 
         public class BoxGame : Game
         {
+            private static readonly string s_windowTitle = "Hold F to Fire Boxes, Y to Place, +/- to Resize";
+
             protected override void PerformCustomInitialization()
             {
                 CreateStandardBoxArena();
+            }
 
+            protected override void PostSystemsStart()
+            {
+                GraphicsSystem.WindowInfo.Title = s_windowTitle;
                 // Fix when the text renderer isn't OpenGL-specific
                 if (GraphicsSystem is EngineCore.Graphics.OpenGL.OpenGLGraphicsSystem)
                 {
@@ -47,14 +56,20 @@ namespace GameApplication
                 }
             }
 
-            private static void CreateFpsTracker()
+            private void CreateFpsTracker()
             {
-                var textRendererObj = new GameObject();
-                EngineCore.Graphics.OpenGL.TextRenderer textRenderer = new EngineCore.Graphics.OpenGL.TextRenderer();
-                textRendererObj.AddComponent(textRenderer);
+                GameObject fpsTrackerObj = new GameObject();
                 FpsTracker fpsTracker = new FpsTracker();
-                textRendererObj.AddComponent(fpsTracker);
+                fpsTracker.UpdateFrequency = 100;
+                fpsTrackerObj.AddComponent(fpsTracker);
+#if FEATURE_TEXT_RENDERING
+                EngineCore.Graphics.OpenGL.TextRenderer textRenderer = new EngineCore.Graphics.OpenGL.TextRenderer();
+                fpsTrackerObj.AddComponent(textRenderer);                
                 fpsTracker.FramesPerSecondUpdated += (value) => textRenderer.DrawText("FPS: " + value.ToString("###.00"), 15, 15);
+#else
+                fpsTracker.FramesPerSecondUpdated += (value) => GraphicsSystem.WindowInfo.Title = $"{s_windowTitle} {value.ToString("###.00")} FPS";
+#endif
+
             }
 
             private static void AddArenaStartingStuff()

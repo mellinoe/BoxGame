@@ -3,7 +3,6 @@ using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
 using System.Numerics;
 using System.Text;
@@ -15,12 +14,12 @@ namespace EngineCore.Graphics.OpenGL
     public unsafe class OpenGLGraphicsSystem : GraphicsSystem
     {
         private OpenTK.NativeWindow _window;
+        private OpenTKNativeWindowInfo _windowInfo;
         private GraphicsContext _graphicsContext;
         private Matrix4x4 _viewMatrix;
         private NativeWindowInputSystem _inputSystem;
         private float fieldOfViewRadians = 1.05f;
         private Camera _camera;
-        private static readonly string s_windowTitle = "Hold F to Fire Boxes, Y to Place, +/- to Resize";
 
         private bool _supportsMeshBatching = true;
 
@@ -31,7 +30,8 @@ namespace EngineCore.Graphics.OpenGL
         public OpenGLGraphicsSystem(Game game)
             : base(game)
         {
-            _window = new OpenTK.NativeWindow(960, 600, s_windowTitle, OpenTK.GameWindowFlags.Default, GraphicsMode.Default, OpenTK.DisplayDevice.Default);
+            _window = new OpenTK.NativeWindow(960, 600, "EngineCore", OpenTK.GameWindowFlags.Default, GraphicsMode.Default, OpenTK.DisplayDevice.Default);
+            _windowInfo = new OpenTKNativeWindowInfo(_window);
             GraphicsContextFlags flags = GraphicsContextFlags.Default;
 #if DEBUG
             //flags |= GraphicsContextFlags.Debug;
@@ -50,6 +50,7 @@ namespace EngineCore.Graphics.OpenGL
         }
 
         public EngineCore.Input.InputSystem InputSystem { get { return _inputSystem; } }
+        public override IWindowInfo WindowInfo => _windowInfo;
 
         public override void Start()
         {
@@ -124,7 +125,7 @@ namespace EngineCore.Graphics.OpenGL
             GLEx.LoadMatrix(ref projectionMatrix);
         }
 
-        public override void RegisterSimpleMesh(IRenderable renderable, PolyMesh mesh, Bitmap bitmap)
+        public override void RegisterSimpleMesh(IRenderable renderable, PolyMesh mesh)
         {
             BatchedOpenGLMeshInfo batchedMeshInfo;
 
@@ -136,7 +137,7 @@ namespace EngineCore.Graphics.OpenGL
                 }
                 else
                 {
-                    batchedMeshInfo = new BatchedOpenGLMeshInfo(mesh, bitmap);
+                    batchedMeshInfo = new BatchedOpenGLMeshInfo(mesh);
                     batchedMeshInfo.AddRenderable(renderable);
                     _batchedModels.Add(mesh, batchedMeshInfo);
                     _renderableObjects.Add(batchedMeshInfo);
@@ -144,7 +145,7 @@ namespace EngineCore.Graphics.OpenGL
             }
             else // Mesh batching not supported
             {
-                _renderableObjects.Add(new OpenGLMeshInfo(renderable, mesh, bitmap));
+                _renderableObjects.Add(new OpenGLMeshInfo(renderable, mesh));
             }
         }
 
@@ -174,18 +175,6 @@ namespace EngineCore.Graphics.OpenGL
         public void RemoveSelfManagedRenderable(IRenderableObjectInfo2D info)
         {
             _renderableObjects2D.Remove(info);
-        }
-
-        public override OpenTK.Size WindowSize
-        {
-            get
-            {
-                return _window.Size;
-            }
-            set
-            {
-                _window.Size = value;
-            }
         }
 
         public OpenTK.NativeWindow Window { get { return _window; } }

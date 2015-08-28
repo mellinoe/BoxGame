@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
 using System.Numerics;
 using System.Text;
@@ -21,12 +20,12 @@ namespace EngineCore.Graphics
             }
         }
 
-        public abstract void RegisterSimpleMesh(IRenderable renderable, PolyMesh _cubeMesh, Bitmap bitmap);
+        public abstract void RegisterSimpleMesh(IRenderable renderable, PolyMesh _cubeMesh);
 
         public abstract void RegisterLight(ILightInfo lightInfo);
 
         public abstract void SetCamera(Camera camera);
 
-        public abstract OpenTK.Size WindowSize { get; set; }
+        public abstract IWindowInfo WindowInfo { get; }
     }
 }

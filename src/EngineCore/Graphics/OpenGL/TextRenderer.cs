@@ -1,4 +1,5 @@
-﻿using EngineCore.Components;
+﻿#if FEATURE_TEXT_RENDERING
+using EngineCore.Components;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -151,3 +152,5 @@ namespace EngineCore.Graphics.OpenGL
         }
     }
 }
+
+#endif

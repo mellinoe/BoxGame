@@ -1,4 +1,5 @@
-﻿using OpenTK.Graphics.OpenGL;
+﻿#if FEATURE_TEXTURES
+using OpenTK.Graphics.OpenGL;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -97,3 +98,5 @@ namespace EngineCore.Graphics.OpenGL
 
     }
 }
+
+#endif

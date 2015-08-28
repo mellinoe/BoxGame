@@ -30,6 +30,8 @@ namespace EngineCore.Graphics
         internal EngineCore.Graphics.OpenGL.NativeWindowInputSystem InputSystem { get { return _inputSystem; } }
 
         private bool active;
+        private OpenTKNativeWindowInfo _windowInfo;
+        public override IWindowInfo WindowInfo => _windowInfo;
 
         public SharpDxGraphicsSystem(Game game)
             : base(game)
@@ -38,6 +40,7 @@ namespace EngineCore.Graphics
             _renderer.Window.Closing += OnWindowClosing;
 
             _inputSystem = new OpenGL.NativeWindowInputSystem(Game, _renderer.Window);
+            _windowInfo = new OpenTKNativeWindowInfo(_renderer.Window);
 
             this.active = true;
         }
@@ -72,14 +75,14 @@ namespace EngineCore.Graphics
             _renderer.MainCamera = camera;
         }
 
-        public override void RegisterSimpleMesh(IRenderable renderable, PolyMesh mesh, System.Drawing.Bitmap bitmap)
+        public override void RegisterSimpleMesh(IRenderable renderable, PolyMesh mesh)
         {
             if (_supportsBatching)
             {
                 Direct3DBatchedMeshInfo batchedInfo;
                 if (!_batchedMeshInfos.TryGetValue(mesh, out batchedInfo))
                 {
-                    batchedInfo = new Direct3DBatchedMeshInfo(Renderer, renderable, mesh.Vertices.ToArray(), mesh.Indices.ToArray(), bitmap);
+                    batchedInfo = new Direct3DBatchedMeshInfo(Renderer, renderable, mesh.Vertices.ToArray(), mesh.Indices.ToArray());
                     _batchedMeshInfos.Add(mesh, batchedInfo);
                     _renderer.AddRenderable(batchedInfo);
                 }
@@ -88,20 +91,8 @@ namespace EngineCore.Graphics
             }
             else
             {
-                Direct3DMeshInfo meshInfo = new Direct3DMeshInfo(_renderer, renderable, mesh.Vertices.ToArray(), mesh.Indices.ToArray(), bitmap);
+                Direct3DMeshInfo meshInfo = new Direct3DMeshInfo(_renderer, renderable, mesh.Vertices.ToArray(), mesh.Indices.ToArray());
                 _renderer.AddRenderable(meshInfo);
-            }
-        }
-
-        public override OpenTK.Size WindowSize
-        {
-            get
-            {
-                return _renderer.Window.ClientSize;
-            }
-            set
-            {
-                _renderer.Window.ClientSize = value;
             }
         }
 

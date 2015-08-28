@@ -3,7 +3,6 @@ using EngineCore.Graphics;
 using EngineCore.Utility;
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Numerics;
@@ -14,22 +13,10 @@ namespace EngineCore.Entities
     public class BoxRenderer : Component<GraphicsSystem>, IRenderable
     {
         private readonly PolyMesh _cubeMesh;
-        private readonly Bitmap _bitmap;
-
-        private static readonly string s_defaultBitmapPath = Path.Combine(AppContext.BaseDirectory, "Textures", "Stone.png");
-        private static readonly Bitmap s_defaultBitmap = new Bitmap(s_defaultBitmapPath);
 
         public BoxRenderer()
         {
-            _bitmap = s_defaultBitmap;
             _cubeMesh = s_cachedMeshInstance;
-        }
-
-        public BoxRenderer(Bitmap bitmap)
-            : this()
-        {
-            _cubeMesh = s_cachedMeshInstance;
-            _bitmap = bitmap;
         }
 
         private Vector3 _scale;
@@ -51,7 +38,7 @@ namespace EngineCore.Entities
 
         protected override void Initialize(GraphicsSystem system)
         {
-            system.RegisterSimpleMesh(this, _cubeMesh, _bitmap);
+            system.RegisterSimpleMesh(this, _cubeMesh);
         }
 
         protected override void Uninitialize(GraphicsSystem system)

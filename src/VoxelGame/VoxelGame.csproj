@@ -1,7 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), dir.props))\dir.props" />
-
   <PropertyGroup>
     <MinimumVisualStudioVersion>14.0</MinimumVisualStudioVersion>
     <ProjectGuid>{DF9A0BD7-D59E-4274-B35E-2F966C44B217}</ProjectGuid>
@@ -14,20 +13,25 @@
     <BaseNuGetRuntimeIdentifier>win10</BaseNuGetRuntimeIdentifier>
     <NoStdLib>true</NoStdLib>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <DefineConstants>$(DefineConstants);FEATURE_TEXTURES</DefineConstants>
   </PropertyGroup>
-
   <!-- Default configurations to help VS understand the configurations -->
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x64' " />
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x64' " />
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' " />
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' " />
-
   <ItemGroup>
     <Compile Include="$(SharedSourcePath)Behaviours\FreeFlyMovement.cs" />
     <Compile Include="$(SharedSourcePath)Behaviours\MouseClickRayCaster.cs" />
     <Compile Include="$(SharedSourcePath)Behaviours\BoxLauncher.cs" />
     <Compile Include="$(SharedSourcePath)Behaviours\SimpleFpsController.cs" />
     <Compile Include="$(SharedSourcePath)Behaviours\FpsLookController.cs" />
+    <Compile Include="..\EngineCore\Graphics\OpenGL\TextureBuffer.cs">
+      <Link>TextureBuffer.cs</Link>
+    </Compile>
+    <Compile Include="..\EngineCore\Graphics\Texture2D.cs">
+      <Link>Texture2D.cs</Link>
+    </Compile>
     <Compile Include="Noise.cs" />
     <Compile Include="Graphics\ChunkMeshInfo.cs" />
     <Compile Include="Graphics\ChunkRenderInfo.cs" />
@@ -40,11 +44,9 @@
     <Compile Include="World\ChunkStorage.cs" />
     <Compile Include="World\VoxelWorldSystem.cs" />
   </ItemGroup>
-
   <ItemGroup>
     <None Include="project.json" />
   </ItemGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\BEPU\BEPUphysics\BEPUphysics.csproj">
       <Project>{c0d52c9f-14b8-4008-8ddc-109c27561a5c}</Project>
@@ -61,7 +63,6 @@
     <Reference Condition="'$(Configuration)' == 'Release'" Include="$(RefsDir)\OpenTK\Release\OpenTK.dll" />
     <Reference Condition="'$(Configuration)' == 'Debug'" Include="$(RefsDir)\OpenTK\Debug\OpenTK.dll" />
   </ItemGroup>
-
   <ItemGroup>
     <Content Include="Textures\CubeFaceTextures.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -70,10 +71,8 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
-
   <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), dir.targets))\dir.targets" />
   <PropertyGroup>
     <NuGetTargetMoniker>DNXCore,Version=v5.0</NuGetTargetMoniker>
   </PropertyGroup>
-
 </Project>

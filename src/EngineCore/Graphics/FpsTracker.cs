@@ -15,17 +15,23 @@ namespace EngineCore.Graphics
     {
         public Vector2 Position { get; set; }
 
-        private int numFramesTracked = 50;
-        private LinkedList<double> frameTimes;
+        private int numFramesTracked = 0;
+        private int maxFrameHistory = 50;
+        private long[] samples;
+        private int sampleCursor = 0;
         private double totalFrameTime;
 
         private Stopwatch stopwatch;
 
         private double _updateFrequency = 0f;
         private double _elapsed = 0f;
+        private long lastSampleMs;
 
         public event Action<double> FramesPerSecondUpdated;
 
+        /// <summary>
+        /// The update frequency, in seconds.
+        /// </summary>
         public double UpdateFrequency
         {
             get { return _updateFrequency; }
@@ -37,18 +43,32 @@ namespace EngineCore.Graphics
             base.Initialize(system);
             this.stopwatch = new Stopwatch();
             this.stopwatch.Start();
-            this.frameTimes = new LinkedList<double>();
-            for (int g = 0; g < numFramesTracked; g++)
-            {
-                frameTimes.AddLast(this.stopwatch.ElapsedMilliseconds / 1000.0);
-            }
+            this.samples = new long[maxFrameHistory];
+
+            this.lastSampleMs = stopwatch.ElapsedMilliseconds;
+            AddSample(stopwatch.ElapsedMilliseconds);
+        }
+
+        private void AddSample(long ms)
+        {
+            long diff = ms - lastSampleMs;
+            long previousValue = samples[sampleCursor];
+            samples[sampleCursor] = diff;
+            lastSampleMs = ms;
+
+            long cursorPosDiff = diff - previousValue;
+
+            totalFrameTime += cursorPosDiff;
+
+            sampleCursor = (sampleCursor + 1) % maxFrameHistory;
+            numFramesTracked = Math.Min(maxFrameHistory, numFramesTracked + 1);
         }
 
         public double FramesPerSecond
         {
             get
             {
-                return 1 / (totalFrameTime / numFramesTracked);
+                return 1000.0 / (totalFrameTime / numFramesTracked);
             }
         }
 
@@ -59,21 +79,11 @@ namespace EngineCore.Graphics
 
         private void UpdateFrameCount()
         {
-            var first = frameTimes.First.Value;
-            var second = frameTimes.First.Next.Value;
-            var oldDiff = (second - first);
+            var now = this.stopwatch.ElapsedMilliseconds;
+            var diff = now - lastSampleMs;
+            AddSample(now);
 
-            var last = frameTimes.Last.Value;
-            var now = this.stopwatch.ElapsedMilliseconds / 1000.0;
-            var newDiff = (now - last);
-
-            var firstNode = frameTimes.First;
-            frameTimes.RemoveFirst();
-            firstNode.Value = now;
-            frameTimes.AddLast(firstNode);
-            totalFrameTime += (newDiff - oldDiff);
-
-            _elapsed += (float)newDiff;
+            _elapsed += (float)diff;
             if (_elapsed >= _updateFrequency)
             {
                 RaiseFpsUpdated();
