@@ -39,5 +39,18 @@ namespace EngineCore.Graphics
                 _nativeWindow.ClientSize = value;
             }
         }
+
+        public bool IsFullscreen
+        {
+            get
+            {
+                return _nativeWindow.WindowState == WindowState.Fullscreen;
+            }
+
+            set
+            {
+                _nativeWindow.WindowState = value ? WindowState.Fullscreen : WindowState.Normal;
+            }
+        }
     }
 }

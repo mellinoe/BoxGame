@@ -13,7 +13,6 @@ namespace OpenTK.Demo
     {
         public static void Main(string[] args)
         {
-
             using (DemoWindow demoWindow = new DemoWindow(900, 600))
             {
                 demoWindow.Run(30.0, 0.0);

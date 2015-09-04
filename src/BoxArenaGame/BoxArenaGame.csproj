@@ -13,6 +13,8 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Behaviours\FreeFlyMovement.cs" />
+    <Compile Include="Behaviours\FullScreenToggle.cs" />
+    <Compile Include="Behaviours\GravityModifier.cs" />
     <Compile Include="Behaviours\MouseClickRayCaster.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Behaviours\BoxLauncher.cs" />

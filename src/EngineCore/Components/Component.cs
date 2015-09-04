@@ -22,7 +22,7 @@ namespace EngineCore.Components
         public Transform Transform { get; private set; }
 
         /// <summary>
-        /// Obtains the system type which this Component is dependent on.
+        /// Obtains the system types which this Component is dependent on.
         /// </summary>
         /// <returns></returns>
         internal virtual IEnumerable<Type> GetDependencies() { return Array.Empty<Type>(); }
@@ -108,18 +108,18 @@ namespace EngineCore.Components
 
         protected internal override void Initialize(IEnumerable<GameSystem> systems)
         {
-            TSystem1 system1 = (TSystem1)systems.Single(gs => gs.GetType() == typeof(TSystem1));
-            TSystem2 system2 = (TSystem2)systems.Single(gs => gs.GetType() == typeof(TSystem2));
-            TSystem3 system3 = (TSystem3)systems.Single(gs => gs.GetType() == typeof(TSystem3));
+            TSystem1 system1 = (TSystem1)systems.Single(gs => typeof(TSystem1).GetTypeInfo().IsAssignableFrom(gs.GetType().GetTypeInfo()));
+            TSystem2 system2 = (TSystem2)systems.Single(gs => typeof(TSystem2).GetTypeInfo().IsAssignableFrom(gs.GetType().GetTypeInfo()));
+            TSystem3 system3 = (TSystem3)systems.Single(gs => typeof(TSystem3).GetTypeInfo().IsAssignableFrom(gs.GetType().GetTypeInfo()));
 
             this.Initialize(system1, system2, system3);
         }
 
         protected internal override void Uninitialize(IEnumerable<GameSystem> systems)
         {
-            TSystem1 system1 = (TSystem1)systems.Single(gs => gs.GetType() == typeof(TSystem1));
-            TSystem2 system2 = (TSystem2)systems.Single(gs => gs.GetType() == typeof(TSystem2));
-            TSystem3 system3 = (TSystem3)systems.Single(gs => gs.GetType() == typeof(TSystem3));
+            TSystem1 system1 = (TSystem1)systems.Single(gs => typeof(TSystem1).GetTypeInfo().IsAssignableFrom(gs.GetType().GetTypeInfo()));
+            TSystem2 system2 = (TSystem2)systems.Single(gs => typeof(TSystem2).GetTypeInfo().IsAssignableFrom(gs.GetType().GetTypeInfo()));
+            TSystem3 system3 = (TSystem3)systems.Single(gs => typeof(TSystem3).GetTypeInfo().IsAssignableFrom(gs.GetType().GetTypeInfo()));
 
             this.Uninitialize(system1, system2, system3);
         }

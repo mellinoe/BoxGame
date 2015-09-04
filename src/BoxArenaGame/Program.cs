@@ -1,4 +1,5 @@
-﻿using EngineCore;
+﻿using BoxArenaGame.Behaviours;
+using EngineCore;
 using EngineCore.Entities;
 using EngineCore.Graphics;
 using EngineCore.Physics;
@@ -84,6 +85,9 @@ namespace GameApplication
                 camera.AddComponent<BoxLauncher>();
                 var fpsLookController = camera.AddComponent<FpsLookController>();
                 fpsLookController.Tracked = character.Transform;
+
+                new GameObject().AddComponent<FullScreenToggle>();
+                new GameObject().AddComponent<GravityModifier>();
             }
 
             private void CreateSimpleWorld()
