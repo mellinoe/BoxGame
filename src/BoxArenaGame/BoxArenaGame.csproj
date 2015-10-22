@@ -7,9 +7,6 @@
     <OutputType>Exe</OutputType>
     <RootNamespace>BoxArenaGame</RootNamespace>
     <AssemblyName>BoxArenaGame</AssemblyName>
-    <BaseNuGetRuntimeIdentifier>win10</BaseNuGetRuntimeIdentifier>
-    <NoStdLib>true</NoStdLib>
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Behaviours\FreeFlyMovement.cs" />
@@ -21,12 +18,12 @@
     <Compile Include="Behaviours\SimpleFpsController.cs" />
     <Compile Include="Behaviours\FpsLookController.cs" />
   </ItemGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x64' " />
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x64' ">
-    <UseVSHostingProcess>false</UseVSHostingProcess>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' " />
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' " />
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Windows_Debug|x64' " />
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Windows_Release|x64' " />
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Ubuntu_Debug|x64' " />
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Ubuntu_Release|x64' " />
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'OSX_Debug|x64' " />
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'OSX_Release|x64' " />
   <ItemGroup>
     <None Include="project.json" />
   </ItemGroup>
@@ -53,7 +50,4 @@
     </Content>
   </ItemGroup>
   <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), dir.targets))\dir.targets" />
-  <PropertyGroup>
-    <NuGetTargetMoniker>DNXCore,Version=v5.0</NuGetTargetMoniker>
-  </PropertyGroup>
 </Project>
