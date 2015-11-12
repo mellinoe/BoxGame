@@ -82,7 +82,7 @@
     <EmbeddedResource Include="Graphics\DirectX\DefaultShaders\LightShader.hlsl" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="$(RefsDir)\OpenTK\Release\OpenTK.dll" />
+    <Reference Include="$(RefsDir)\OpenTK\OpenTK.dll" />
     <Reference Include="$(RefsDir)\ExperimentalCollections\Microsoft.Experimental.Collections.dll" />
     <Reference Include="$(RefsDir)\SharpDx\SharpDX.dll" />
     <Reference Include="$(RefsDir)\SharpDx\SharpDX.D3DCompiler.dll" />

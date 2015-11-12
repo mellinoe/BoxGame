@@ -60,8 +60,7 @@
       <Project>{c29c63ab-7cfb-4eaa-be26-9f225fb9e007}</Project>
       <Name>EngineCore</Name>
     </ProjectReference>
-    <Reference Condition="'$(Configuration)' == 'Release'" Include="$(RefsDir)\OpenTK\Release\OpenTK.dll" />
-    <Reference Condition="'$(Configuration)' == 'Debug'" Include="$(RefsDir)\OpenTK\Debug\OpenTK.dll" />
+    <Reference Include="$(RefsDir)\OpenTK\OpenTK.dll" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Textures\CubeFaceTextures.png">
