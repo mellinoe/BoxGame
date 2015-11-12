@@ -7,6 +7,8 @@
     <OutputType>Exe</OutputType>
     <RootNamespace>BoxArenaGame</RootNamespace>
     <AssemblyName>BoxArenaGame</AssemblyName>
+    <!-- Silence VS warnings -->
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Behaviours\FreeFlyMovement.cs" />

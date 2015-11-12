@@ -33,8 +33,8 @@ Global
 		Windows_Release|x64 = Windows_Release|x64
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{8DAA5ABB-7DF7-4FA9-BA02-7FFC5D8C934F}.Debug|Any CPU.ActiveCfg = OSX_Release|x64
-		{8DAA5ABB-7DF7-4FA9-BA02-7FFC5D8C934F}.Debug|Any CPU.Build.0 = OSX_Release|x64
+		{8DAA5ABB-7DF7-4FA9-BA02-7FFC5D8C934F}.Debug|Any CPU.ActiveCfg = Windows_Debug|x64
+		{8DAA5ABB-7DF7-4FA9-BA02-7FFC5D8C934F}.Debug|Any CPU.Build.0 = Windows_Debug|x64
 		{8DAA5ABB-7DF7-4FA9-BA02-7FFC5D8C934F}.Debug|x64.ActiveCfg = OSX_Debug|x64
 		{8DAA5ABB-7DF7-4FA9-BA02-7FFC5D8C934F}.Debug|x64.Build.0 = OSX_Debug|x64
 		{8DAA5ABB-7DF7-4FA9-BA02-7FFC5D8C934F}.OSX_Debug|Any CPU.ActiveCfg = OSX_Debug|x64
@@ -43,8 +43,8 @@ Global
 		{8DAA5ABB-7DF7-4FA9-BA02-7FFC5D8C934F}.OSX_Release|Any CPU.ActiveCfg = OSX_Release|x64
 		{8DAA5ABB-7DF7-4FA9-BA02-7FFC5D8C934F}.OSX_Release|x64.ActiveCfg = OSX_Release|x64
 		{8DAA5ABB-7DF7-4FA9-BA02-7FFC5D8C934F}.OSX_Release|x64.Build.0 = OSX_Release|x64
-		{8DAA5ABB-7DF7-4FA9-BA02-7FFC5D8C934F}.Release|Any CPU.ActiveCfg = OSX_Release|x64
-		{8DAA5ABB-7DF7-4FA9-BA02-7FFC5D8C934F}.Release|Any CPU.Build.0 = OSX_Release|x64
+		{8DAA5ABB-7DF7-4FA9-BA02-7FFC5D8C934F}.Release|Any CPU.ActiveCfg = Windows_Release|x64
+		{8DAA5ABB-7DF7-4FA9-BA02-7FFC5D8C934F}.Release|Any CPU.Build.0 = Windows_Release|x64
 		{8DAA5ABB-7DF7-4FA9-BA02-7FFC5D8C934F}.Release|x64.ActiveCfg = OSX_Release|x64
 		{8DAA5ABB-7DF7-4FA9-BA02-7FFC5D8C934F}.Release|x64.Build.0 = OSX_Release|x64
 		{8DAA5ABB-7DF7-4FA9-BA02-7FFC5D8C934F}.Ubuntu_Debug|Any CPU.ActiveCfg = Ubuntu_Debug|x64
