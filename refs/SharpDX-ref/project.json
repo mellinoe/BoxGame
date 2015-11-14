@@ -1,0 +1,10 @@
+{
+    "frameworks" : {
+        "dnxcore50" : {
+            "bin" : { "assembly":"SharpDX.dll", "pdb":"SharpDX.pdb",
+              "assembly":"SharpDX.D3DCompiler.dll", "pdb":"SharpDX.D3DCompiler.pdb",
+              "assembly":"SharpDX.Direct3D11.dll", "pdb":"SharpDX.Direct3D11.pdb",
+              "assembly":"SharpDX.DXGI.dll", "pdb":"SharpDX.DXGI.pdb" }
+        }
+    }
+}

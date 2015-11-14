@@ -1,0 +1,7 @@
+{
+    "frameworks" : {
+        "dnxcore50" : {
+            "bin" : { "assembly":"Debug/OpenTK.dll", "pdb":"Debug/OpenTK.pdb" }
+        }
+    }
+}

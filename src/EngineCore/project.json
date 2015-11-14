@@ -1,8 +1,20 @@
 ﻿{
+    "compilationOptions": {
+        "allowUnsafe": true,
+    },
+
   "dependencies": {
+    "BEPUutilities": { "target": "project" },
+    "BEPUphysics": { "target": "project" },
+    "OpenTK-ref": "1.0.0",
+    "SharpDX": "3.0.0-beta01",
+    "SharpDX.Direct3D11": "3.0.0-beta01",
+    "SharpDX.DXGI": "3.0.0-beta01",
+    "SharpDX.D3DCompiler": "3.0.0-beta01",
     "Microsoft.Win32.Primitives": "4.0.0",
     "System.AppContext": "4.0.0",
     "System.Collections": "4.0.10",
+    "Microsoft.Experimental.Collections": "1.0.3-alpha",
     "System.Collections.Immutable": "1.1.37",
     "System.ComponentModel": "4.0.0",
     "System.Console": "4.0.0-beta-23420",
