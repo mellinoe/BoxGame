@@ -1,16 +1,12 @@
 ﻿using OpenTK.Graphics.OpenGL;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EngineCore.Graphics.OpenGL
 {
     class BatchedOpenGLMeshInfo : OpenGLMeshInfo
     {
-        public BatchedOpenGLMeshInfo(PolyMesh mesh) : base(null, mesh) { }
+        public BatchedOpenGLMeshInfo(PolyMesh mesh, Texture2D texture) : base(null, mesh, texture) { }
 
         private List<IRenderable> _renderables = new List<IRenderable>();
 

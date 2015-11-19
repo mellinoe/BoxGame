@@ -1,13 +1,8 @@
-﻿using EngineCore.Entities;
-using EngineCore.Graphics;
-using EngineCore.Graphics.DirectX;
-using EngineCore.Physics;
+﻿using EngineCore.Graphics.DirectX;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Text;
-using System.Threading;
 
 namespace EngineCore.Graphics
 {
@@ -75,14 +70,14 @@ namespace EngineCore.Graphics
             _renderer.MainCamera = camera;
         }
 
-        public override void RegisterSimpleMesh(IRenderable renderable, PolyMesh mesh)
+        public override void RegisterSimpleMesh(IRenderable renderable, PolyMesh mesh, Texture2D texture)
         {
             if (_supportsBatching)
             {
                 Direct3DBatchedMeshInfo batchedInfo;
                 if (!_batchedMeshInfos.TryGetValue(mesh, out batchedInfo))
                 {
-                    batchedInfo = new Direct3DBatchedMeshInfo(Renderer, renderable, mesh.Vertices.ToArray(), mesh.Indices.ToArray());
+                    batchedInfo = new Direct3DBatchedMeshInfo(Renderer, renderable, mesh.Vertices.ToArray(), mesh.Indices.ToArray(), texture.Image);
                     _batchedMeshInfos.Add(mesh, batchedInfo);
                     _renderer.AddRenderable(batchedInfo);
                 }
@@ -91,7 +86,7 @@ namespace EngineCore.Graphics
             }
             else
             {
-                Direct3DMeshInfo meshInfo = new Direct3DMeshInfo(_renderer, renderable, mesh.Vertices.ToArray(), mesh.Indices.ToArray());
+                Direct3DMeshInfo meshInfo = new Direct3DMeshInfo(_renderer, renderable, mesh.Vertices.ToArray(), mesh.Indices.ToArray(), texture.Image);
                 _renderer.AddRenderable(meshInfo);
             }
         }

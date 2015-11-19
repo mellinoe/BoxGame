@@ -4,15 +4,10 @@ using System.Numerics;
 using OpenTK.Graphics.OpenGL;
 using System;
 using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Text;
 using VoxelGame.Graphics;
-using System.IO;
 using EngineCore.Graphics;
 using System.Threading.Tasks;
 using System.Diagnostics;
-using OpenTK.Graphics;
 
 namespace VoxelGame.World
 {

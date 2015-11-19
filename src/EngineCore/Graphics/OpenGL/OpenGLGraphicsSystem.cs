@@ -1,13 +1,8 @@
-﻿using EngineCore.Utility;
-using OpenTK.Graphics;
+﻿using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Numerics;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace EngineCore.Graphics.OpenGL
 {
@@ -125,7 +120,7 @@ namespace EngineCore.Graphics.OpenGL
             GLEx.LoadMatrix(ref projectionMatrix);
         }
 
-        public override void RegisterSimpleMesh(IRenderable renderable, PolyMesh mesh)
+        public override void RegisterSimpleMesh(IRenderable renderable, PolyMesh mesh, Texture2D texture)
         {
             BatchedOpenGLMeshInfo batchedMeshInfo;
 
@@ -137,7 +132,7 @@ namespace EngineCore.Graphics.OpenGL
                 }
                 else
                 {
-                    batchedMeshInfo = new BatchedOpenGLMeshInfo(mesh);
+                    batchedMeshInfo = new BatchedOpenGLMeshInfo(mesh, texture);
                     batchedMeshInfo.AddRenderable(renderable);
                     _batchedModels.Add(mesh, batchedMeshInfo);
                     _renderableObjects.Add(batchedMeshInfo);
@@ -145,7 +140,7 @@ namespace EngineCore.Graphics.OpenGL
             }
             else // Mesh batching not supported
             {
-                _renderableObjects.Add(new OpenGLMeshInfo(renderable, mesh));
+                _renderableObjects.Add(new OpenGLMeshInfo(renderable, mesh, texture));
             }
         }
 

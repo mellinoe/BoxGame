@@ -1,12 +1,6 @@
-﻿#if FEATURE_TEXTURES
+﻿using ImageProcessor;
 using OpenTK.Graphics.OpenGL;
 using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Drawing.Imaging;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EngineCore.Graphics.OpenGL
 {
@@ -14,23 +8,18 @@ namespace EngineCore.Graphics.OpenGL
     {
         private int _textureBufferId;
 
-        public TextureBuffer(Bitmap bitmap)
+        public TextureBuffer(Image image)
         {
-            GenerateTexture(bitmap);
+            GenerateTexture(image);
         }
 
         public TextureBuffer(Texture2D texture2D)
         {
-            GenerateTexture(texture2D.Bitmap);
+            GenerateTexture(texture2D.Image);
         }
 
-        private void GenerateTexture(Bitmap bitmap)
+        private void GenerateTexture(Image image)
         {
-            BitmapData bitmapData = bitmap.LockBits(
-                new Rectangle(0, 0, bitmap.Width, bitmap.Height),
-                ImageLockMode.ReadOnly,
-                System.Drawing.Imaging.PixelFormat.Format24bppRgb);
-
             GL.GenTextures(1, out _textureBufferId);
             GL.BindTexture(TextureTarget.Texture2D, _textureBufferId);
 
@@ -50,16 +39,13 @@ namespace EngineCore.Graphics.OpenGL
             GL.TexImage2D(
                 TextureTarget.Texture2D,
                 0, // level
-                PixelInternalFormat.Three,
-                bitmap.Width, bitmap.Height,
+                PixelInternalFormat.Four,
+                image.Width, image.Height,
                 0, // border
-                OpenTK.Graphics.OpenGL.PixelFormat.Rgb,
-                PixelType.UnsignedByte,
-                bitmapData.Scan0
+                PixelFormat.Bgra,
+                PixelType.Float,
+                image.Pixels
                 );
-
-            //free the bitmap data (we dont need it anymore because it has been passed to the OpenGL driver
-            bitmap.UnlockBits(bitmapData);
 
             GL.BindTexture(TextureTarget.Texture2D, 0);
         }
@@ -98,5 +84,3 @@ namespace EngineCore.Graphics.OpenGL
 
     }
 }
-
-#endif

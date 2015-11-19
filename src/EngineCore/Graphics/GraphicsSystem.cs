@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Numerics;
-using System.Text;
 
 namespace EngineCore.Graphics
 {
@@ -20,7 +16,7 @@ namespace EngineCore.Graphics
             }
         }
 
-        public abstract void RegisterSimpleMesh(IRenderable renderable, PolyMesh _cubeMesh);
+        public abstract void RegisterSimpleMesh(IRenderable renderable, PolyMesh _cubeMesh, Texture2D texture);
 
         public abstract void RegisterLight(ILightInfo lightInfo);
 

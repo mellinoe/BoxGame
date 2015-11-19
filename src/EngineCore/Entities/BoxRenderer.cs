@@ -1,22 +1,30 @@
 ﻿using EngineCore.Components;
 using EngineCore.Graphics;
-using EngineCore.Utility;
+using ImageProcessor;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Numerics;
-using System.Text;
 
 namespace EngineCore.Entities
 {
     public class BoxRenderer : Component<GraphicsSystem>, IRenderable
     {
         private readonly PolyMesh _cubeMesh;
+        private readonly Texture2D _surfaceTexture;
 
+        private static readonly string s_defaultImagePath = Path.Combine("Textures", "StoneTile.png");
+        private static readonly Texture2D s_defaultImage = new Texture2D(s_defaultImagePath);
         public BoxRenderer()
         {
+            _surfaceTexture = s_defaultImage;
             _cubeMesh = s_cachedMeshInstance;
+        }
+
+        public BoxRenderer(Texture2D texture)
+            : this()
+        {
+            _cubeMesh = s_cachedMeshInstance;
+            _surfaceTexture = texture;
         }
 
         private Vector3 _scale;
@@ -38,7 +46,7 @@ namespace EngineCore.Entities
 
         protected override void Initialize(GraphicsSystem system)
         {
-            system.RegisterSimpleMesh(this, _cubeMesh);
+            system.RegisterSimpleMesh(this, _cubeMesh, _surfaceTexture);
         }
 
         protected override void Uninitialize(GraphicsSystem system)

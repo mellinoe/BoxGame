@@ -88,6 +88,7 @@
     <Reference Include="$(RefsDir)\SharpDx\SharpDX.D3DCompiler.dll" />
     <Reference Include="$(RefsDir)\SharpDx\SharpDX.Direct3D11.dll" />
     <Reference Include="$(RefsDir)\SharpDx\SharpDX.DXGI.dll" />
+    <Reference Include="$(RefsDir)\ImageProcessor\ImageProcessor.dll" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\BEPU\BEPUphysics\BEPUphysics.csproj">

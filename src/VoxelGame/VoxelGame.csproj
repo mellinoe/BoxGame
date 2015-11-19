@@ -26,12 +26,6 @@
     <Compile Include="$(SharedSourcePath)Behaviours\BoxLauncher.cs" />
     <Compile Include="$(SharedSourcePath)Behaviours\SimpleFpsController.cs" />
     <Compile Include="$(SharedSourcePath)Behaviours\FpsLookController.cs" />
-    <Compile Include="..\EngineCore\Graphics\OpenGL\TextureBuffer.cs">
-      <Link>TextureBuffer.cs</Link>
-    </Compile>
-    <Compile Include="..\EngineCore\Graphics\Texture2D.cs">
-      <Link>Texture2D.cs</Link>
-    </Compile>
     <Compile Include="Noise.cs" />
     <Compile Include="Graphics\ChunkMeshInfo.cs" />
     <Compile Include="Graphics\ChunkRenderInfo.cs" />
@@ -61,6 +55,7 @@
       <Name>EngineCore</Name>
     </ProjectReference>
     <Reference Include="$(RefsDir)\OpenTK\OpenTK.dll" />
+    <Reference Include="$(RefsDir)\ImageProcessor\ImageProcessor.dll" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Textures\CubeFaceTextures.png">

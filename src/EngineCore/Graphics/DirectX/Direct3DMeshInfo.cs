@@ -1,11 +1,9 @@
-﻿using SharpDX;
+﻿using ImageProcessor;
+using SharpDX;
 using SharpDX.Direct3D11;
 using SharpDX.DXGI;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EngineCore.Graphics.DirectX
 {
@@ -29,8 +27,9 @@ namespace EngineCore.Graphics.DirectX
         private int _indexCount;
         private SimpleShader _shader;
         private IRenderable _renderable;
+        private ShaderResourceView _shaderTextureResourceView;
 
-        public Direct3DMeshInfo(SimpleRenderer simpleRenderer, IRenderable renderable, SimpleVertex[] vertices, int[] indices)
+        public unsafe Direct3DMeshInfo(SimpleRenderer simpleRenderer, IRenderable renderable, SimpleVertex[] vertices, int[] indices, Image image)
             : base(simpleRenderer)
         {
             VertexBuffer = SharpDX.Direct3D11.Buffer.Create<SimpleVertex>(simpleRenderer.Device, BindFlags.VertexBuffer, vertices);
@@ -38,6 +37,29 @@ namespace EngineCore.Graphics.DirectX
             _indexCount = indices.Length;
             _shader = simpleRenderer.DefaultShaders.LightShader;
             _renderable = renderable;
+
+            Texture2DDescription desc;
+            desc.Width = image.Width;
+            desc.Height = image.Height;
+            desc.ArraySize = 1;
+            desc.BindFlags = BindFlags.ShaderResource;
+            desc.Usage = ResourceUsage.Default;
+            desc.CpuAccessFlags = CpuAccessFlags.None;
+            desc.Format = Format.R32G32B32A32_Float;
+            desc.MipLevels = 1;
+            desc.OptionFlags = ResourceOptionFlags.None;
+            desc.SampleDescription.Count = 1;
+            desc.SampleDescription.Quality = 0;
+
+            DataRectangle dataRectangle;
+            fixed (float* basePtr = image.Pixels)
+            {
+                int stride = sizeof(float) * 4 * image.Width;
+                dataRectangle = new DataRectangle(new IntPtr(basePtr), stride);
+            }
+
+            SharpDX.Direct3D11.Texture2D deviceTexture= new SharpDX.Direct3D11.Texture2D(simpleRenderer.Device, desc, dataRectangle);
+            _shaderTextureResourceView = new ShaderResourceView(simpleRenderer.Device, deviceTexture);
         }
 
         public void Dispose()
@@ -76,6 +98,7 @@ namespace EngineCore.Graphics.DirectX
 
         protected virtual void ApplyShaderSettings()
         {
+            SimpleRenderer.DeviceContext.PixelShader.SetShaderResource(0, _shaderTextureResourceView);
             _shader.ApplyShader();
         }
 
@@ -89,8 +112,8 @@ namespace EngineCore.Graphics.DirectX
     {
         private List<IRenderable> _renderables = new List<IRenderable>();
 
-        public Direct3DBatchedMeshInfo(SimpleRenderer simpleRenderer, IRenderable renderable, SimpleVertex[] vertices, int[] indices)
-            : base(simpleRenderer, renderable, vertices, indices)
+        public Direct3DBatchedMeshInfo(SimpleRenderer simpleRenderer, IRenderable renderable, SimpleVertex[] vertices, int[] indices, Image image)
+            : base(simpleRenderer, renderable, vertices, indices, image)
         {
         }
 
