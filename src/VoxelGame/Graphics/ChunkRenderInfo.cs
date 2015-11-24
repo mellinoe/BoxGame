@@ -17,7 +17,6 @@ namespace VoxelGame.Graphics
         private uint _vertexBufferId;
         private uint _indexBufferId;
         private int _numElements;
-        private Chunk chunk;
 
         public OpenGLChunkRenderInfo(Chunk chunk, Vector3 center)
         {

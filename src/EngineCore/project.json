@@ -5,14 +5,14 @@
     "System.Collections": "4.0.10",
     "System.Collections.Immutable": "1.1.37",
     "System.ComponentModel": "4.0.0",
-    "System.Console": "4.0.0-beta-23420",
+    "System.Console": "4.0.0-rc2-23523",
     "System.Diagnostics.Debug": "4.0.10",
     "System.Globalization": "4.0.10",
     "System.IO": "4.0.10",
     "System.IO.FileSystem": "4.0.0",
     "System.IO.FileSystem.Primitives": "4.0.0",
     "System.Linq": "4.0.0",
-    "System.Numerics.Vectors": "4.1.1-beta-23420",
+    "System.Numerics.Vectors": "4.1.1-rc2-23523",
     "System.Reflection": "4.0.10",
     "System.Reflection.Primitives": "4.0.0",
     "System.Reflection.TypeExtensions": "4.0.0",
@@ -23,7 +23,7 @@
     "System.Text.Encoding": "4.0.10",
     "System.Threading": "4.0.10",
     "System.Threading.Tasks": "4.0.10",
-    "System.Threading.Thread": "4.0.0-beta-23420"
+    "System.Threading.Thread": "4.0.0-rc2-23523"
   },
   "frameworks": {
     "dnxcore50": { }
