@@ -41,7 +41,6 @@ namespace EngineCore.Physics
 
         protected override void Initialize(BepuPhysicsSystem system)
         {
-
             this.Transform.PositionChanged += OnTransformPositionManuallyChanged;
             this.Transform.RotationChanged += OnTransformRotationManuallyChanged;
             this.Transform.ScaleChanged += OnTransformScaleManuallyChanged;

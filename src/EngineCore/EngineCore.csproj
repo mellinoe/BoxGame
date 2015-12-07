@@ -19,8 +19,15 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' " />
   <ItemGroup>
     <Compile Include="Components\Component.cs" />
+    <Compile Include="Components\ComponentListenerRegistration.cs" />
+    <Compile Include="Components\ComponentMask.cs" />
+    <Compile Include="Components\ComponentRegistry.cs" />
+    <Compile Include="Components\ComponentStore.cs" />
+    <Compile Include="Components\IndexedComponentView.cs" />
     <Compile Include="Components\Transform.cs" />
+    <Compile Include="EcsGame.cs" />
     <Compile Include="Entities\Behaviour.cs" />
+    <Compile Include="Entities\EntityID.cs" />
     <Compile Include="Graphics\DirectX\DefaultShaders.cs" />
     <Compile Include="Graphics\DirectX\RenderableObjectBase.cs" />
     <Compile Include="Graphics\GameWindowResizedEventArgs.cs" />
@@ -48,6 +55,7 @@
     <Compile Include="Physics\Collider.cs" />
     <Compile Include="Physics\PhysicsExtensions.cs" />
     <Compile Include="Physics\SphereCollider.cs" />
+    <Compile Include="Systems\GameSystem2.cs" />
     <Compile Include="Time.cs" />
     <Compile Include="Utility\Convert.cs" />
     <Compile Include="Entities\BoxRenderer.cs" />
@@ -99,6 +107,9 @@
       <Project>{34853dea-43a6-4f2f-a379-d1ee04d256d2}</Project>
       <Name>BEPUutilities</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), dir.targets))\dir.targets" />
 </Project>
