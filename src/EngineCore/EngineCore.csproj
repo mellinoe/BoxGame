@@ -55,6 +55,8 @@
     <Compile Include="Physics\Collider.cs" />
     <Compile Include="Physics\PhysicsExtensions.cs" />
     <Compile Include="Physics\SphereCollider.cs" />
+    <Compile Include="Services\Service.cs" />
+    <Compile Include="Services\ServiceRegistry.cs" />
     <Compile Include="Systems\GameSystem2.cs" />
     <Compile Include="Time.cs" />
     <Compile Include="Utility\Convert.cs" />
@@ -82,6 +84,7 @@
     <Compile Include="Graphics\DirectX\SimpleText.cs" />
     <Compile Include="Graphics\DirectX\OLD_InputSystem.cs" />
     <Compile Include="Physics\ConvexHullCollider.cs" />
+    <Compile Include="Utility\TypeDictionary.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="project.json" />
