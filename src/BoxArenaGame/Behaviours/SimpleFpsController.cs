@@ -1,19 +1,17 @@
 ﻿using EngineCore;
 using EngineCore.Input;
 using EngineCore.Physics;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+using EngineCore.Services;
 using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GameApplication.Behaviours
 {
-    public class SimpleFpsController : Behaviour<InputSystem>
+    public class SimpleFpsController : Behaviour
     {
-        private CharacterController _controller;
-        private InputSystem _input;
+        [AutoInject]
+        public IInputService InputService { get; set; }
+
+        private CharacterController _controller => GameObject.GetComponent<CharacterController>();
 
         protected override void Update()
         {
@@ -23,19 +21,19 @@ namespace GameApplication.Behaviours
         private void HandleKeyboardMovement()
         {
             Vector3 movementDirection = new Vector3();
-            if (_input.GetKey(KeyCode.W))
+            if (InputService.GetKey(KeyCode.W))
             {
                 movementDirection += Transform.Forward;
             }
-            if (_input.GetKey(KeyCode.S))
+            if (InputService.GetKey(KeyCode.S))
             {
                 movementDirection += -Transform.Forward;
             }
-            if (_input.GetKey(KeyCode.A))
+            if (InputService.GetKey(KeyCode.A))
             {
                 movementDirection += Transform.Right;
             }
-            if (_input.GetKey(KeyCode.D))
+            if (InputService.GetKey(KeyCode.D))
             {
                 movementDirection += -Transform.Right;
             }
@@ -51,7 +49,7 @@ namespace GameApplication.Behaviours
                 _controller.SetMotionDirection(Vector2.Zero);
             }
 
-            if (_input.GetKeyDown(KeyCode.Space))
+            if (InputService.GetKeyDown(KeyCode.Space))
             {
                 JumpButtonPressed();
             }
@@ -63,17 +61,5 @@ namespace GameApplication.Behaviours
         }
 
         public float MovementSpeed { get { return 5.0f; } }
-
-        protected override void Initialize(InputSystem system)
-        {
-            _input = system;
-            _controller = GameObject.GetComponent<CharacterController>();
-            //_controller.SetMotionDirection(Transform.Forward);
-        }
-
-        protected override void Uninitialize(InputSystem system)
-        {
-            _input = null;
-        }
     }
 }

@@ -1,13 +1,11 @@
 ﻿using EngineCore.Components;
 using EngineCore.Graphics;
-using ImageProcessor;
-using System;
 using System.IO;
 using System.Numerics;
 
 namespace EngineCore.Entities
 {
-    public class BoxRenderer : Component<GraphicsSystem>, IRenderable
+    public class BoxRenderer : Component, IRenderable
     {
         private readonly PolyMesh _cubeMesh;
         private readonly Texture2D _surfaceTexture;
@@ -42,16 +40,6 @@ namespace EngineCore.Entities
         public System.Numerics.Matrix4x4 WorldMatrix
         {
             get { return this._scaleMatrix * Transform.WorldMatrix; }
-        }
-
-        protected override void Initialize(GraphicsSystem system)
-        {
-            system.RegisterSimpleMesh(this, _cubeMesh, _surfaceTexture);
-        }
-
-        protected override void Uninitialize(GraphicsSystem system)
-        {
-            throw new NotImplementedException();
         }
 
         private static readonly SimpleVertex[] s_cubeVertices = new SimpleVertex[]

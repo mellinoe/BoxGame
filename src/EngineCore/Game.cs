@@ -2,11 +2,13 @@
 using EngineCore.Graphics;
 using EngineCore.Graphics.OpenGL;
 using EngineCore.Physics;
+using EngineCore.Services;
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Diagnostics;
 using System.Linq;
+using System.Reflection;
 using System.Threading;
 
 #if USE_SLEEP0 && USE_THREADYIELD
@@ -17,61 +19,73 @@ namespace EngineCore
 {
     public abstract class Game
     {
-        public GameSystemCollection Systems { get; set; }
         private double desiredFrameLength = 1.0 / 100000000;
         private bool running = false;
+        private GraphicsSystem _graphicsSystem;
 
-        private ImmutableArray<GameObject> gameObjects = ImmutableArray<GameObject>.Empty;
-        public IReadOnlyCollection<GameObject> GameObjects
-        {
-            get { return gameObjects; }
-        }
+        private readonly ServiceRegistry _serviceRegistry = new ServiceRegistry();
+        private readonly List<GameObject> _gameObjects = new List<GameObject>();
+
         private void AddGameObject(GameObject go)
         {
-            this.gameObjects = this.gameObjects.Add(go);
-            go.InitializeComponents(this);
+            _gameObjects.Add(go);
+            go.ServiceRegistry = _serviceRegistry;
         }
 
-        private GraphicsSystem graphicsSystem;
-        public GraphicsSystem GraphicsSystem
-        {
-            get { return graphicsSystem; }
-        }
+        public GameSystemCollection Systems { get; set; }
+
+        public GraphicsSystem GraphicsSystem => _graphicsSystem;
 
         public Game()
         {
-            this.Systems = new GameSystemCollection();
+            Systems = new GameSystemCollection();
             AddInitialGameSystems();
 
             GameObject.GameObjectConstructed += AddGameObject;  // Todo: Make this less ridiculous
 
-            this.previousFrameStartTime = DateTime.UtcNow;
+            previousFrameStartTime = DateTime.UtcNow;
         }
 
         protected virtual void AddInitialGameSystems()
         {
-            this.Systems.Add(new EntityUpdateSystem(this));
-            this.Systems.Add(new BepuPhysicsSystem(this));
+            AddGameSystem(new EntityUpdateSystem(this));
+            AddGameSystem(new BepuPhysicsSystem(this));
 
             bool useDirectX = false;
             if (useDirectX)
             {
-                graphicsSystem = new SharpDxGraphicsSystem(this);
-                this.Systems.Add(graphicsSystem);
-                this.Systems.Add(((SharpDxGraphicsSystem)graphicsSystem).InputSystem);
+                _graphicsSystem = new SharpDxGraphicsSystem(this);
+                AddGameSystem(_graphicsSystem);
+                AddGameSystem(((SharpDxGraphicsSystem)_graphicsSystem).InputSystem);
             }
             else
             {
-                graphicsSystem = new OpenGLGraphicsSystem(this);
-                this.Systems.Add(graphicsSystem);
-                this.Systems.Add(((OpenGLGraphicsSystem)graphicsSystem).InputSystem);
+                _graphicsSystem = new OpenGLGraphicsSystem(this);
+                AddGameSystem(_graphicsSystem);
+                AddGameSystem(((OpenGLGraphicsSystem)_graphicsSystem).InputSystem);
+            }
+        }
+
+        protected void AddGameSystem(GameSystem system)
+        {
+            Systems.Add(system);
+            var serviceProviderTypes = system.GetType().GetInterfaces()
+                .Where(t => t.GetTypeInfo().IsGenericType && t.GetGenericTypeDefinition() == typeof(IServiceProvider<>));
+
+            foreach (var t in serviceProviderTypes)
+            {
+                Type serviceType = t.GetGenericArguments()[0];
+                var method = t.GetRuntimeMethod(nameof(IServiceProvider<object>.GetService), Array.Empty<Type>());
+                var service = method.Invoke(system, null);
+                Console.WriteLine($"System {system.GetType().Name} provided a {serviceType.Name} service.");
+                _serviceRegistry.RegisterService(serviceType, service);
             }
         }
 
         public void Start()
         {
             Debug.WriteLine("Starting main game loop.");
-            this.running = true;
+            running = true;
             PerformCustomInitialization();
             StartSystems();
             PostSystemsStart();
@@ -83,7 +97,7 @@ namespace EngineCore
 
         private void StartSystems()
         {
-            foreach (var system in this.Systems)
+            foreach (var system in Systems)
             {
                 system.Start();
             }
@@ -104,7 +118,7 @@ namespace EngineCore
             float elapsedSinceLastFrame = (float)(beforeFrameTime - previousFrameStartTime).TotalSeconds;
             Time.SetDeltaTime(elapsedSinceLastFrame);
             previousFrameStartTime = beforeFrameTime;
-            foreach (GameSystem system in this.Systems)
+            foreach (GameSystem system in Systems)
             {
                 system.Update();
             }
@@ -137,7 +151,7 @@ namespace EngineCore
 
         internal void Exit()
         {
-            this.running = false;
+            running = false;
         }
     }
 }

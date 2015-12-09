@@ -1,53 +1,47 @@
 ﻿using BEPUphysics.Entities.Prefabs;
 using EngineCore.Components;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EngineCore.Physics
 {
     public class SphereCollider : Collider<Sphere>
     {
-        private float radius;
+        private float _radius;
 
         public SphereCollider() : this(1.0f) { }
 
         public SphereCollider(float radius)
         {
-            this.radius = radius;
+            _radius = radius;
         }
 
         public float Radius
         {
-            get { return radius; }
+            get { return _radius; }
             set
             {
-                radius = value;
+                _radius = value;
                 SetPhysicsSphereSize();
             }
         }
-        protected override void Initialize(BepuPhysicsSystem system)
+        protected override void Start()
         {
-            base.Initialize(system);
-            this.Transform.ScaleChanged += OnScaleChanged;
+            Transform.ScaleChanged += OnScaleChanged;
         }
 
         private void OnScaleChanged(Vector3 obj)
         {
-            this.Radius = 1.66f * obj.X;
+            Radius = 1.66f * obj.X;
         }
 
         private void SetPhysicsSphereSize()
         {
-            PhysicsEntity.Radius = this.radius;
+            PhysicsEntity.Radius = _radius;
         }
 
         protected override Sphere InitPhysicsEntity()
         {
-            return new Sphere(this.Transform.Position, this.radius * Transform.Scale.X, 1.0f);
+            return new Sphere(Transform.Position, _radius * Transform.Scale.X, 1.0f);
         }
     }
 }

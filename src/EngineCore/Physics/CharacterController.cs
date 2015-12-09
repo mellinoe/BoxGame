@@ -1,38 +1,20 @@
-﻿using EngineCore.Components;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Numerics;
+using BEPUphysics;
 
 namespace EngineCore.Physics
 {
-    public class CharacterController : Component<BepuPhysicsSystem>
+    public class CharacterController : PhysicsComponent
     {
-        private BEPUphysics.Character.CharacterController bepuController
+        private BEPUphysics.Character.CharacterController _bepuController
             = new BEPUphysics.Character.CharacterController(jumpSpeed: 7.5f, mass: 1.0f);
 
-        public BEPUphysics.Character.CharacterController BepuController
-        {
-            get { return bepuController; }
-        }
+        public BEPUphysics.Character.CharacterController BepuController => _bepuController;
 
-        protected override void Initialize(BepuPhysicsSystem system)
-        {
-            system.AddOject(bepuController, this.GameObject);
-            bepuController.Body.PositionUpdated += Transform.OnPhysicsUpdate;
-        }
+        internal override ISpaceObject GetSpaceObject() => _bepuController;
 
         public void SetMotionDirection(Vector2 motion)
         {
-            bepuController.HorizontalMotionConstraint.MovementDirection = motion;
-        }
-
-        protected override void Uninitialize(BepuPhysicsSystem system)
-        {
-            system.RemoveObject(bepuController);
-            bepuController.Body.PositionUpdated -= Transform.OnPhysicsUpdate;
+            _bepuController.HorizontalMotionConstraint.MovementDirection = motion;
         }
     }
 }

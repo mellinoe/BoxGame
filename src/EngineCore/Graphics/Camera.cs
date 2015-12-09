@@ -1,34 +1,29 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Numerics;
 using Vector3 = System.Numerics.Vector3;
 using Matrix4x4 = System.Numerics.Matrix4x4;
 using EngineCore.Components;
 using EngineCore.Utility;
-using EngineCore.Graphics.OpenGL;
 
 namespace EngineCore.Graphics
 {
-    public class Camera : Component<GraphicsSystem>
+    public class Camera : Component
     {
-        private Matrix4x4 viewMatrix;
-        private Matrix4x4 projectionMatrix;
-        private float fieldOfViewRadians = 1.05f;
-        private ProjectionType projectionType = ProjectionType.Perspective;
+        private Matrix4x4 _viewMatrix;
+        private Matrix4x4 _projectionMatrix;
+        private float _fieldOfViewRadians = 1.05f;
+        private ProjectionType _projectionType = ProjectionType.Perspective;
 
         /// <summary>
         /// Gets or sets the field of view angle, in radians.
         /// </summary>
         public float FieldOfViewRadians
         {
-            get { return fieldOfViewRadians; }
+            get { return _fieldOfViewRadians; }
             set
             {
-                fieldOfViewRadians = value;
-                if (projectionType == global::ProjectionType.Perspective)
+                _fieldOfViewRadians = value;
+                if (_projectionType == global::ProjectionType.Perspective)
                 {
                     RecalculateProjectionMatrix();
                 }
@@ -40,10 +35,10 @@ namespace EngineCore.Graphics
         /// </summary>
         public ProjectionType ProjectionType
         {
-            get { return projectionType; }
+            get { return _projectionType; }
             set
             {
-                projectionType = value;
+                _projectionType = value;
                 RecalculateProjectionMatrix();
             }
         }
@@ -54,7 +49,7 @@ namespace EngineCore.Graphics
         /// <returns></returns>
         public Matrix4x4 GetViewMatrix()
         {
-            return viewMatrix;
+            return _viewMatrix;
         }
 
         /// <summary>
@@ -63,7 +58,7 @@ namespace EngineCore.Graphics
         /// <returns></returns>
         public Matrix4x4 GetProjectionMatrix()
         {
-            return projectionMatrix;
+            return _projectionMatrix;
         }
 
         public Vector3 ScreenToWorldPoint(Vector2 screenPosition, float screenWidth, float screenHeight)
@@ -74,24 +69,20 @@ namespace EngineCore.Graphics
             Console.WriteLine("Screen Y: " + x);
 
             Matrix4x4 inverseViewProjection;
-            Matrix4x4.Invert(projectionMatrix * viewMatrix, out inverseViewProjection);
+            Matrix4x4.Invert(_projectionMatrix * _viewMatrix, out inverseViewProjection);
 
             Vector3 worldPoint = new Vector3(x, y, 0);
             return Vector3.Transform(worldPoint, inverseViewProjection);
         }
 
-        protected override void Initialize(GraphicsSystem system)
+        protected override void Start()
         {
-            this.Transform.PositionChanged += OnTransformPositionChanged;
-            this.Transform.RotationChanged += OnTransformRotationChanged;
-            this.RecalculateViewMatrix();
-            this.RecalculateProjectionMatrix();
-
-            system.SetCamera(this);
-            //system.OnScreenResized += OnScreenResized;
+            Transform.PositionChanged += OnTransformPositionChanged;
+            Transform.RotationChanged += OnTransformRotationChanged;
+            RecalculateViewMatrix();
+            RecalculateProjectionMatrix();
         }
 
-        protected override void Uninitialize(GraphicsSystem system) { }
 
         private void OnFormResized(object sender, EventArgs e)
         {
@@ -100,8 +91,8 @@ namespace EngineCore.Graphics
 
         private void RecalculateViewMatrix()
         {
-            var lookAt = this.Transform.Position + this.Transform.Forward;
-            this.viewMatrix = Matrix4x4.CreateLookAt(this.Transform.Position, lookAt, this.Transform.Up);
+            var lookAt = Transform.Position + Transform.Forward;
+            _viewMatrix = Matrix4x4.CreateLookAt(Transform.Position, lookAt, Transform.Up);
         }
 
         private void RecalculateProjectionMatrix()
@@ -109,13 +100,13 @@ namespace EngineCore.Graphics
             float windowRatio = //(float)renderForm.ClientRectangle.Width / (float)renderForm.ClientRectangle.Height;
                 16f / 9f;
 
-            switch (this.projectionType)
+            switch (_projectionType)
             {
                 case ProjectionType.Perspective:
-                    this.projectionMatrix = Matrix4x4.CreatePerspectiveFieldOfView(fieldOfViewRadians, windowRatio, 0.1f, 1000.0f);
+                    _projectionMatrix = Matrix4x4.CreatePerspectiveFieldOfView(_fieldOfViewRadians, windowRatio, 0.1f, 1000.0f);
                     break;
                 case ProjectionType.Orthographic:
-                    this.projectionMatrix = MathUtil.CreateOrthographic(10 * windowRatio, 10, .03f, 1000f);
+                    _projectionMatrix = MathUtil.CreateOrthographic(10 * windowRatio, 10, .03f, 1000f);
                     break;
             }
         }

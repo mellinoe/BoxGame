@@ -29,102 +29,12 @@ namespace EngineCore.Components
 
         internal void CoreInitialize(GameObject gameObject, IEnumerable<GameSystem> systems)
         {
-            this.GameObject = gameObject;
-            this.Transform = gameObject.Transform;
-
-            this.Initialize(systems);
+            GameObject = gameObject;
+            Transform = gameObject.Transform;
         }
 
-        protected internal abstract void Initialize(IEnumerable<GameSystem> systems);
-        protected internal abstract void Uninitialize(IEnumerable<GameSystem> systems);
-    }
-
-    /// <summary>
-    /// An abstract Component type declaring one GameSystem dependency.
-    /// </summary>
-    /// <typeparam name="TSystem">The type of dependency.</typeparam>
-    public abstract class Component<TSystem> : Component where TSystem : GameSystem
-    {
-        private static readonly HashSet<Type> s_dependencyTypes = new HashSet<Type>() { typeof(TSystem) };
-
-        internal override IEnumerable<Type> GetDependencies() { return s_dependencyTypes; }
-
-        protected internal override sealed void Initialize(IEnumerable<GameSystem> systems)
+        protected virtual void Start()
         {
-            this.Initialize((TSystem)systems.First());
         }
-
-        protected internal override sealed void Uninitialize(IEnumerable<GameSystem> systems)
-        {
-            this.Uninitialize((TSystem)systems.First());
-        }
-
-        protected abstract void Initialize(TSystem system);
-        protected abstract void Uninitialize(TSystem system);
-    }
-
-    public abstract class Component<TSystem1, TSystem2> : Component
-        where TSystem1 : GameSystem
-        where TSystem2 : GameSystem
-    {
-        private static readonly HashSet<Type> s_dependencyTypes = new HashSet<Type>() { typeof(TSystem1), typeof(TSystem2) };
-
-        internal override IEnumerable<Type> GetDependencies()
-        {
-            return s_dependencyTypes;
-        }
-
-        protected internal override void Initialize(IEnumerable<GameSystem> systems)
-        {
-            TSystem1 system1 = (TSystem1)systems.Single(gs => typeof(TSystem1).GetTypeInfo().IsAssignableFrom(gs.GetType().GetTypeInfo()));
-            TSystem2 system2 = (TSystem2)systems.Single(gs => typeof(TSystem2).GetTypeInfo().IsAssignableFrom(gs.GetType().GetTypeInfo()));
-
-            this.Initialize(system1, system2);
-        }
-
-        protected internal override void Uninitialize(IEnumerable<GameSystem> systems)
-        {
-            TSystem1 system1 = (TSystem1)systems.Single(gs => typeof(TSystem1).GetTypeInfo().IsAssignableFrom(gs.GetType().GetTypeInfo()));
-            TSystem2 system2 = (TSystem2)systems.Single(gs => typeof(TSystem2).GetTypeInfo().IsAssignableFrom(gs.GetType().GetTypeInfo()));
-
-            this.Uninitialize(system1, system2);
-        }
-
-        protected abstract void Initialize(TSystem1 system1, TSystem2 system2);
-        protected abstract void Uninitialize(TSystem1 system1, TSystem2 system2);
-    }
-
-    public abstract class Component<TSystem1, TSystem2, TSystem3> : Component
-        where TSystem1 : GameSystem
-        where TSystem2 : GameSystem
-        where TSystem3 : GameSystem
-    {
-        private static readonly HashSet<Type> s_dependencyTypes = new HashSet<Type>() { typeof(TSystem1), typeof(TSystem2), typeof(TSystem3) };
-
-        internal override IEnumerable<Type> GetDependencies()
-        {
-            return s_dependencyTypes;
-        }
-
-        protected internal override void Initialize(IEnumerable<GameSystem> systems)
-        {
-            TSystem1 system1 = (TSystem1)systems.Single(gs => typeof(TSystem1).GetTypeInfo().IsAssignableFrom(gs.GetType().GetTypeInfo()));
-            TSystem2 system2 = (TSystem2)systems.Single(gs => typeof(TSystem2).GetTypeInfo().IsAssignableFrom(gs.GetType().GetTypeInfo()));
-            TSystem3 system3 = (TSystem3)systems.Single(gs => typeof(TSystem3).GetTypeInfo().IsAssignableFrom(gs.GetType().GetTypeInfo()));
-
-            this.Initialize(system1, system2, system3);
-        }
-
-        protected internal override void Uninitialize(IEnumerable<GameSystem> systems)
-        {
-            TSystem1 system1 = (TSystem1)systems.Single(gs => typeof(TSystem1).GetTypeInfo().IsAssignableFrom(gs.GetType().GetTypeInfo()));
-            TSystem2 system2 = (TSystem2)systems.Single(gs => typeof(TSystem2).GetTypeInfo().IsAssignableFrom(gs.GetType().GetTypeInfo()));
-            TSystem3 system3 = (TSystem3)systems.Single(gs => typeof(TSystem3).GetTypeInfo().IsAssignableFrom(gs.GetType().GetTypeInfo()));
-
-            this.Uninitialize(system1, system2, system3);
-        }
-
-        protected abstract void Initialize(TSystem1 system1, TSystem2 system2, TSystem3 system3);
-        protected abstract void Uninitialize(TSystem1 system1, TSystem2 system2, TSystem3 system3);
     }
 }

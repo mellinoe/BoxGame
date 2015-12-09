@@ -12,20 +12,18 @@ using BEPUphysics.Entities.Prefabs;
 using EngineCore.Entities;
 using EngineCore.Components;
 using EngineCore.Physics;
+using EngineCore.Services;
 
 namespace EngineCore
 {
     public class GameObject
     {
-        // Hold a back-reference to the game until I figure out how to encapsulate things
-        Game game;
+        internal ServiceRegistry ServiceRegistry { get; set; }
 
-        MultiValueDictionary<Type, Component> components = new MultiValueDictionary<Type, Component>();
+        MultiValueDictionary<Type, Component> _components = new MultiValueDictionary<Type, Component>();
 
         public GameObject()
         {
-            this.Transform = AddComponent<Transform>();
-
             if (GameObjectConstructed != null)
             {
                 GameObjectConstructed(this);
@@ -35,81 +33,40 @@ namespace EngineCore
                 throw new InvalidOperationException(
                     "GameObjectConstructed callback has not been properly initialized before attempting to construct GameObjects.");
             }
+
+            this.Transform = AddComponent<Transform>();
         }
 
         public static event Action<GameObject> GameObjectConstructed;
 
-        public Transform Transform { get; private set; }
+        public Transform Transform { get; }
 
         public T GetComponent<T>() where T : Component
         {
-            return (T)components[typeof(T)].First();
+            return (T)_components[typeof(T)].First();
         }
 
         public T AddComponent<T>() where T : Component, new()
         {
             T component = new T();
-            this.components.Add(typeof(T), component);
-            if (game != null)
-            {
-                InitializeSingleComponent(this.game, component);
-            }
+            _components.Add(typeof(T), component);
+            ServiceRegistry.InjectServices(component);
+
             return component;
         }
 
         public T AddComponent<T>(T component) where T : Component
         {
-            this.components.Add(typeof(T), component);
-            if (game != null)
-            {
-                InitializeSingleComponent(this.game, component);
-            }
+            _components.Add(typeof(T), component);
+            ServiceRegistry.InjectServices(component);
 
             return component;
         }
 
         public void RemoveComponent<T>() where T : Component
         {
-            T component = this.GetComponent<T>();
-            if (game != null)
-            {
-                UninitializeSingleComponent(this.game, component);
-            }
-            this.components.Remove(typeof(T), component);
-        }
-
-        public void InitializeComponents(Game game)
-        {
-            this.game = game;
-            foreach (var componentList in components.Values)
-            {
-                foreach (var component in componentList)
-                {
-                    InitializeSingleComponent(game, component);
-                }
-            }
-        }
-
-        private void InitializeSingleComponent(Game game, Component component)
-        {
-            IEnumerable<GameSystem> systems = null;
-            IEnumerable<Type> dependencyTypes = component.GetDependencies();
-            if (dependencyTypes != null)
-            {
-                systems = game.Systems.GetSystemsByTypes(dependencyTypes);
-            }
-            component.CoreInitialize(this, systems);
-        }
-
-        private void UninitializeSingleComponent(Game game, Component component)
-        {
-            IEnumerable<GameSystem> systems = null;
-            IEnumerable<Type> dependencyTypes = component.GetDependencies();
-            if (dependencyTypes != null)
-            {
-                systems = game.Systems.GetSystemsByTypes(dependencyTypes);
-            }
-            component.Uninitialize(systems);
+            T component = GetComponent<T>();
+            _components.Remove(typeof(T), component);
         }
 
         public static GameObject CreateBox(float width, float height, float depth, float mass = 1.0f)

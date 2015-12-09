@@ -43,6 +43,7 @@
     <Compile Include="Graphics\OpenTKNativeWindowInfo.cs" />
     <Compile Include="Graphics\Texture2D.cs" />
     <Compile Include="Graphics\WindowInfo.cs" />
+    <Compile Include="Input\InputService.cs" />
     <Compile Include="Input\InputSystem.cs" />
     <Compile Include="Graphics\OpenGL\NativeWindowInputSystem.cs" />
     <Compile Include="Graphics\OpenGL\OpenGLGraphicsSystem.cs" />
@@ -53,9 +54,12 @@
     <Compile Include="Physics\BoxCollider.cs" />
     <Compile Include="Physics\CharacterController.cs" />
     <Compile Include="Physics\Collider.cs" />
+    <Compile Include="Physics\PhysicsComponent.cs" />
     <Compile Include="Physics\PhysicsExtensions.cs" />
     <Compile Include="Physics\SphereCollider.cs" />
-    <Compile Include="Services\Service.cs" />
+    <Compile Include="Services\AutoInjectAttribute.cs" />
+    <Compile Include="Services\IServiceProvider.cs" />
+    <Compile Include="Services\ServiceInjector.cs" />
     <Compile Include="Services\ServiceRegistry.cs" />
     <Compile Include="Systems\GameSystem2.cs" />
     <Compile Include="Time.cs" />
@@ -84,7 +88,6 @@
     <Compile Include="Graphics\DirectX\SimpleText.cs" />
     <Compile Include="Graphics\DirectX\OLD_InputSystem.cs" />
     <Compile Include="Physics\ConvexHullCollider.cs" />
-    <Compile Include="Utility\TypeDictionary.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="project.json" />

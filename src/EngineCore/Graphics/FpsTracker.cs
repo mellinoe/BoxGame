@@ -1,13 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Numerics;
-using Matrix4x4 = System.Numerics.Matrix4x4;
-using EngineCore.Components;
-using EngineCore.Graphics.OpenGL;
 
 namespace EngineCore.Graphics
 {
@@ -21,7 +14,7 @@ namespace EngineCore.Graphics
         private int sampleCursor = 0;
         private double totalFrameTime;
 
-        private Stopwatch stopwatch;
+        private Stopwatch _stopwatch;
 
         private double _updateFrequency = 0f;
         private double _elapsed = 0f;
@@ -38,15 +31,14 @@ namespace EngineCore.Graphics
             set { _updateFrequency = value; }
         }
 
-        protected override void Initialize(Entities.EntityUpdateSystem system)
+        protected override void Start()
         {
-            base.Initialize(system);
-            this.stopwatch = new Stopwatch();
-            this.stopwatch.Start();
-            this.samples = new long[maxFrameHistory];
+            _stopwatch = new Stopwatch();
+            _stopwatch.Start();
+            samples = new long[maxFrameHistory];
 
-            this.lastSampleMs = stopwatch.ElapsedMilliseconds;
-            AddSample(stopwatch.ElapsedMilliseconds);
+            lastSampleMs = _stopwatch.ElapsedMilliseconds;
+            AddSample(_stopwatch.ElapsedMilliseconds);
         }
 
         private void AddSample(long ms)
@@ -79,7 +71,7 @@ namespace EngineCore.Graphics
 
         private void UpdateFrameCount()
         {
-            var now = this.stopwatch.ElapsedMilliseconds;
+            var now = _stopwatch.ElapsedMilliseconds;
             var diff = now - lastSampleMs;
             AddSample(now);
 

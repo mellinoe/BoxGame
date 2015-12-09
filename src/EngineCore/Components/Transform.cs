@@ -1,10 +1,5 @@
-﻿using EngineCore.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System;
 using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EngineCore.Components
 {
@@ -114,8 +109,5 @@ namespace EngineCore.Components
             this.position = obj.Position;
             this.rotation = obj.Orientation;
         }
-
-        protected internal override void Initialize(IEnumerable<GameSystem> systems) { }
-        protected internal override void Uninitialize(IEnumerable<GameSystem> systems) { }
     }
 }

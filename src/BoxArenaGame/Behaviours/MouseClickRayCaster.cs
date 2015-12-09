@@ -1,39 +1,25 @@
-﻿using BEPUutilities;
-using EngineCore;
+﻿using EngineCore;
 using EngineCore.Input;
 using EngineCore.Physics;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+using EngineCore.Services;
 using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GameApplication.Behaviours
 {
-    public class MouseClickRayCaster : Behaviour<BepuPhysicsSystem, InputSystem>
+    public class MouseClickRayCaster : Behaviour
     {
-        private InputSystem _input;
-        private BepuPhysicsSystem _physicsSystem;
+        [AutoInject]
+        public IInputService InputService { get; set; }
+
+        [AutoInject]
+        public BepuPhysicsSystem Physics { get; set; }
 
         protected override void Update()
         {
-            if (_input.GetMouseButtonDown(MouseButton.Button1))
+            if (InputService.GetMouseButtonDown(MouseButton.Button1))
             {
-                Vector2 clickPos = _input.MousePosition;
+                Vector2 clickPos = InputService.MousePosition;
             }
-        }
-
-        protected override void Initialize(BepuPhysicsSystem system1, InputSystem system2)
-        {
-            _physicsSystem = system1;
-            _input = system2;
-        }
-
-        protected override void Uninitialize(BepuPhysicsSystem system1, InputSystem system2)
-        {
-            _physicsSystem = null;
-            _input = null;
         }
     }
 }

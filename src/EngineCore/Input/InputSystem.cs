@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using EngineCore.Services;
 using System.Numerics;
-using System.Text;
 
 namespace EngineCore.Input
 {
-    public abstract class InputSystem : GameSystem
+    public abstract class InputSystem : GameSystem, IInputService, IServiceProvider<IInputService>
     {
         public InputSystem(Game game) : base(game) { }
 
@@ -17,5 +14,7 @@ namespace EngineCore.Input
         public abstract bool GetKey(KeyCode key);
 
         public abstract Vector2 MousePosition { get; }
+
+        IInputService IServiceProvider<IInputService>.GetService() => this;
     }
 }

@@ -49,7 +49,7 @@ namespace VoxelGame
             private void CreateNoiseGeneratedWorld()
             {
                 VoxelWorldSystem voxelWorldSystem = new VoxelWorldSystem(this);
-                this.Systems.Add(voxelWorldSystem);
+                AddGameSystem(voxelWorldSystem);
             }
 
             private static void AddNoiseWorldStartingStuff()

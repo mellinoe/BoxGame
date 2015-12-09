@@ -1,24 +1,21 @@
 ﻿using EngineCore;
-using EngineCore.Components;
-using EngineCore.Entities;
 using EngineCore.Graphics;
 using EngineCore.Input;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using EngineCore.Services;
 
 namespace BoxArenaGame.Behaviours
 {
-    public class FullScreenToggle : Behaviour<InputSystem, GraphicsSystem>
+    public class FullScreenToggle : Behaviour
     {
-        private GraphicsSystem _graphics;
-        private InputSystem _input;
+        [AutoInject]
+        public IInputService InputService { get; set; }
+
+        [AutoInject]
+        private IGraphicsService GraphicsService { get; set; }
 
         protected override void Update()
         {
-            if (_input.GetKeyDown(KeyCode.F12))
+            if (InputService.GetKeyDown(KeyCode.F12))
             {
                 ToggleFullscreen();
             }
@@ -26,19 +23,7 @@ namespace BoxArenaGame.Behaviours
 
         private void ToggleFullscreen()
         {
-            _graphics.WindowInfo.IsFullscreen = !_graphics.WindowInfo.IsFullscreen;
-        }
-
-        protected override void Initialize(InputSystem system1, GraphicsSystem system2)
-        {
-            _input = system1;
-            _graphics = system2;
-        }
-
-        protected override void Uninitialize(InputSystem system1, GraphicsSystem system2)
-        {
-            _input = null;
-            _graphics = null;
+            GraphicsService.WindowInfo.IsFullscreen = !GraphicsService.WindowInfo.IsFullscreen;
         }
     }
 }

@@ -2,6 +2,7 @@
 using EngineCore.Components;
 using EngineCore.Input;
 using EngineCore.Physics;
+using EngineCore.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,32 +12,34 @@ using System.Threading.Tasks;
 
 namespace GameApplication.Behaviours
 {
-    public class BoxLauncher : Behaviour<InputSystem>
+    public class BoxLauncher : Behaviour
     {
+        [AutoInject]
+        public IInputService InputService { get; set; }
+
         private GameObject _heldBox;
         private Tracker _tracker;
-        private InputSystem _input;
         private bool _launchingTonsOfBoxes;
 
         protected override void Update()
         {
-            if (_input.GetKey(KeyCode.F))
+            if (InputService.GetKey(KeyCode.F))
             {
                 FireBoxForward();
             }
-            if (_input.GetKeyDown(KeyCode.Y))
+            if (InputService.GetKeyDown(KeyCode.Y))
             {
                 StartStopHoldingBoxPressed();
             }
-            if (_input.GetKeyDown(KeyCode.KeypadPlus))
+            if (InputService.GetKeyDown(KeyCode.KeypadPlus))
             {
                 PlusButtonPressed();
             }
-            if (_input.GetKeyDown(KeyCode.KeypadMinus))
+            if (InputService.GetKeyDown(KeyCode.KeypadMinus))
             {
                 MinusButtonPressed();
             }
-            if (_input.GetKeyDown(KeyCode.F6))
+            if (InputService.GetKeyDown(KeyCode.F6))
             {
                 ToggleLaunchAmount();
             }
@@ -121,16 +124,6 @@ namespace GameApplication.Behaviours
                 box.GetComponent<BoxCollider>().PhysicsEntity.LinearVelocity = (this.Transform.Forward * 25.0f);
                 box.Transform.Position = this.Transform.Position + this.Transform.Forward * 1.5f - this.Transform.Up * .5f;
             }
-        }
-
-        protected override void Initialize(InputSystem system)
-        {
-            _input = system;
-        }
-
-        protected override void Uninitialize(InputSystem system)
-        {
-            _input = null;
         }
     }
 

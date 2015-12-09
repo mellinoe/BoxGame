@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace EngineCore.Graphics
 {
-    public class LightComponent : Component<GraphicsSystem>, ILightInfo
+    public class LightComponent : Component, ILightInfo
     {
         private LightKind _kind;
         private Vector3 _direction;
@@ -19,16 +19,6 @@ namespace EngineCore.Graphics
             _kind = kind;
             _direction = direction;
             _color = color;
-        }
-
-        protected override void Initialize(GraphicsSystem system)
-        {
-            system.RegisterLight(this);
-        }
-
-        protected override void Uninitialize(GraphicsSystem system)
-        {
-            throw new NotImplementedException();
         }
 
         public LightKind Kind
