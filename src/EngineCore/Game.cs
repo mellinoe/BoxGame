@@ -1,4 +1,5 @@
-﻿using EngineCore.Entities;
+﻿using EngineCore.Components;
+using EngineCore.Entities;
 using EngineCore.Graphics;
 using EngineCore.Graphics.OpenGL;
 using EngineCore.Physics;
@@ -24,17 +25,21 @@ namespace EngineCore
         private GraphicsSystem _graphicsSystem;
 
         private readonly ServiceRegistry _serviceRegistry = new ServiceRegistry();
+        private readonly ComponentRegistry _componentRegistry = new ComponentRegistry();
         private readonly List<GameObject> _gameObjects = new List<GameObject>();
 
         private void AddGameObject(GameObject go)
         {
             _gameObjects.Add(go);
             go.ServiceRegistry = _serviceRegistry;
+            go.ComponentRegistry = _componentRegistry;
         }
 
         public GameSystemCollection Systems { get; set; }
 
         public GraphicsSystem GraphicsSystem => _graphicsSystem;
+
+        public ComponentRegistry ComponentRegistry => _componentRegistry;
 
         public Game()
         {

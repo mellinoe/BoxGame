@@ -25,7 +25,6 @@
     <Compile Include="Components\ComponentStore.cs" />
     <Compile Include="Components\IndexedComponentView.cs" />
     <Compile Include="Components\Transform.cs" />
-    <Compile Include="EcsGame.cs" />
     <Compile Include="Entities\Behaviour.cs" />
     <Compile Include="Entities\EntityID.cs" />
     <Compile Include="Graphics\DirectX\DefaultShaders.cs" />
@@ -61,7 +60,6 @@
     <Compile Include="Services\IServiceProvider.cs" />
     <Compile Include="Services\ServiceInjector.cs" />
     <Compile Include="Services\ServiceRegistry.cs" />
-    <Compile Include="Systems\GameSystem2.cs" />
     <Compile Include="Time.cs" />
     <Compile Include="Utility\Convert.cs" />
     <Compile Include="Entities\BoxRenderer.cs" />

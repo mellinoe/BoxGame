@@ -1,14 +1,7 @@
-﻿using BEPUphysics;
-using BEPUphysics.Entities;
-using EngineCore.Graphics;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
-using EngineCore;
-using BEPUphysics.Entities.Prefabs;
 using EngineCore.Entities;
 using EngineCore.Components;
 using EngineCore.Physics;
@@ -20,7 +13,9 @@ namespace EngineCore
     {
         internal ServiceRegistry ServiceRegistry { get; set; }
 
-        MultiValueDictionary<Type, Component> _components = new MultiValueDictionary<Type, Component>();
+        internal ComponentRegistry ComponentRegistry { get; set; }
+
+        private readonly MultiValueDictionary<Type, Component> _components = new MultiValueDictionary<Type, Component>();
 
         public GameObject()
         {
@@ -51,6 +46,7 @@ namespace EngineCore
             T component = new T();
             _components.Add(typeof(T), component);
             ServiceRegistry.InjectServices(component);
+            ComponentRegistry.RegisterComponent(this, component);
 
             return component;
         }
@@ -59,6 +55,7 @@ namespace EngineCore
         {
             _components.Add(typeof(T), component);
             ServiceRegistry.InjectServices(component);
+            ComponentRegistry.RegisterComponent(this, component);
 
             return component;
         }
@@ -67,6 +64,7 @@ namespace EngineCore
         {
             T component = GetComponent<T>();
             _components.Remove(typeof(T), component);
+            ComponentRegistry.RemoveComponent(this, component);
         }
 
         public static GameObject CreateBox(float width, float height, float depth, float mass = 1.0f)

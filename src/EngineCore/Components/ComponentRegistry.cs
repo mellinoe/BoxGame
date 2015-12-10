@@ -15,43 +15,47 @@ namespace EngineCore.Components
         private static Type[] s_componentTypes = new Type[MaxComponentTypes];
         private static int s_lastAssignedID;
 
-        private readonly Dictionary<Type, IComponentStore> _stores = new Dictionary<Type, IComponentStore>();
-        private readonly Dictionary<EntityID, ComponentMask> _entityComponentMasks = new Dictionary<EntityID, ComponentMask>();
+        private readonly Dictionary<GameObject, ComponentMask> _entityComponentMasks = new Dictionary<GameObject, ComponentMask>();
         private readonly List<ComponentListenerRegistration> _registrations = new List<ComponentListenerRegistration>();
 
-        public void AddComponent<T>(EntityID entity, T component)
+        public void RegisterComponent<T>(GameObject go, T component)
         {
-            ComponentStore<T> store = GetStore<T>();
-            store.AddComponent(entity, component);
-            AddComponentMask<T>(entity);
+            var mask = AddComponentMask<T>(go);
+
+            foreach (var listenerRegistration in _registrations)
+            {
+                if ((listenerRegistration.Mask & mask) == mask)
+                {
+                    listenerRegistration.ComponentAddedAction(component);
+                }
+            }
         }
 
-        public void AddComponent<T>(EntityID entity, ComponentInitializationFunc<T> initFunc) where T : new()
+        public void RemoveComponent<T>(GameObject go, T component)
         {
-            ComponentStore<T> store = GetStore<T>();
-            store.AddComponent(entity, initFunc);
+            var mask = RemoveComponentMask<T>(go);
 
-            AddComponentMask<T>(entity);
+            foreach (var listenerRegistration in _registrations)
+            {
+                if ((listenerRegistration.Mask & mask) == mask)
+                {
+                    listenerRegistration.ComponentRemovedAction(component);
+                }
+            }
         }
 
-        internal List<EntityID> GetEntitiesWithComponents(ComponentMask mask)
+        internal List<GameObject> GetEntitiesWithComponents(ComponentMask mask)
         {
-            List<EntityID> ids = new List<EntityID>();
+            List<GameObject> gameObjects = new List<GameObject>();
             foreach (var kvp in _entityComponentMasks)
             {
                 if ((kvp.Value & mask) == mask)
                 {
-                    ids.Add(kvp.Key);
+                    gameObjects.Add(kvp.Key);
                 }
             }
 
-            return ids;
-        }
-
-        public IndexedComponentView<T> GetIndexedComponentView<T>(List<EntityID> entities)
-        {
-            ComponentStore<T> store = GetStore<T>();
-            return store.GetIndexedView(entities);
+            return gameObjects;
         }
 
         public void AddComponentRegistration<T>(Action<T> addedAction, Action<T> removedAction)
@@ -80,7 +84,7 @@ namespace EngineCore.Components
         internal static ComponentMask GetComponentMask(Type type)
         {
             int id = GetComponentID(type);
-            Debug.Assert(id > 0 && id < MaxComponentTypes);
+            Debug.Assert(id >= 0 && id < MaxComponentTypes);
             return ComponentMask.GetForID(id);
         }
 
@@ -101,29 +105,20 @@ namespace EngineCore.Components
             return s_lastAssignedID++;
         }
 
-        private ComponentStore<T> GetStore<T>()
-        {
-            IComponentStore store;
-            if (!_stores.TryGetValue(typeof(T), out store))
-            {
-                store = new ComponentStore<T>();
-            }
-
-            return (ComponentStore<T>)store;
-        }
-
-        private void AddComponentMask<T>(EntityID entity)
+        private ComponentMask AddComponentMask<T>(GameObject go)
         {
             ComponentMask mask = ComponentMask.None;
-            _entityComponentMasks.TryGetValue(entity, out mask);
-            _entityComponentMasks[entity] = mask & GetComponentMask(typeof(T));
+            _entityComponentMasks.TryGetValue(go, out mask);
+            _entityComponentMasks[go] = mask & GetComponentMask(typeof(T));
+            return mask;
         }
 
-        private void RemoveComponentMask<T>(EntityID entity)
+        private ComponentMask RemoveComponentMask<T>(GameObject go)
         {
             ComponentMask mask = ComponentMask.None;
-            _entityComponentMasks.TryGetValue(entity, out mask);
-            _entityComponentMasks[entity] = mask ^ GetComponentMask(typeof(T));
+            _entityComponentMasks.TryGetValue(go, out mask);
+            _entityComponentMasks[go] = mask ^ GetComponentMask(typeof(T));
+            return mask;
         }
     }
 }

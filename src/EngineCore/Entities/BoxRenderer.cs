@@ -7,11 +7,12 @@ namespace EngineCore.Entities
 {
     public class BoxRenderer : Component, IRenderable
     {
-        private readonly PolyMesh _cubeMesh;
-        private readonly Texture2D _surfaceTexture;
+        internal readonly PolyMesh _cubeMesh;
+        internal readonly Texture2D _surfaceTexture;
 
         private static readonly string s_defaultImagePath = Path.Combine("Textures", "StoneTile.png");
         private static readonly Texture2D s_defaultImage = new Texture2D(s_defaultImagePath);
+
         public BoxRenderer()
         {
             _surfaceTexture = s_defaultImage;
@@ -37,7 +38,7 @@ namespace EngineCore.Entities
         }
 
         private Matrix4x4 _scaleMatrix = Matrix4x4.Identity;
-        public System.Numerics.Matrix4x4 WorldMatrix
+        public Matrix4x4 WorldMatrix
         {
             get { return this._scaleMatrix * Transform.WorldMatrix; }
         }

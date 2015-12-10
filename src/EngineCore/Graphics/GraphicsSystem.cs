@@ -1,11 +1,17 @@
-﻿using EngineCore.Services;
+﻿using EngineCore.Entities;
+using EngineCore.Services;
 using System;
 
 namespace EngineCore.Graphics
 {
     public abstract class GraphicsSystem : GameSystem, IGraphicsService, IServiceProvider<IGraphicsService>
     {
-        public GraphicsSystem(Game game) : base(game) { }
+        public GraphicsSystem(Game game) : base(game)
+        {
+            var registry = game.ComponentRegistry;
+            registry.AddComponentRegistration<BoxRenderer>((br) => RegisterSimpleMesh(br, br._cubeMesh, br._surfaceTexture), (br) => { });
+            registry.AddComponentRegistration<LightComponent>((lc) => RegisterLight(lc), (lc) => { });
+        }
 
         public event Action<GameWindowResizedEventArgs> OnScreenResized;
 
