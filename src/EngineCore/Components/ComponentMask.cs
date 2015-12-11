@@ -9,7 +9,7 @@
             Value = value;
         }
 
-        public static ComponentMask GetForID(int id) => 1UL >> id;
+        public static ComponentMask GetForID(int id) => 1UL << id;
 
         public static ComponentMask None => new ComponentMask(0);
 
@@ -24,5 +24,7 @@
         public static implicit operator ComponentMask(ulong value) => new ComponentMask(value);
 
         public static implicit operator ulong (ComponentMask mask) => mask.Value;
+
+        public override string ToString() => Value.ToString();
     }
 }

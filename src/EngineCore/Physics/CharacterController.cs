@@ -10,6 +10,11 @@ namespace EngineCore.Physics
 
         public BEPUphysics.Character.CharacterController BepuController => _bepuController;
 
+        protected internal override void Start()
+        {
+            _bepuController.Body.PositionUpdated += Transform.OnPhysicsUpdate;
+        }
+
         internal override ISpaceObject GetSpaceObject() => _bepuController;
 
         public void SetMotionDirection(Vector2 motion)

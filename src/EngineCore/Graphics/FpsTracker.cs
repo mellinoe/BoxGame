@@ -31,7 +31,7 @@ namespace EngineCore.Graphics
             set { _updateFrequency = value; }
         }
 
-        protected override void Start()
+        protected internal override void Start()
         {
             _stopwatch = new Stopwatch();
             _stopwatch.Start();

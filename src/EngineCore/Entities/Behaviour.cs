@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 
 namespace EngineCore
 {
+    [RegistrationType(typeof(IUpdateableEntity))]
     public abstract class Behaviour : Component, IUpdateableEntity
     {
         void IUpdateableEntity.Update()

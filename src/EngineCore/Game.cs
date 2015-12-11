@@ -6,7 +6,6 @@ using EngineCore.Physics;
 using EngineCore.Services;
 using System;
 using System.Collections.Generic;
-using System.Collections.Immutable;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
@@ -56,7 +55,7 @@ namespace EngineCore
             AddGameSystem(new EntityUpdateSystem(this));
             AddGameSystem(new BepuPhysicsSystem(this));
 
-            bool useDirectX = false;
+            bool useDirectX = true;
             if (useDirectX)
             {
                 _graphicsSystem = new SharpDxGraphicsSystem(this);
@@ -95,6 +94,7 @@ namespace EngineCore
             StartSystems();
             PostSystemsStart();
             RunMainLoop();
+            return;
         }
 
         protected abstract void PerformCustomInitialization();

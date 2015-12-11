@@ -29,7 +29,7 @@ namespace EngineCore
                     "GameObjectConstructed callback has not been properly initialized before attempting to construct GameObjects.");
             }
 
-            this.Transform = AddComponent<Transform>();
+            Transform = AddComponent<Transform>();
         }
 
         public static event Action<GameObject> GameObjectConstructed;
@@ -41,22 +41,15 @@ namespace EngineCore
             return (T)_components[typeof(T)].First();
         }
 
-        public T AddComponent<T>() where T : Component, new()
-        {
-            T component = new T();
-            _components.Add(typeof(T), component);
-            ServiceRegistry.InjectServices(component);
-            ComponentRegistry.RegisterComponent(this, component);
-
-            return component;
-        }
+        public T AddComponent<T>() where T : Component, new() => AddComponent(new T());
 
         public T AddComponent<T>(T component) where T : Component
         {
+            component.CoreInitialize(this);
             _components.Add(typeof(T), component);
             ServiceRegistry.InjectServices(component);
+            component.Start();
             ComponentRegistry.RegisterComponent(this, component);
-
             return component;
         }
 

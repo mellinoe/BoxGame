@@ -24,7 +24,7 @@ namespace EngineCore.Physics
                 SetPhysicsSphereSize();
             }
         }
-        protected override void Start()
+        protected internal override void Start()
         {
             Transform.ScaleChanged += OnScaleChanged;
         }

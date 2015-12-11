@@ -22,11 +22,8 @@
     <Compile Include="Components\ComponentListenerRegistration.cs" />
     <Compile Include="Components\ComponentMask.cs" />
     <Compile Include="Components\ComponentRegistry.cs" />
-    <Compile Include="Components\ComponentStore.cs" />
-    <Compile Include="Components\IndexedComponentView.cs" />
     <Compile Include="Components\Transform.cs" />
     <Compile Include="Entities\Behaviour.cs" />
-    <Compile Include="Entities\EntityID.cs" />
     <Compile Include="Graphics\DirectX\DefaultShaders.cs" />
     <Compile Include="Graphics\DirectX\RenderableObjectBase.cs" />
     <Compile Include="Graphics\GameWindowResizedEventArgs.cs" />
@@ -84,7 +81,6 @@
     <Compile Include="Graphics\DirectX\SharpDxGraphicsSystem.cs" />
     <Compile Include="Graphics\DirectX\ShaderCache.cs" />
     <Compile Include="Graphics\DirectX\SimpleText.cs" />
-    <Compile Include="Graphics\DirectX\OLD_InputSystem.cs" />
     <Compile Include="Physics\ConvexHullCollider.cs" />
   </ItemGroup>
   <ItemGroup>

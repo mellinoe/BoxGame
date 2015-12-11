@@ -1,67 +1,61 @@
-﻿using BEPUphysics.Entities;
-using BEPUphysics.Entities.Prefabs;
+﻿using BEPUphysics.Entities.Prefabs;
 using EngineCore.Components;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EngineCore.Physics
 {
     public class BoxCollider : Collider<Box>
     {
-        private float width, height, length;
+        private float _width, _height, _length;
 
         public BoxCollider() : this(1.0f, 1.0f, 1.0f) { }
 
         public BoxCollider(float width, float height, float length)
         {
-            this.width = width;
-            this.height = height;
-            this.length = length;
+            _width = width;
+            _height = height;
+            _length = length;
         }
 
         public float Width
         {
-            get { return width; }
+            get { return _width; }
             set
             {
-                width = value;
+                _width = value;
                 SetPhysicsBoxDimensions();
             }
         }
 
         public float Height
         {
-            get { return height; }
+            get { return _height; }
             set
             {
-                height = value;
+                _height = value;
                 SetPhysicsBoxDimensions();
             }
         }
 
         public float Length
         {
-            get { return length; }
+            get { return _length; }
             set
             {
-                length = value;
+                _length = value;
                 SetPhysicsBoxDimensions();
             }
         }
 
         private void SetPhysicsBoxDimensions()
         {
-            PhysicsEntity.Length = length * Transform.Scale.Z;
-            PhysicsEntity.Width = width * Transform.Scale.X;
-            PhysicsEntity.Height = height * Transform.Scale.Y;
+            PhysicsEntity.Length = _length * Transform.Scale.Z;
+            PhysicsEntity.Width = _width * Transform.Scale.X;
+            PhysicsEntity.Height = _height * Transform.Scale.Y;
         }
 
         protected override Box InitPhysicsEntity()
         {
-            return new Box(this.Transform.Position, width, height, length);
+            return new Box(Transform.Position, _width, _height, _length);
         }
 
         protected override void OnTransformScaleManuallyChanged(System.Numerics.Vector3 obj)

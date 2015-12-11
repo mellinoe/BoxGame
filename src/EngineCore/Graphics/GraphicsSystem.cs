@@ -9,8 +9,16 @@ namespace EngineCore.Graphics
         public GraphicsSystem(Game game) : base(game)
         {
             var registry = game.ComponentRegistry;
-            registry.AddComponentRegistration<BoxRenderer>((br) => RegisterSimpleMesh(br, br._cubeMesh, br._surfaceTexture), (br) => { });
-            registry.AddComponentRegistration<LightComponent>((lc) => RegisterLight(lc), (lc) => { });
+            registry.AddComponentRegistration<BoxRenderer>(
+                (br) => RegisterSimpleMesh(br, br._cubeMesh, br._surfaceTexture),
+                (br) => { });
+            registry.AddComponentRegistration<LightComponent>
+                ((lc) => RegisterLight(lc),
+                (lc) => { });
+            registry.AddComponentRegistration<Camera>((cam) =>
+            {
+                SetCamera(cam);
+            }, (cam) => { });
         }
 
         public event Action<GameWindowResizedEventArgs> OnScreenResized;

@@ -1,34 +1,31 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.Immutable;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Immutable;
 
 namespace EngineCore.Entities
 {
     public class EntityUpdateSystem : GameSystem
     {
-        ImmutableArray<IUpdateableEntity> entities = ImmutableArray<IUpdateableEntity>.Empty;
-        public ImmutableArray<IUpdateableEntity> Entities
-        {
-            get { return entities; }
-        }
+        ImmutableArray<IUpdateableEntity> _entities = ImmutableArray<IUpdateableEntity>.Empty;
 
         public void AddEntity(IUpdateableEntity entity)
         {
-            this.entities = this.entities.Add(entity);
+            _entities = _entities.Add(entity);
         }
 
         public void RemoveEntity(IUpdateableEntity entity)
         {
-            this.entities = this.entities.Remove(entity);
+            _entities = _entities.Remove(entity);
         }
 
-        public EntityUpdateSystem(Game game) : base(game) { }
+        public EntityUpdateSystem(Game game) : base(game)
+        {
+            game.ComponentRegistry.AddComponentRegistration<IUpdateableEntity>(
+                entity => AddEntity(entity),
+                entity => RemoveEntity(entity));
+        }
 
         public override void Update()
         {
-            foreach (IUpdateableEntity entity in entities)
+            foreach (IUpdateableEntity entity in _entities)
             {
                 entity.Update();
             }

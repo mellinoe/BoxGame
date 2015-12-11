@@ -75,7 +75,7 @@ namespace EngineCore.Graphics
             return Vector3.Transform(worldPoint, inverseViewProjection);
         }
 
-        protected override void Start()
+        protected internal override void Start()
         {
             Transform.PositionChanged += OnTransformPositionChanged;
             Transform.RotationChanged += OnTransformRotationChanged;

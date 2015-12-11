@@ -25,6 +25,10 @@ namespace EngineCore.Physics
                 _looper.AddThread();
             }
             _space = new Space(_looper);
+
+            game.ComponentRegistry.AddComponentRegistration<PhysicsComponent>(
+                (pc) => AddOject(pc.GetSpaceObject(), pc.GameObject),
+                (pc) => RemoveObject(pc.GetSpaceObject()));
         }
 
         public override void Update()

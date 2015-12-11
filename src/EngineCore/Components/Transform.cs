@@ -7,16 +7,16 @@ namespace EngineCore.Components
     {
         public Transform() : base() { }
 
-        private Vector3 position;
+        private Vector3 _position;
         public Vector3 Position
         {
             get
             {
-                return position;
+                return _position;
             }
             set
             {
-                position = value;
+                _position = value;
                 OnPositionChanged();
             }
         }
@@ -26,17 +26,17 @@ namespace EngineCore.Components
         {
             if (PositionChanged != null)
             {
-                this.PositionChanged(this.position);
+                PositionChanged(_position);
             }
         }
 
-        private Quaternion rotation = Quaternion.Identity;
+        private Quaternion _rotation = Quaternion.Identity;
         public Quaternion Rotation
         {
-            get { return rotation; }
+            get { return _rotation; }
             set
             {
-                rotation = value;
+                _rotation = value;
                 OnRotationChanged();
             }
         }
@@ -46,18 +46,18 @@ namespace EngineCore.Components
         {
             if (RotationChanged != null)
             {
-                this.RotationChanged(this.rotation);
+                RotationChanged(_rotation);
             }
         }
 
-        private Vector3 scale = Vector3.One;
+        private Vector3 _scale = Vector3.One;
         public Vector3 Scale
         {
-            get { return scale; }
+            get { return _scale; }
             set
             {
-                scale = value;
-                this.OnScalechanged();
+                _scale = value;
+                OnScalechanged();
             }
         }
 
@@ -66,7 +66,7 @@ namespace EngineCore.Components
         {
             if (ScaleChanged != null)
             {
-                this.ScaleChanged(this.scale);
+                ScaleChanged(_scale);
             }
         }
 
@@ -74,9 +74,9 @@ namespace EngineCore.Components
         {
             get
             {
-                return Matrix4x4.CreateScale(scale)
-                    * Matrix4x4.CreateFromQuaternion(rotation)
-                    * Matrix4x4.CreateTranslation(position);
+                return Matrix4x4.CreateScale(_scale)
+                    * Matrix4x4.CreateFromQuaternion(_rotation)
+                    * Matrix4x4.CreateTranslation(_position);
             }
         }
 
@@ -84,7 +84,7 @@ namespace EngineCore.Components
         {
             get
             {
-                return Vector3.Transform(Vector3.UnitZ, this.rotation);
+                return Vector3.Transform(Vector3.UnitZ, _rotation);
             }
         }
 
@@ -92,7 +92,7 @@ namespace EngineCore.Components
         {
             get
             {
-                return Vector3.Transform(Vector3.UnitY, this.rotation);
+                return Vector3.Transform(Vector3.UnitY, _rotation);
             }
         }
 
@@ -100,14 +100,14 @@ namespace EngineCore.Components
         {
             get
             {
-                return Vector3.Transform(Vector3.UnitX, this.rotation);
+                return Vector3.Transform(Vector3.UnitX, _rotation);
             }
         }
 
         internal void OnPhysicsUpdate(BEPUphysics.Entities.Entity obj)
         {
-            this.position = obj.Position;
-            this.rotation = obj.Orientation;
+            _position = obj.Position;
+            _rotation = obj.Orientation;
         }
     }
 }

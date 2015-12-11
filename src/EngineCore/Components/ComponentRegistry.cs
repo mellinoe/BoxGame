@@ -1,7 +1,6 @@
-﻿using EngineCore.Entities;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
+using System.Reflection;
 
 namespace EngineCore.Components
 {
@@ -12,6 +11,7 @@ namespace EngineCore.Components
         private const int MaxComponentTypes = 64;
 
         private static Dictionary<Type, int> s_componentTypeIDs = new Dictionary<Type, int>();
+        private static Dictionary<Type, ComponentMask> s_typeComponentMasks = new Dictionary<Type, ComponentMask>();
         private static Type[] s_componentTypes = new Type[MaxComponentTypes];
         private static int s_lastAssignedID;
 
@@ -20,11 +20,12 @@ namespace EngineCore.Components
 
         public void RegisterComponent<T>(GameObject go, T component)
         {
-            var mask = AddComponentMask<T>(go);
+            AddComponentMask<T>(go);
+            ComponentMask maskOfT = GetComponentMask(typeof(T));
 
             foreach (var listenerRegistration in _registrations)
             {
-                if ((listenerRegistration.Mask & mask) == mask)
+                if ((listenerRegistration.Mask & maskOfT) == maskOfT)
                 {
                     listenerRegistration.ComponentAddedAction(component);
                 }
@@ -35,9 +36,10 @@ namespace EngineCore.Components
         {
             var mask = RemoveComponentMask<T>(go);
 
+            ComponentMask maskOfT = GetComponentMask(typeof(T));
             foreach (var listenerRegistration in _registrations)
             {
-                if ((listenerRegistration.Mask & mask) == mask)
+                if ((listenerRegistration.Mask & maskOfT) == maskOfT)
                 {
                     listenerRegistration.ComponentRemovedAction(component);
                 }
@@ -83,9 +85,28 @@ namespace EngineCore.Components
 
         internal static ComponentMask GetComponentMask(Type type)
         {
-            int id = GetComponentID(type);
-            Debug.Assert(id >= 0 && id < MaxComponentTypes);
-            return ComponentMask.GetForID(id);
+            ComponentMask mask;
+            if (!s_typeComponentMasks.TryGetValue(type, out mask))
+            {
+                foreach (RegistrationTypeAttribute rta in GetRegistrationTypes(type))
+                {
+                    int id = GetComponentID(rta.Type);
+                    mask |= ComponentMask.GetForID(id);
+                }
+                if (mask == ComponentMask.None)
+                {
+                    mask = ComponentMask.GetForID(GetComponentID(type));
+                }
+
+                s_typeComponentMasks.Add(type, mask);
+            }
+
+            return mask;
+        }
+
+        private static IEnumerable<RegistrationTypeAttribute> GetRegistrationTypes(Type type)
+        {
+            return type.GetTypeInfo().GetCustomAttributes<RegistrationTypeAttribute>(inherit: true);
         }
 
         internal static IEnumerable<Type> GetTypesFromMask(ComponentMask mask)
@@ -102,23 +123,33 @@ namespace EngineCore.Components
 
         private static int AssignNextID(Type type)
         {
-            return s_lastAssignedID++;
+            return ++s_lastAssignedID;
         }
 
         private ComponentMask AddComponentMask<T>(GameObject go)
         {
-            ComponentMask mask = ComponentMask.None;
-            _entityComponentMasks.TryGetValue(go, out mask);
-            _entityComponentMasks[go] = mask & GetComponentMask(typeof(T));
-            return mask;
+            ComponentMask entityMask = ComponentMask.None;
+            _entityComponentMasks.TryGetValue(go, out entityMask);
+            entityMask |= GetComponentMask(typeof(T));
+            _entityComponentMasks[go] = entityMask;
+            return entityMask;
         }
 
         private ComponentMask RemoveComponentMask<T>(GameObject go)
         {
-            ComponentMask mask = ComponentMask.None;
-            _entityComponentMasks.TryGetValue(go, out mask);
-            _entityComponentMasks[go] = mask ^ GetComponentMask(typeof(T));
-            return mask;
+            ComponentMask entityMask = ComponentMask.None;
+            _entityComponentMasks.TryGetValue(go, out entityMask);
+            _entityComponentMasks[go] = entityMask ^ GetComponentMask(typeof(T));
+            return entityMask;
+        }
+    }
+
+    public class RegistrationTypeAttribute : Attribute
+    {
+        public Type Type { get; }
+        public RegistrationTypeAttribute(Type type)
+        {
+            Type = type;
         }
     }
 }

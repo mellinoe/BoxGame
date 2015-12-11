@@ -1,15 +1,11 @@
 ﻿using BoxArenaGame.Behaviours;
 using EngineCore;
-using EngineCore.Entities;
 using EngineCore.Graphics;
 using EngineCore.Physics;
 using GameApplication.Behaviours;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Numerics;
-using System.Threading.Tasks;
 
 namespace GameApplication
 {

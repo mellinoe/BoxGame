@@ -37,7 +37,7 @@ namespace EngineCore.Physics
             set { _physicsEntity.Mass = value; }
         }
 
-        public Collider()
+        protected internal override void Start()
         {
             Transform.PositionChanged += OnTransformPositionManuallyChanged;
             Transform.RotationChanged += OnTransformRotationManuallyChanged;

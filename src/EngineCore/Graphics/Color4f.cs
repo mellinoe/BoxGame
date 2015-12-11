@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Numerics;
 using System.Globalization;
 
@@ -10,16 +6,16 @@ namespace EngineCore.Graphics
 {
     public struct Color4f
     {
-        private Vector4 backingVector;
+        private Vector4 _backingVector;
         public Color4f(float r, float g, float b, float a)
         {
-            backingVector = new Vector4(r, g, b, a);
+            _backingVector = new Vector4(r, g, b, a);
         }
 
-        public float R { get { return backingVector.X; } }
-        public float G { get { return backingVector.Y; } }
-        public float B { get { return backingVector.Z; } }
-        public float A { get { return backingVector.W; } }
+        public float R => _backingVector.X;
+        public float G => _backingVector.Y;
+        public float B => _backingVector.Z;
+        public float A => _backingVector.W;
 
         public static readonly Color4f Red = new Color4f(1, 0, 0, 1);
         public static readonly Color4f Green = new Color4f(0, 1, 0, 1);

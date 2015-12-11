@@ -1,10 +1,5 @@
-﻿using EngineCore.Entities;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Reflection;
 
 namespace EngineCore.Components
 {
@@ -21,19 +16,13 @@ namespace EngineCore.Components
         /// </summary>
         public Transform Transform { get; private set; }
 
-        /// <summary>
-        /// Obtains the system types which this Component is dependent on.
-        /// </summary>
-        /// <returns></returns>
-        internal virtual IEnumerable<Type> GetDependencies() { return Array.Empty<Type>(); }
-
-        internal void CoreInitialize(GameObject gameObject, IEnumerable<GameSystem> systems)
+        internal void CoreInitialize(GameObject gameObject)
         {
             GameObject = gameObject;
             Transform = gameObject.Transform;
         }
 
-        protected virtual void Start()
+        protected internal virtual void Start()
         {
         }
     }

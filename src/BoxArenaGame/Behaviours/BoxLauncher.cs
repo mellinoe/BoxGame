@@ -3,12 +3,7 @@ using EngineCore.Components;
 using EngineCore.Input;
 using EngineCore.Physics;
 using EngineCore.Services;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GameApplication.Behaviours
 {
@@ -87,42 +82,42 @@ namespace GameApplication.Behaviours
 
         private void StopHoldingBox()
         {
-            this._heldBox.RemoveComponent<Tracker>();
-            this._heldBox.GetComponent<BoxCollider>().PhysicsEntity.Mass = 10.0f;
-            this._heldBox = null;
+            _heldBox.RemoveComponent<Tracker>();
+            _heldBox.GetComponent<BoxCollider>().PhysicsEntity.Mass = 10.0f;
+            _heldBox = null;
         }
 
         private void StartHoldingBox()
         {
-            this._heldBox = GameObject.CreateStaticBox(2.0f, 2.0f, 2.0f);
-            _tracker = this._heldBox.AddComponent<Tracker>();
-            _tracker.TrackedObject = this.Transform;
+            _heldBox = GameObject.CreateStaticBox(2.0f, 2.0f, 2.0f);
+            _tracker = _heldBox.AddComponent<Tracker>();
+            _tracker.TrackedObject = Transform;
             _tracker.Offset = new Vector3(0, 0, 3.0f);
         }
 
         private void FireBoxForward()
         {
             GameObject box = GameObject.CreateBox(0.2f, 0.2f, 0.2f, .2f);
-            box.GetComponent<BoxCollider>().PhysicsEntity.LinearVelocity = (this.Transform.Forward * 25.0f);
-            box.Transform.Position = this.Transform.Position + this.Transform.Forward * 1.5f;
+            box.GetComponent<BoxCollider>().PhysicsEntity.LinearVelocity = (Transform.Forward * 25.0f);
+            box.Transform.Position = Transform.Position + Transform.Forward * 1.5f;
 
             if (_launchingTonsOfBoxes)
             {
                 box = GameObject.CreateBox(0.2f, 0.2f, 0.2f, .2f);
-                box.GetComponent<BoxCollider>().PhysicsEntity.LinearVelocity = (this.Transform.Forward * 25.0f);
-                box.Transform.Position = this.Transform.Position + this.Transform.Forward * 1.5f + this.Transform.Right * .5f;
+                box.GetComponent<BoxCollider>().PhysicsEntity.LinearVelocity = (Transform.Forward * 25.0f);
+                box.Transform.Position = Transform.Position + Transform.Forward * 1.5f + Transform.Right * .5f;
 
                 box = GameObject.CreateBox(0.2f, 0.2f, 0.2f, .2f);
-                box.GetComponent<BoxCollider>().PhysicsEntity.LinearVelocity = (this.Transform.Forward * 25.0f);
-                box.Transform.Position = this.Transform.Position + this.Transform.Forward * 1.5f - this.Transform.Right * .5f;
+                box.GetComponent<BoxCollider>().PhysicsEntity.LinearVelocity = (Transform.Forward * 25.0f);
+                box.Transform.Position = Transform.Position + Transform.Forward * 1.5f - Transform.Right * .5f;
 
                 box = GameObject.CreateBox(0.2f, 0.2f, 0.2f, .2f);
-                box.GetComponent<BoxCollider>().PhysicsEntity.LinearVelocity = (this.Transform.Forward * 25.0f);
-                box.Transform.Position = this.Transform.Position + this.Transform.Forward * 1.5f + this.Transform.Up * .5f;
+                box.GetComponent<BoxCollider>().PhysicsEntity.LinearVelocity = (Transform.Forward * 25.0f);
+                box.Transform.Position = Transform.Position + Transform.Forward * 1.5f + Transform.Up * .5f;
 
                 box = GameObject.CreateBox(0.2f, 0.2f, 0.2f, .2f);
-                box.GetComponent<BoxCollider>().PhysicsEntity.LinearVelocity = (this.Transform.Forward * 25.0f);
-                box.Transform.Position = this.Transform.Position + this.Transform.Forward * 1.5f - this.Transform.Up * .5f;
+                box.GetComponent<BoxCollider>().PhysicsEntity.LinearVelocity = (Transform.Forward * 25.0f);
+                box.Transform.Position = Transform.Position + Transform.Forward * 1.5f - Transform.Up * .5f;
             }
         }
     }
@@ -134,7 +129,7 @@ namespace GameApplication.Behaviours
 
         protected override void Update()
         {
-            this.Transform.Position = TrackedObject.Position + Vector3.Transform(Offset, TrackedObject.Rotation);
+            Transform.Position = TrackedObject.Position + Vector3.Transform(Offset, TrackedObject.Rotation);
         }
     }
 
