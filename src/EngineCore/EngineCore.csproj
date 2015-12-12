@@ -26,6 +26,7 @@
     <Compile Include="Entities\Behaviour.cs" />
     <Compile Include="Graphics\DirectX\DefaultShaders.cs" />
     <Compile Include="Graphics\DirectX\RenderableObjectBase.cs" />
+    <Compile Include="Graphics\Formats\ObjImporter.cs" />
     <Compile Include="Graphics\GameWindowResizedEventArgs.cs" />
     <Compile Include="Graphics\GraphicsSystem.cs" />
     <Compile Include="Graphics\ILightInfo.cs" />
@@ -37,6 +38,7 @@
     <Compile Include="Graphics\OpenGL\TextureBuffer.cs" />
     <Compile Include="Graphics\DirectX\Direct3DMeshInfo.cs" />
     <Compile Include="Graphics\OpenTKNativeWindowInfo.cs" />
+    <Compile Include="Graphics\PrimitiveShapes.cs" />
     <Compile Include="Graphics\Texture2D.cs" />
     <Compile Include="Graphics\WindowInfo.cs" />
     <Compile Include="Input\InputService.cs" />
@@ -84,6 +86,7 @@
     <Compile Include="Physics\ConvexHullCollider.cs" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Graphics\Models\Sphere.obj" />
     <None Include="project.json" />
   </ItemGroup>
   <ItemGroup>

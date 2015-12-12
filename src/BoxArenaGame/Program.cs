@@ -84,6 +84,9 @@ namespace GameApplication
 
                 new GameObject().AddComponent<FullScreenToggle>();
                 new GameObject().AddComponent<GravityModifier>();
+
+                var sphere = new GameObject();
+
             }
 
             private void CreateSimpleWorld()
