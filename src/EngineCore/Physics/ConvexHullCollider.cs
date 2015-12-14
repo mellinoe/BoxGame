@@ -7,11 +7,11 @@ namespace EngineCore.Physics
 {
     public class ConvexHullCollider : Collider<ConvexHull>
     {
-        private PolyMesh mesh;
+        private PolyMesh _mesh;
 
         public PolyMesh Mesh
         {
-            get { return mesh; }
+            get { return _mesh; }
             set
             {
                 if (value == null)
@@ -19,24 +19,24 @@ namespace EngineCore.Physics
                     throw new ArgumentNullException("Mesh");
                 }
 
-                mesh = value;
+                _mesh = value;
                 SetPhysicsEntity();
             }
         }
 
         private void SetPhysicsEntity()
         {
-            this.PhysicsEntity = InitPhysicsEntity();
+            PhysicsEntity = InitPhysicsEntity();
         }
 
         public ConvexHullCollider(PolyMesh mesh)
         {
-            this.mesh = mesh;
+            _mesh = mesh;
         }
 
         protected override ConvexHull InitPhysicsEntity()
         {
-            return new ConvexHull(this.Transform.Position, mesh.Vertices.Select(sv => sv.Position).ToArray());
+            return new ConvexHull(Transform.Position, _mesh.Vertices.Select(sv => sv.Position).ToArray());
         }
     }
 }

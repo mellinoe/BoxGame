@@ -12,6 +12,9 @@ namespace EngineCore.Graphics
             registry.AddComponentRegistration<BoxRenderer>(
                 (br) => RegisterSimpleMesh(br, br._cubeMesh, br._surfaceTexture),
                 (br) => { });
+            registry.AddComponentRegistration<MeshRenderer>(
+                (br) => RegisterSimpleMesh(br, br.Mesh, br.SurfaceTexture),
+                (br) => { });
             registry.AddComponentRegistration<LightComponent>
                 ((lc) => RegisterLight(lc),
                 (lc) => { });

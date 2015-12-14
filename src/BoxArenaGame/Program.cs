@@ -1,10 +1,14 @@
-﻿using BoxArenaGame.Behaviours;
+﻿using BEPUphysics.CollisionShapes.ConvexShapes;
+using BoxArenaGame.Behaviours;
 using EngineCore;
 using EngineCore.Graphics;
+using EngineCore.Graphics.Formats;
 using EngineCore.Physics;
 using GameApplication.Behaviours;
 using System;
 using System.Diagnostics;
+using System.IO;
+using System.Linq;
 using System.Numerics;
 
 namespace GameApplication
@@ -79,14 +83,21 @@ namespace GameApplication
                 var camera = new GameObject();
                 camera.AddComponent<Camera>();
                 camera.AddComponent<BoxLauncher>();
-                var fpsLookController = camera.AddComponent<FpsLookController>();
-                fpsLookController.Tracked = character.Transform;
+                var fpsLookController = camera.AddComponent(new FpsLookController(character.Transform));
 
                 new GameObject().AddComponent<FullScreenToggle>();
                 new GameObject().AddComponent<GravityModifier>();
 
                 var sphere = new GameObject();
+                Texture2D stoneTex = new Texture2D(Path.Combine("Textures", "StoneTile.png"));
+                sphere.AddComponent(new MeshRenderer(Primitives.Teapot, stoneTex));
+                sphere.Transform.Position = new Vector3(0, 5, 10);
 
+                Vector3 center;
+                var convexShape = new ConvexHullShape(Primitives.Teapot.Vertices.Select(sv => sv.Position).ToArray(), out center);
+                sphere.AddComponent(new ConvexHullCollider(Primitives.Teapot));
+                sphere.GetComponent<MeshRenderer>().SetRenderOffset(-center);
+                sphere.GetComponent<ConvexHullCollider>().Mass = 50.0f;
             }
 
             private void CreateSimpleWorld()

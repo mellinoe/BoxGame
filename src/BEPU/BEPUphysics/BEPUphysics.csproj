@@ -11,6 +11,7 @@
     <RootNamespace>BEPUphysics</RootNamespace>
     <AssemblyName>BEPUphysics</AssemblyName>
     <NoWarn>3005;3006</NoWarn>
+    <Optimize>true</Optimize>
   </PropertyGroup>
   <!-- Default configurations to help VS understand the configurations -->
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' " />

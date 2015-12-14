@@ -47,32 +47,44 @@ namespace EngineCore.Graphics.Formats
                 else if (line.StartsWith("f"))
                 {
                     string[] words = line.Split(' ');
-                    var v1Split = words[1].Split('/');
-                    var v2Split = words[2].Split('/');
-                    var v3Split = words[3].Split('/');
 
-                    ObjVertex v1 = ParseObjVertexFromElements(v1Split, positions, normals, textureCoords);
-                    ObjVertex v2 = ParseObjVertexFromElements(v2Split, positions, normals, textureCoords);
-                    ObjVertex v3 = ParseObjVertexFromElements(v3Split, positions, normals, textureCoords);
-                    ObjVertex[] objVertices = new[] { v1, v2, v3 };
-
-                    foreach (ObjVertex objV in objVertices)
+                    ObjVertex[] objVertices = new ObjVertex[3];
+                    for (int i = 0; i < words.Length - 3; i++)
                     {
-                        int vertexIndex;
-                        if (!objVertexIndices.TryGetValue(objV, out vertexIndex))
-                        {
-                            vertexIndex = ++lastIndexUsed;
-                            objVertexIndices.Add(objV, vertexIndex);
-                            SimpleVertex vertex = new SimpleVertex(
-                                positions[objV.Position],
-                                normals[objV.Normal],
-                                Color4f.White,
-                                textureCoords[objV.TextureCoord]);
-                            vertices.Add(vertex);
-                            Debug.Assert(vertices.Count == lastIndexUsed + 1);
-                        }
+                        var v1Split = words[1].Split('/');
+                        var v2Split = words[i + 2].Split('/');
+                        var v3Split = words[i + 3].Split('/');
 
-                        indices.Add(vertexIndex);
+                        ObjVertex v1 = ParseObjVertexFromElements(v1Split, positions, normals, textureCoords);
+                        ObjVertex v2 = ParseObjVertexFromElements(v2Split, positions, normals, textureCoords);
+                        ObjVertex v3 = ParseObjVertexFromElements(v3Split, positions, normals, textureCoords);
+                        objVertices[0] = v1;
+                        objVertices[1] = v2;
+                        objVertices[2] = v3;
+
+                        foreach (ObjVertex objV in objVertices)
+                        {
+                            int vertexIndex;
+                            if (!objVertexIndices.TryGetValue(objV, out vertexIndex))
+                            {
+                                vertexIndex = ++lastIndexUsed;
+                                objVertexIndices.Add(objV, vertexIndex);
+
+                                var position = positions[objV.Position];
+                                var normal = objV.Normal != -2
+                                        ? normals[objV.Normal]
+                                        : normals.Count == 0
+                                            ? ComputeNormal(positions, v1, v2, v3)
+                                            : Vector3.Zero;
+                                var texCoord = objV.TextureCoord != -2 ? textureCoords[objV.TextureCoord] : Vector2.Zero;
+
+                                SimpleVertex vertex = new SimpleVertex(position, normal, Color4f.White, texCoord);
+                                vertices.Add(vertex);
+                                Debug.Assert(vertices.Count == lastIndexUsed + 1);
+                            }
+
+                            indices.Add(vertexIndex);
+                        }
                     }
                 }
             }
@@ -80,16 +92,38 @@ namespace EngineCore.Graphics.Formats
             return new PolyMesh(vertices, indices);
         }
 
+        private static Vector3 ComputeNormal(List<Vector3> positions, ObjVertex v1, ObjVertex v2, ObjVertex v3)
+        {
+            Vector3 pos1 = positions[v1.Position];
+            Vector3 pos2 = positions[v2.Position];
+            Vector3 pos3 = positions[v3.Position];
+
+            return Vector3.Normalize(Vector3.Cross(pos1 - pos2, pos1 - pos3));
+        }
+
         private static ObjVertex ParseObjVertexFromElements(string[] elements, List<Vector3> positions, List<Vector3> normals, List<Vector2> textureCoords)
         {
-            if (elements.Length != 3)
+            if (elements.Length < 1)
             {
                 throw new NotSupportedException("Can't parse this obj file");
             }
 
-            int posIndex = int.Parse(elements[0]);
-            int texIndex = int.Parse(elements[1]);
-            int normalIndex = int.Parse(elements[2]);
+            int posIndex = -1;
+            int texIndex = -1;
+            int normalIndex = -1;
+
+            // Vertex Position is not optional.
+            posIndex = int.Parse(elements[0]);
+
+            // Texture-coordinates and normal are optional.
+            if (elements.Length >= 2 && !string.IsNullOrWhiteSpace(elements[1]))
+            {
+                texIndex = int.Parse(elements[1]);
+            }
+            if (elements.Length >= 3 && !string.IsNullOrWhiteSpace(elements[2]))
+            {
+                normalIndex = int.Parse(elements[2]);
+            }
 
             return new ObjVertex(posIndex, normalIndex, texIndex);
         }
@@ -118,9 +152,9 @@ namespace EngineCore.Graphics.Formats
 
         public ObjVertex(int pos, int normal, int texCoord)
         {
-            Position = pos;
-            Normal = normal;
-            TextureCoord = texCoord;
+            Position = pos - 1;
+            Normal = normal - 1;
+            TextureCoord = texCoord - 1;
         }
     }
 }

@@ -8,10 +8,10 @@ namespace BoxArenaGame.Behaviours
     public class FullScreenToggle : Behaviour
     {
         [AutoInject]
-        public IInputService InputService { get; set; }
+        public IGraphicsService GraphicsService { get; set; }
 
         [AutoInject]
-        private IGraphicsService GraphicsService { get; set; }
+        public IInputService InputService { get; set; }
 
         protected override void Update()
         {

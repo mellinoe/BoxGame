@@ -20,15 +20,25 @@ namespace GameApplication.Behaviours
         private float currentYaw;
         private float currentPitch;
 
+        public FpsLookController(Transform trackedTransform)
+        {
+            Tracked = trackedTransform;
+        }
+
         [AutoInject]
         public IInputService Input { get; set; }
 
         public Transform Tracked { get; set; }
 
+        protected override void Start()
+        {
+            cc = Tracked.GameObject.GetComponent<CharacterController>();
+            cc.BepuController.ViewDirection = Transform.Forward;
+        }
+
         protected override void Update()
         {
             Transform.Position = Tracked.Position;
-            cc = Tracked.GameObject.GetComponent<CharacterController>();
             HandleMouseMovement();
         }
 

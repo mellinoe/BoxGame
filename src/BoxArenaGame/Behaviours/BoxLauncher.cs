@@ -4,6 +4,7 @@ using EngineCore.Input;
 using EngineCore.Physics;
 using EngineCore.Services;
 using System.Numerics;
+using System;
 
 namespace GameApplication.Behaviours
 {
@@ -16,6 +17,10 @@ namespace GameApplication.Behaviours
         private Tracker _tracker;
         private bool _launchingTonsOfBoxes;
 
+        private float _width = 1f;
+        private float _height = 1f;
+        private float _numPadChangeScale = (1f / 3f);
+
         protected override void Update()
         {
             if (InputService.GetKey(KeyCode.F))
@@ -26,13 +31,41 @@ namespace GameApplication.Behaviours
             {
                 StartStopHoldingBoxPressed();
             }
-            if (InputService.GetKeyDown(KeyCode.KeypadPlus))
+            if (InputService.GetKeyDown(KeyCode.Keypad6))
             {
-                PlusButtonPressed();
+                if (_heldBox != null)
+                {
+                    ModifyWidth(+1);
+                    SetBoxDimensions();
+                    FixHoldOffset();
+                }
             }
-            if (InputService.GetKeyDown(KeyCode.KeypadMinus))
+            if (InputService.GetKeyDown(KeyCode.Keypad4))
             {
-                MinusButtonPressed();
+                if (_heldBox != null)
+                {
+                    ModifyWidth(-1);
+                    SetBoxDimensions();
+                    FixHoldOffset();
+                }
+            }
+            if (InputService.GetKeyDown(KeyCode.Keypad8))
+            {
+                if (_heldBox != null)
+                {
+                    ModifyHeight(+1);
+                    SetBoxDimensions();
+                    FixHoldOffset();
+                }
+            }
+            if (InputService.GetKeyDown(KeyCode.Keypad2))
+            {
+                if (_heldBox != null)
+                {
+                    ModifyHeight(-1);
+                    SetBoxDimensions();
+                    FixHoldOffset();
+                }
             }
             if (InputService.GetKeyDown(KeyCode.F6))
             {
@@ -40,27 +73,25 @@ namespace GameApplication.Behaviours
             }
         }
 
+        private void ModifyWidth(int direction)
+        {
+            _width += direction * _numPadChangeScale;
+        }
+
+        private void ModifyHeight(int direction)
+        {
+            _height += direction * _numPadChangeScale;
+
+        }
+
         private void ToggleLaunchAmount()
         {
             _launchingTonsOfBoxes = !_launchingTonsOfBoxes;
         }
 
-        private void MinusButtonPressed()
+        private void SetBoxDimensions()
         {
-            if (_heldBox != null)
-            {
-                _heldBox.Transform.Scale -= new Vector3(.2f, 0, .2f);
-                FixHoldOffset();
-            }
-        }
-
-        private void PlusButtonPressed()
-        {
-            if (_heldBox != null)
-            {
-                _heldBox.Transform.Scale += new Vector3(.2f, 0, .2f);
-                FixHoldOffset();
-            }
+            _heldBox.Transform.Scale = new Vector3(_width, _height, _width);
         }
 
         private void FixHoldOffset()
@@ -89,10 +120,11 @@ namespace GameApplication.Behaviours
 
         private void StartHoldingBox()
         {
-            _heldBox = GameObject.CreateStaticBox(2.0f, 2.0f, 2.0f);
+            _heldBox = GameObject.CreateStaticBox(1.0f, 1.0f, 1.0f);
             _tracker = _heldBox.AddComponent<Tracker>();
             _tracker.TrackedObject = Transform;
-            _tracker.Offset = new Vector3(0, 0, 3.0f);
+            SetBoxDimensions();
+            FixHoldOffset();
         }
 
         private void FireBoxForward()
