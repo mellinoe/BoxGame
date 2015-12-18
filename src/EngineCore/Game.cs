@@ -86,6 +86,11 @@ namespace EngineCore
             }
         }
 
+        public T GetService<T>()
+        {
+            return (T)_serviceRegistry.GetService(typeof(T));
+        }
+
         public void Start()
         {
             Debug.WriteLine("Starting main game loop.");

@@ -53,6 +53,9 @@
     <Content Include="Textures\StoneTile.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="$(RefsDir)\ImGui.NET\win-x64\cimgui.dll" Condition="'$(TargetsWindows)' == 'true'">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), dir.targets))\dir.targets" />
 </Project>

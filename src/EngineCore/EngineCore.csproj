@@ -30,6 +30,7 @@
     <Compile Include="Graphics\GameWindowResizedEventArgs.cs" />
     <Compile Include="Graphics\GraphicsSystem.cs" />
     <Compile Include="Graphics\ILightInfo.cs" />
+    <Compile Include="Graphics\ImGui\ImGuiSystem.cs" />
     <Compile Include="Graphics\LightComponent.cs" />
     <Compile Include="Graphics\LightKind.cs" />
     <Compile Include="Graphics\MeshRenderer.cs" />
@@ -104,6 +105,7 @@
     <Reference Include="$(RefsDir)\SharpDx\SharpDX.Direct3D11.dll" />
     <Reference Include="$(RefsDir)\SharpDx\SharpDX.DXGI.dll" />
     <Reference Include="$(RefsDir)\ImageProcessor\ImageProcessor.dll" />
+    <Reference Include="$(RefsDir)\ImGui.NET\ImGui.NET.dll" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\BEPU\BEPUphysics\BEPUphysics.csproj">
