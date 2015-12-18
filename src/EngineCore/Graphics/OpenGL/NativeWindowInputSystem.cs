@@ -61,6 +61,11 @@ namespace EngineCore.Graphics.OpenGL
 
         private void OnKeyDown(object sender, OpenTK.Input.KeyboardKeyEventArgs e)
         {
+            if (e.Key == OpenTK.Input.Key.F4 && e.Modifiers.HasFlag(OpenTK.Input.KeyModifiers.Alt))
+            {
+                _window.Close();
+            }
+
             if (currentlyPressedKeys.Add((KeyCode)e.Key))
             {
                 newlyQueuedKeys.Add((KeyCode)e.Key);

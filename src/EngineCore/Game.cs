@@ -108,12 +108,23 @@ namespace EngineCore
             }
         }
 
+        private void StopSystems()
+        {
+            Console.WriteLine("Stopping systems");
+            foreach (var system in Systems)
+            {
+                system.Stop();
+            }
+        }
+
         private void RunMainLoop()
         {
             while (running)
             {
                 RunSingleFrame();
             }
+
+            StopSystems();
         }
 
         private DateTime previousFrameStartTime;

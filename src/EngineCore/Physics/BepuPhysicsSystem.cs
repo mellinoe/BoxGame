@@ -1,14 +1,7 @@
 ﻿using BEPUphysics;
-using BEPUphysics.Entities;
-using BEPUphysics.Entities.Prefabs;
-using EngineCore.Entities;
 using EngineCore.Services;
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
 using System.Numerics;
-using System.Text;
 
 namespace EngineCore.Physics
 {
@@ -54,6 +47,7 @@ namespace EngineCore.Physics
 
         public override void Stop()
         {
+            _looper.Dispose();
         }
 
         public bool RayCast(BEPUutilities.Ray ray, out RayCastResult result)
