@@ -89,7 +89,7 @@ namespace EngineCore.Graphics.Formats
                 }
             }
 
-            return new PolyMesh(vertices, indices);
+            return new PolyMesh(vertices.ToArray(), indices.ToArray());
         }
 
         private static Vector3 ComputeNormal(List<Vector3> positions, ObjVertex v1, ObjVertex v2, ObjVertex v3)

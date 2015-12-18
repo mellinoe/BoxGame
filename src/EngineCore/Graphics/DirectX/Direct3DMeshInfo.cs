@@ -28,19 +28,23 @@ namespace EngineCore.Graphics.DirectX
         private SimpleShader _shader;
         private IRenderable _renderable;
         private ShaderResourceView _shaderTextureResourceView;
+        private PolyMesh _mesh;
 
-        public unsafe Direct3DMeshInfo(SimpleRenderer simpleRenderer, IRenderable renderable, SimpleVertex[] vertices, int[] indices, Image image)
+        public unsafe Direct3DMeshInfo(SimpleRenderer simpleRenderer, IRenderable renderable, PolyMesh mesh, Texture2D texture)
             : base(simpleRenderer)
         {
-            VertexBuffer = SharpDX.Direct3D11.Buffer.Create<SimpleVertex>(simpleRenderer.Device, BindFlags.VertexBuffer, vertices);
-            IndexBuffer = SharpDX.Direct3D11.Buffer.Create<int>(simpleRenderer.Device, BindFlags.IndexBuffer, indices);
-            _indexCount = indices.Length;
+            _mesh = mesh;
+            VertexBuffer = SharpDX.Direct3D11.Buffer.Create<SimpleVertex>(simpleRenderer.Device, BindFlags.VertexBuffer, _mesh.Vertices);
+            IndexBuffer = SharpDX.Direct3D11.Buffer.Create<int>(simpleRenderer.Device, BindFlags.IndexBuffer, _mesh.Indices);
+            _mesh.MeshChanged += OnMeshChanged;
+
+            _indexCount = _mesh.Indices.Length;
             _shader = simpleRenderer.DefaultShaders.LightShader;
             _renderable = renderable;
 
             Texture2DDescription desc;
-            desc.Width = image.Width;
-            desc.Height = image.Height;
+            desc.Width = texture.Width;
+            desc.Height = texture.Height;
             desc.ArraySize = 1;
             desc.BindFlags = BindFlags.ShaderResource;
             desc.Usage = ResourceUsage.Default;
@@ -52,14 +56,26 @@ namespace EngineCore.Graphics.DirectX
             desc.SampleDescription.Quality = 0;
 
             DataRectangle dataRectangle;
-            fixed (float* basePtr = image.Pixels)
+            int stride = sizeof(float) * 4 * texture.Width;
+            dataRectangle = new DataRectangle(texture.Pixels, stride);
+
+            SharpDX.Direct3D11.Texture2D deviceTexture = new SharpDX.Direct3D11.Texture2D(simpleRenderer.Device, desc, dataRectangle);
+            _shaderTextureResourceView = new ShaderResourceView(simpleRenderer.Device, deviceTexture);
+        }
+
+        private void OnMeshChanged(PolyMesh mesh)
+        {
+            if (VertexBuffer != null)
             {
-                int stride = sizeof(float) * 4 * image.Width;
-                dataRectangle = new DataRectangle(new IntPtr(basePtr), stride);
+                VertexBuffer.Dispose();
+            }
+            if (IndexBuffer != null)
+            {
+                IndexBuffer.Dispose();
             }
 
-            SharpDX.Direct3D11.Texture2D deviceTexture= new SharpDX.Direct3D11.Texture2D(simpleRenderer.Device, desc, dataRectangle);
-            _shaderTextureResourceView = new ShaderResourceView(simpleRenderer.Device, deviceTexture);
+            VertexBuffer = SharpDX.Direct3D11.Buffer.Create<SimpleVertex>(SimpleRenderer.Device, BindFlags.VertexBuffer, _mesh.Vertices);
+            IndexBuffer = SharpDX.Direct3D11.Buffer.Create<int>(SimpleRenderer.Device, BindFlags.IndexBuffer, _mesh.Indices);
         }
 
         public void Dispose()
@@ -82,7 +98,7 @@ namespace EngineCore.Graphics.DirectX
 
         private void SetIndexBuffer(InputAssemblerStage inputAssembler)
         {
-            inputAssembler.SetIndexBuffer(IndexBuffer, SharpDX.DXGI.Format.R32_UInt, 0);
+            inputAssembler.SetIndexBuffer(IndexBuffer, Format.R32_UInt, 0);
         }
 
         protected void SetWorldMatrix(IRenderable renderable)
@@ -112,8 +128,8 @@ namespace EngineCore.Graphics.DirectX
     {
         private List<IRenderable> _renderables = new List<IRenderable>();
 
-        public Direct3DBatchedMeshInfo(SimpleRenderer simpleRenderer, IRenderable renderable, SimpleVertex[] vertices, int[] indices, Image image)
-            : base(simpleRenderer, renderable, vertices, indices, image)
+        public Direct3DBatchedMeshInfo(SimpleRenderer simpleRenderer, IRenderable renderable, PolyMesh mesh, Texture2D texture)
+            : base(simpleRenderer, renderable, mesh, texture)
         {
         }
 

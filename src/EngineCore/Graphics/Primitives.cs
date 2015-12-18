@@ -21,7 +21,7 @@ namespace EngineCore.Graphics
             Assembly assembly = typeof(Primitives).GetTypeInfo().Assembly;
             using (var stream = assembly.GetManifestResourceStream("EngineCore.Graphics.Models.WhiteSquare.png"))
             {
-                return new Texture2D(stream);
+                return new ImageProcessorTexture2D(stream);
             }
         }
 

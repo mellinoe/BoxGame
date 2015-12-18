@@ -1,6 +1,7 @@
 ﻿using EngineCore.Components;
 using EngineCore.Entities;
 using EngineCore.Graphics;
+using EngineCore.Graphics.Gui;
 using EngineCore.Graphics.OpenGL;
 using EngineCore.Physics;
 using EngineCore.Services;
@@ -54,6 +55,7 @@ namespace EngineCore
         {
             AddGameSystem(new EntityUpdateSystem(this));
             AddGameSystem(new BepuPhysicsSystem(this));
+            AddGameSystem(new ImGuiSystem(this));
 
             bool useDirectX = true;
             if (useDirectX)

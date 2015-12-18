@@ -17,7 +17,7 @@ namespace VoxelGame.World
         private NoiseGen _noiseGen = new NoiseGen(1f, 1f, 4);
         private SpatialStorageBuffer<Tuple<Chunk, OpenGLChunkRenderInfo>> _chunks;
 
-        private static Texture2D s_cubeFaceTextures = new Texture2D("Textures/CubeFaceTextures.png");
+        private static Texture2D s_cubeFaceTextures = Texture2D.CreateFromFile("Textures/CubeFaceTextures.png");
         private TextureBuffer _textureBuffer = new TextureBuffer(s_cubeFaceTextures);
 
         public ChunkManager(OpenGLGraphicsSystem graphicsSystem)

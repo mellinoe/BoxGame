@@ -11,7 +11,7 @@ namespace EngineCore.Entities
         internal readonly Texture2D _surfaceTexture;
 
         private static readonly string s_defaultImagePath = Path.Combine("Textures", "StoneTile.png");
-        private static readonly Texture2D s_defaultImage = new Texture2D(s_defaultImagePath);
+        private static readonly Texture2D s_defaultImage = new ImageProcessorTexture2D(s_defaultImagePath);
 
         public BoxRenderer()
         {

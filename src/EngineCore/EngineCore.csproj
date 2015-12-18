@@ -30,7 +30,7 @@
     <Compile Include="Graphics\GameWindowResizedEventArgs.cs" />
     <Compile Include="Graphics\GraphicsSystem.cs" />
     <Compile Include="Graphics\ILightInfo.cs" />
-    <Compile Include="Graphics\ImGui\ImGuiSystem.cs" />
+    <Compile Include="Graphics\Gui\ImGuiSystem.cs" />
     <Compile Include="Graphics\LightComponent.cs" />
     <Compile Include="Graphics\LightKind.cs" />
     <Compile Include="Graphics\MeshRenderer.cs" />
@@ -84,7 +84,6 @@
     <Compile Include="Graphics\DirectX\SimpleShader.cs" />
     <Compile Include="Graphics\DirectX\SharpDxGraphicsSystem.cs" />
     <Compile Include="Graphics\DirectX\ShaderCache.cs" />
-    <Compile Include="Graphics\DirectX\SimpleText.cs" />
     <Compile Include="Physics\ConvexHullCollider.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -122,6 +121,9 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Graphics\Models\WhiteSquare.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Graphics\DirectX\DefaultShaders\SimpleUnlitShader.hlsl" />
   </ItemGroup>
   <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), dir.targets))\dir.targets" />
 </Project>

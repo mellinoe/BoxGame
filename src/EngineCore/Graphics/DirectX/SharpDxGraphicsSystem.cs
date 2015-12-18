@@ -77,7 +77,7 @@ namespace EngineCore.Graphics
                 Direct3DBatchedMeshInfo batchedInfo;
                 if (!_batchedMeshInfos.TryGetValue(mesh, out batchedInfo))
                 {
-                    batchedInfo = new Direct3DBatchedMeshInfo(Renderer, renderable, mesh.Vertices.ToArray(), mesh.Indices.ToArray(), texture.Image);
+                    batchedInfo = new Direct3DBatchedMeshInfo(Renderer, renderable, mesh, texture);
                     _batchedMeshInfos.Add(mesh, batchedInfo);
                     _renderer.AddRenderable(batchedInfo);
                 }
@@ -86,7 +86,7 @@ namespace EngineCore.Graphics
             }
             else
             {
-                Direct3DMeshInfo meshInfo = new Direct3DMeshInfo(_renderer, renderable, mesh.Vertices.ToArray(), mesh.Indices.ToArray(), texture.Image);
+                Direct3DMeshInfo meshInfo = new Direct3DMeshInfo(_renderer, renderable, mesh, texture);
                 _renderer.AddRenderable(meshInfo);
             }
         }

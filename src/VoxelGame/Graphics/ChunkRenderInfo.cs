@@ -150,12 +150,12 @@ namespace VoxelGame.Graphics
                 GL.BindBuffer(BufferTarget.ElementArrayBuffer, indexBufferId);
 
                 // Send data to buffer
-                GL.BufferData(BufferTarget.ElementArrayBuffer, (IntPtr)(polyMesh.Indices.Count * sizeof(int)), polyMesh.Indices.ToArray(), BufferUsageHint.StaticDraw);
+                GL.BufferData(BufferTarget.ElementArrayBuffer, (IntPtr)(polyMesh.Indices.Length * sizeof(int)), polyMesh.Indices, BufferUsageHint.StaticDraw);
 
 #if DEBUG
                 // Validate that the buffer is the correct size
                 GL.GetBufferParameter(BufferTarget.ElementArrayBuffer, BufferParameterName.BufferSize, out bufferSize);
-                if (polyMesh.Indices.Count * sizeof(int) != bufferSize)
+                if (polyMesh.Indices.Length * sizeof(int) != bufferSize)
                     throw new InvalidOperationException("Element array not uploaded correctly");
 #endif
 
@@ -163,7 +163,7 @@ namespace VoxelGame.Graphics
                 GL.BindBuffer(BufferTarget.ElementArrayBuffer, 0);
 
                 // Store the number of elements for the DrawElements call
-                numElements = polyMesh.Indices.Count;
+                numElements = polyMesh.Indices.Length;
             }
         }
     }

@@ -41,7 +41,7 @@ namespace VoxelGame.Graphics
                 }
             }
 
-            return new PolyMesh(vertices, indices);
+            return new PolyMesh(vertices.ToArray(), indices.ToArray());
         }
 
         private void AddBlock(List<SimpleVertex> vertices, List<int> indices, BlockType blockType, Vector3 center)

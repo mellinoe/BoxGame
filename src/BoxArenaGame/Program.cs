@@ -89,7 +89,7 @@ namespace GameApplication
                 new GameObject().AddComponent<GravityModifier>();
 
                 var sphere = new GameObject();
-                Texture2D stoneTex = new Texture2D(Path.Combine("Textures", "StoneTile.png"));
+                Texture2D stoneTex = Texture2D.CreateFromFile(Path.Combine("Textures", "StoneTile.png"));
                 sphere.AddComponent(new MeshRenderer(Primitives.Teapot, stoneTex));
                 sphere.Transform.Position = new Vector3(0, 5, 10);
 

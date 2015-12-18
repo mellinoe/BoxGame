@@ -8,17 +8,12 @@ namespace EngineCore.Graphics.OpenGL
     {
         private int _textureBufferId;
 
-        public TextureBuffer(Image image)
-        {
-            GenerateTexture(image);
-        }
-
         public TextureBuffer(Texture2D texture2D)
         {
-            GenerateTexture(texture2D.Image);
+            GenerateTexture(texture2D);
         }
 
-        private void GenerateTexture(Image image)
+        private void GenerateTexture(Texture2D image)
         {
             GL.GenTextures(1, out _textureBufferId);
             GL.BindTexture(TextureTarget.Texture2D, _textureBufferId);
@@ -35,6 +30,9 @@ namespace EngineCore.Graphics.OpenGL
             GL.TexParameter(TextureTarget.Texture2D,
                    TextureParameterName.GenerateMipmap, (float)1.0f);
 
+            var pixelFormat = MapPixelFormat(image.Format);
+            var pixelType = MapPixelType(image.Format);
+
             // load the texture
             GL.TexImage2D(
                 TextureTarget.Texture2D,
@@ -42,12 +40,42 @@ namespace EngineCore.Graphics.OpenGL
                 PixelInternalFormat.Four,
                 image.Width, image.Height,
                 0, // border
-                PixelFormat.Bgra,
-                PixelType.Float,
+                OpenTK.Graphics.OpenGL.PixelFormat.Bgra,
+                pixelType,
                 image.Pixels
                 );
 
             GL.BindTexture(TextureTarget.Texture2D, 0);
+        }
+
+        private OpenTK.Graphics.OpenGL.PixelFormat MapPixelFormat(PixelFormat format)
+        {
+            switch (format)
+            {
+                case PixelFormat.R32_G32_B32_A32_Float:
+                    return OpenTK.Graphics.OpenGL.PixelFormat.Bgra;
+                case PixelFormat.Alpha_Int8:
+                    return OpenTK.Graphics.OpenGL.PixelFormat.Alpha;
+                case PixelFormat.R8_G8_B8_A8:
+                    return OpenTK.Graphics.OpenGL.PixelFormat.Bgra;
+                default:
+                    throw new InvalidOperationException("Invalid pixel format: " + format);
+            }
+        }
+
+        private PixelType MapPixelType(PixelFormat format)
+        {
+            switch (format)
+            {
+                case PixelFormat.R32_G32_B32_A32_Float:
+                    return PixelType.Float;
+                case PixelFormat.Alpha_Int8:
+                    return PixelType.UnsignedByte;
+                case PixelFormat.R8_G8_B8_A8:
+                    return PixelType.Int;
+                default:
+                    throw new InvalidOperationException("Invalid pixel format: " + format);
+            }
         }
 
         public void Bind()

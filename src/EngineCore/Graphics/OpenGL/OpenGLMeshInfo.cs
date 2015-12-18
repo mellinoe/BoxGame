@@ -24,6 +24,7 @@ namespace EngineCore.Graphics.OpenGL
             _textureBuffer = new TextureBuffer(texture);
 
             GenerateBuffers();
+            _mesh.MeshChanged += (pm) => GenerateBuffers();
         }
 
         private unsafe void GenerateBuffers()
@@ -40,7 +41,7 @@ namespace EngineCore.Graphics.OpenGL
             GLEx.LoadMatrix(ref transformMatrix);
 
             GL.Begin(PrimitiveType.Triangles);
-            for (int i = 0; i <= _mesh.Indices.Count - 3; i += 3)
+            for (int i = 0; i <= _mesh.Indices.Length - 3; i += 3)
             {
                 SimpleVertex vertex0 = _mesh.Vertices[_mesh.Indices[i]];
                 SimpleVertex vertex1 = _mesh.Vertices[_mesh.Indices[i + 1]];
@@ -155,7 +156,6 @@ namespace EngineCore.Graphics.OpenGL
         private void GenerateCombinedVertexBuffer()
         {
             int bufferSize;
-            SimpleVertex[] vertices = _mesh.Vertices.ToArray();
             // Generate Array Buffer Id
             GL.GenBuffers(1, out _vertexBufferId);
 
@@ -163,11 +163,11 @@ namespace EngineCore.Graphics.OpenGL
             GL.BindBuffer(BufferTarget.ArrayBuffer, _vertexBufferId);
 
             // Send data to buffer
-            GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(vertices.Length * SimpleVertex.SizeInBytes), vertices, BufferUsageHint.DynamicDraw);
+            GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(_mesh.Vertices.Length * SimpleVertex.SizeInBytes), _mesh.Vertices, BufferUsageHint.DynamicDraw);
 
             // Validate that the buffer is the correct size
             GL.GetBufferParameter(BufferTarget.ArrayBuffer, BufferParameterName.BufferSize, out bufferSize);
-            if (vertices.Length * SimpleVertex.SizeInBytes != bufferSize)
+            if (_mesh.Vertices.Length * SimpleVertex.SizeInBytes != bufferSize)
                 throw new InvalidOperationException("Vertex array not uploaded correctly");
 
             // Clear the buffer Binding
@@ -185,18 +185,18 @@ namespace EngineCore.Graphics.OpenGL
             GL.BindBuffer(BufferTarget.ElementArrayBuffer, _indexBufferId);
 
             // Send data to buffer
-            GL.BufferData(BufferTarget.ElementArrayBuffer, (IntPtr)(_mesh.Indices.Count * sizeof(int)), _mesh.Indices.ToArray(), BufferUsageHint.StaticDraw);
+            GL.BufferData(BufferTarget.ElementArrayBuffer, (IntPtr)(_mesh.Indices.Length * sizeof(int)), _mesh.Indices, BufferUsageHint.StaticDraw);
 
             // Validate that the buffer is the correct size
             GL.GetBufferParameter(BufferTarget.ElementArrayBuffer, BufferParameterName.BufferSize, out bufferSize);
-            if (_mesh.Indices.Count * sizeof(int) != bufferSize)
+            if (_mesh.Indices.Length * sizeof(int) != bufferSize)
                 throw new InvalidOperationException("Element array not uploaded correctly");
 
             // Clear the buffer Binding
             GL.BindBuffer(BufferTarget.ElementArrayBuffer, 0);
 
             // Store the number of elements for the DrawElements call
-            _numElements = _mesh.Indices.Count;
+            _numElements = _mesh.Indices.Length;
         }
         #endregion Buffer Binding and Initialization
 
