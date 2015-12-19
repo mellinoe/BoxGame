@@ -31,14 +31,22 @@ namespace EngineCore.Graphics
 
         // Ambient Color Properties
         private SharpDX.Direct3D11.Buffer ambientLightBuffer;
+
+        internal void AddSelfManagedRenderable(IRenderableObjectInfo2D info)
+        {
+            renderables2D.Add(info);
+        }
+
         private Color4f ambientColor;
 
         // Misc
         private ImmutableArray<IRenderableObjectInfo> renderables;
+        private List<IRenderableObjectInfo2D> renderables2D;
         private Camera camera;
         private bool needsResizing = false;
         private OpenTK.NativeWindow _nativeWindow;
         private DefaultShaders _defaultShaders;
+        private float _windowScaleFactor;
 
         #endregion Private Fields
 
@@ -67,6 +75,8 @@ namespace EngineCore.Graphics
             set { camera = value; }
         }
 
+        internal float ScaleFactor => _windowScaleFactor;
+
         public void AddRenderable(IRenderableObjectInfo renderable)
         {
             this.renderables = this.renderables.Add(renderable);
@@ -89,8 +99,9 @@ namespace EngineCore.Graphics
         {
             string title = "SharpDX Renderer";
             _nativeWindow = new OpenTK.NativeWindow(960, 600, title, OpenTK.GameWindowFlags.Default, OpenTK.Graphics.GraphicsMode.Default, OpenTK.DisplayDevice.Default);
-
+            _windowScaleFactor = (float)_nativeWindow.Width / 960f;
             this.renderables = ImmutableArray<IRenderableObjectInfo>.Empty;
+            renderables2D = new List<IRenderableObjectInfo2D>();
             CreateAndInitializeDevice();
             _defaultShaders = new DefaultShaders(device, deviceContext);
             _nativeWindow.Visible = true;

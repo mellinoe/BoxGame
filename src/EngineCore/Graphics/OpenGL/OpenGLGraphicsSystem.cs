@@ -26,7 +26,7 @@ namespace EngineCore.Graphics.OpenGL
             : base(game)
         {
             _window = new OpenTK.NativeWindow(960, 600, "EngineCore", OpenTK.GameWindowFlags.Default, GraphicsMode.Default, OpenTK.DisplayDevice.Default);
-            _windowInfo = new OpenTKNativeWindowInfo(_window);
+            _windowInfo = new OpenTKNativeWindowInfo(_window, _window.Width / 960f);
             GraphicsContextFlags flags = GraphicsContextFlags.Default;
 #if DEBUG
             //flags |= GraphicsContextFlags.Debug;

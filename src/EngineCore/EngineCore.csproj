@@ -29,6 +29,8 @@
     <Compile Include="Graphics\Formats\ObjImporter.cs" />
     <Compile Include="Graphics\GameWindowResizedEventArgs.cs" />
     <Compile Include="Graphics\GraphicsSystem.cs" />
+    <Compile Include="Graphics\Gui\DirectXImGuiRenderer.cs" />
+    <Compile Include="Graphics\Gui\OpenGLImGuiRenderer.cs" />
     <Compile Include="Graphics\ILightInfo.cs" />
     <Compile Include="Graphics\Gui\ImGuiSystem.cs" />
     <Compile Include="Graphics\LightComponent.cs" />
@@ -87,7 +89,9 @@
     <Compile Include="Physics\ConvexHullCollider.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Graphics\Models\Sphere.obj" />
+    <EmbeddedResource Include="Graphics\Models\Sphere.obj">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Graphics\Models\Teapot.obj">
       <SubType>Designer</SubType>
     </EmbeddedResource>

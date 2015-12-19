@@ -4,7 +4,7 @@ using EngineCore.Input;
 using EngineCore.Physics;
 using EngineCore.Services;
 using System.Numerics;
-using System;
+using ImGuiNET;
 
 namespace GameApplication.Behaviours
 {
@@ -20,6 +20,9 @@ namespace GameApplication.Behaviours
         private float _width = 1f;
         private float _height = 1f;
         private float _numPadChangeScale = (1f / 3f);
+
+        private int _numBoxesLaunched = 0;
+        private int _numBoxesPlaced;
 
         protected override void Update()
         {
@@ -71,6 +74,10 @@ namespace GameApplication.Behaviours
             {
                 ToggleLaunchAmount();
             }
+
+            ImGui.Text("Total boxes fired: " + _numBoxesLaunched);
+            ImGui.Text("Total boxes placed: " + _numBoxesPlaced);
+
         }
 
         private void ModifyWidth(int direction)
@@ -116,6 +123,7 @@ namespace GameApplication.Behaviours
             _heldBox.RemoveComponent<Tracker>();
             _heldBox.GetComponent<BoxCollider>().PhysicsEntity.Mass = 10.0f;
             _heldBox = null;
+            _numBoxesPlaced++;
         }
 
         private void StartHoldingBox()
@@ -132,24 +140,29 @@ namespace GameApplication.Behaviours
             GameObject box = GameObject.CreateBox(0.2f, 0.2f, 0.2f, .2f);
             box.GetComponent<BoxCollider>().PhysicsEntity.LinearVelocity = (Transform.Forward * 25.0f);
             box.Transform.Position = Transform.Position + Transform.Forward * 1.5f;
+            _numBoxesLaunched++;
 
             if (_launchingTonsOfBoxes)
             {
                 box = GameObject.CreateBox(0.2f, 0.2f, 0.2f, .2f);
                 box.GetComponent<BoxCollider>().PhysicsEntity.LinearVelocity = (Transform.Forward * 25.0f);
                 box.Transform.Position = Transform.Position + Transform.Forward * 1.5f + Transform.Right * .5f;
+                _numBoxesLaunched++;
 
                 box = GameObject.CreateBox(0.2f, 0.2f, 0.2f, .2f);
                 box.GetComponent<BoxCollider>().PhysicsEntity.LinearVelocity = (Transform.Forward * 25.0f);
                 box.Transform.Position = Transform.Position + Transform.Forward * 1.5f - Transform.Right * .5f;
+                _numBoxesLaunched++;
 
                 box = GameObject.CreateBox(0.2f, 0.2f, 0.2f, .2f);
                 box.GetComponent<BoxCollider>().PhysicsEntity.LinearVelocity = (Transform.Forward * 25.0f);
                 box.Transform.Position = Transform.Position + Transform.Forward * 1.5f + Transform.Up * .5f;
+                _numBoxesLaunched++;
 
                 box = GameObject.CreateBox(0.2f, 0.2f, 0.2f, .2f);
                 box.GetComponent<BoxCollider>().PhysicsEntity.LinearVelocity = (Transform.Forward * 25.0f);
                 box.Transform.Position = Transform.Position + Transform.Forward * 1.5f - Transform.Up * .5f;
+                _numBoxesLaunched++;
             }
         }
     }

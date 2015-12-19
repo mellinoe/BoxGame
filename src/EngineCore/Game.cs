@@ -55,7 +55,6 @@ namespace EngineCore
         {
             AddGameSystem(new EntityUpdateSystem(this));
             AddGameSystem(new BepuPhysicsSystem(this));
-            AddGameSystem(new ImGuiSystem(this));
 
             bool useDirectX = true;
             if (useDirectX)
@@ -70,6 +69,8 @@ namespace EngineCore
                 AddGameSystem(_graphicsSystem);
                 AddGameSystem(((OpenGLGraphicsSystem)_graphicsSystem).InputSystem);
             }
+
+           AddGameSystem(new ImGuiSystem(this));
         }
 
         protected void AddGameSystem(GameSystem system)

@@ -5,9 +5,12 @@ namespace EngineCore.Graphics
     class OpenTKNativeWindowInfo : IWindowInfo
     {
         private NativeWindow _nativeWindow;
-        public OpenTKNativeWindowInfo(NativeWindow window)
+        private float _scaleFactor;
+
+        public OpenTKNativeWindowInfo(NativeWindow window, float scaleFactor)
         {
             _nativeWindow = window;
+            _scaleFactor = scaleFactor;
         }
 
         public string Title
@@ -47,5 +50,33 @@ namespace EngineCore.Graphics
                 _nativeWindow.WindowState = value ? WindowState.Fullscreen : WindowState.Normal;
             }
         }
+
+        public int Width
+        {
+            get
+            {
+                return _nativeWindow.Width;
+            }
+
+            set
+            {
+                _nativeWindow.Width = value;
+            }
+        }
+
+        public int Height
+        {
+            get
+            {
+                return _nativeWindow.Height;
+            }
+
+            set
+            {
+                _nativeWindow.Height = value;
+            }
+        }
+
+        public float ScaleFactor => _scaleFactor;
     }
 }

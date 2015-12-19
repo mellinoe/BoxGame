@@ -1,18 +1,22 @@
 ﻿using BEPUphysics.Entities.Prefabs;
 using EngineCore.Components;
+using System;
 using System.Numerics;
 
 namespace EngineCore.Physics
 {
     public class SphereCollider : Collider<Sphere>
     {
+        private float _unscaledRadius;
         private float _radius;
+        private float _massPerVolume;
 
-        public SphereCollider() : this(1.0f) { }
+        public SphereCollider() : this(1.0f, 1.0f) { }
 
-        public SphereCollider(float radius)
+        public SphereCollider(float radius, float massPerVolume)
         {
-            _radius = radius;
+            _unscaledRadius = radius;
+            _massPerVolume = massPerVolume;
         }
 
         public float Radius
@@ -24,24 +28,36 @@ namespace EngineCore.Physics
                 SetPhysicsSphereSize();
             }
         }
-        protected internal override void Start()
-        {
-            Transform.ScaleChanged += OnScaleChanged;
-        }
 
-        private void OnScaleChanged(Vector3 obj)
+        protected override void OnTransformScaleManuallyChanged(Vector3 newScale)
         {
-            Radius = 1.66f * obj.X;
+            base.OnTransformScaleManuallyChanged(newScale);
+            if (newScale.X != newScale.Y || newScale.X != newScale.Z || newScale.Y != newScale.Z)
+            {
+                Console.WriteLine("Warning: sphere collider has non-uniform scale. This will not behave properly.");
+            }
+
+            Radius = _unscaledRadius * newScale.X;
         }
 
         private void SetPhysicsSphereSize()
         {
-            PhysicsEntity.Radius = _radius;
+            PhysicsEntity.Radius = CalculatedScaledRadius();
+            PhysicsEntity.Mass = CalculateScaledMass();
         }
+
+        private float CalculatedScaledRadius() => _unscaledRadius * Transform.Scale.X;
 
         protected override Sphere InitPhysicsEntity()
         {
-            return new Sphere(Transform.Position, _radius * Transform.Scale.X, 1.0f);
+            float scaledRadius = CalculatedScaledRadius();
+            return new Sphere(Transform.Position, CalculatedScaledRadius(), CalculateScaledMass());
+        }
+
+        private float CalculateScaledMass()
+        {
+            float radius = CalculatedScaledRadius();
+            return _massPerVolume * (float)Math.PI * (radius * radius);
         }
     }
 }

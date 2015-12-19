@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
+using EngineCore.Graphics.Gui;
 
 namespace EngineCore.Graphics
 {
@@ -26,6 +26,12 @@ namespace EngineCore.Graphics
 
         private bool active;
         private OpenTKNativeWindowInfo _windowInfo;
+
+        internal void AddSelfManagedRenderable(IRenderableObjectInfo2D info)
+        {
+            _renderer.AddSelfManagedRenderable(info);
+        }
+
         public override IWindowInfo WindowInfo => _windowInfo;
 
         public SharpDxGraphicsSystem(Game game)
@@ -35,7 +41,7 @@ namespace EngineCore.Graphics
             _renderer.Window.Closing += OnWindowClosing;
 
             _inputSystem = new OpenGL.NativeWindowInputSystem(Game, _renderer.Window);
-            _windowInfo = new OpenTKNativeWindowInfo(_renderer.Window);
+            _windowInfo = new OpenTKNativeWindowInfo(_renderer.Window, _renderer.ScaleFactor);
 
             this.active = true;
         }

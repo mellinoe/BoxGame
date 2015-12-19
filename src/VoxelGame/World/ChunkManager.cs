@@ -73,7 +73,6 @@ namespace VoxelGame.World
                             }
                             catch (Exception e)
                             {
-
                                 if (Debugger.IsAttached)
                                     Debugger.Break();
                                 else

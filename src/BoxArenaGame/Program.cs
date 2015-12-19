@@ -90,14 +90,16 @@ namespace GameApplication
 
                 var sphere = new GameObject();
                 Texture2D stoneTex = Texture2D.CreateFromFile(Path.Combine("Textures", "StoneTile.png"));
-                sphere.AddComponent(new MeshRenderer(Primitives.Teapot, stoneTex));
+                sphere.AddComponent(new MeshRenderer(Primitives.Sphere, stoneTex));
+                sphere.AddComponent<SphereCollider>();
                 sphere.Transform.Position = new Vector3(0, 5, 10);
+                sphere.Transform.Scale = new Vector3(4);
 
-                Vector3 center;
-                var convexShape = new ConvexHullShape(Primitives.Teapot.Vertices.Select(sv => sv.Position).ToArray(), out center);
-                sphere.AddComponent(new ConvexHullCollider(Primitives.Teapot));
-                sphere.GetComponent<MeshRenderer>().SetRenderOffset(-center);
-                sphere.GetComponent<ConvexHullCollider>().Mass = 50.0f;
+                //Vector3 center;
+                //var convexShape = new ConvexHullShape(Primitives.Teapot.Vertices.Select(sv => sv.Position).ToArray(), out center);
+                //sphere.AddComponent(new ConvexHullCollider(Primitives.Teapot));
+                //sphere.GetComponent<MeshRenderer>().SetRenderOffset(-center);
+                //sphere.GetComponent<ConvexHullCollider>().Mass = 50.0f;
             }
 
             private void CreateSimpleWorld()

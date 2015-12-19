@@ -42,6 +42,7 @@
       <Project>{c29c63ab-7cfb-4eaa-be26-9f225fb9e007}</Project>
       <Name>EngineCore</Name>
     </ProjectReference>
+    <Reference Include="$(RefsDir)\ImGui.NET\ImGui.NET.dll" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Shaders\LightShader.hlsl">
