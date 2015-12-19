@@ -93,7 +93,7 @@ namespace GameApplication
                 sphere.AddComponent(new MeshRenderer(Primitives.Sphere, stoneTex));
                 sphere.AddComponent<SphereCollider>();
                 sphere.Transform.Position = new Vector3(0, 5, 10);
-                sphere.Transform.Scale = new Vector3(4);
+                sphere.Transform.Scale = new Vector3(1);
 
                 //Vector3 center;
                 //var convexShape = new ConvexHullShape(Primitives.Teapot.Vertices.Select(sv => sv.Position).ToArray(), out center);
@@ -120,7 +120,7 @@ namespace GameApplication
                 AddArenaStartingStuff();
 
                 var light = new GameObject();
-                LightComponent lightComponent = light.AddComponent(new LightComponent(LightKind.Directional, new Vector3(-.5f, -1f, -.5f), Color4f.White));
+                LightComponent lightComponent = light.AddComponent(new LightComponent(LightKind.Directional, new Vector3(.5f, -1f, .5f), Color4f.White));
 
                 var box = GameObject.CreateBox(3.0f, 3.0f, 3.0f, 6f);
                 box.Transform.Position = new Vector3(0, 5, 15);

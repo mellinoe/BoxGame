@@ -16,14 +16,15 @@
     <DefineConstants>$(DefineConstants);FEATURE_TEXTURES</DefineConstants>
   </PropertyGroup>
   <!-- Default configurations to help VS understand the configurations -->
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x64' " />
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x64' ">
+    <UseVSHostingProcess>true</UseVSHostingProcess>
+  </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x64' " />
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' " />
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' " />
   <ItemGroup>
     <Compile Include="$(SharedSourcePath)Behaviours\FreeFlyMovement.cs" />
     <Compile Include="$(SharedSourcePath)Behaviours\MouseClickRayCaster.cs" />
-    <Compile Include="$(SharedSourcePath)Behaviours\BoxLauncher.cs" />
     <Compile Include="$(SharedSourcePath)Behaviours\SimpleFpsController.cs" />
     <Compile Include="$(SharedSourcePath)Behaviours\FpsLookController.cs" />
     <Compile Include="Noise.cs" />

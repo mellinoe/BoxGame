@@ -56,7 +56,6 @@ namespace VoxelGame
             {
                 var camera = new GameObject();
                 camera.AddComponent<Camera>();
-                camera.AddComponent<BoxLauncher>();
                 camera.AddComponent<FreeFlyMovement>();
             }
         }

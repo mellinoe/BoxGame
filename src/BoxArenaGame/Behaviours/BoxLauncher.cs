@@ -77,7 +77,6 @@ namespace GameApplication.Behaviours
 
             ImGui.Text("Total boxes fired: " + _numBoxesLaunched);
             ImGui.Text("Total boxes placed: " + _numBoxesPlaced);
-
         }
 
         private void ModifyWidth(int direction)

@@ -11,9 +11,6 @@ namespace EngineCore.Graphics
         private bool _supportsBatching = true;
         private Dictionary<PolyMesh, Direct3DBatchedMeshInfo> _batchedMeshInfos = new Dictionary<PolyMesh, Direct3DBatchedMeshInfo>();
 
-        private ShaderCache shaderCache = new ShaderCache();
-        public ShaderCache ShaderCache { get { return shaderCache; } }
-
         SimpleRenderer _renderer;
         public SimpleRenderer Renderer
         {

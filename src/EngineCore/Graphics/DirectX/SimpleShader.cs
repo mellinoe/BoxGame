@@ -7,12 +7,11 @@ namespace EngineCore.Graphics
 {
     public class SimpleShader : IDisposable
     {
-        private Device device;
-        private DeviceContext deviceContext;
+        private DeviceContext _deviceContext;
 
-        private VertexShader vertexShader;
-        private PixelShader pixelShader;
-        private InputLayout inputLayout;
+        private VertexShader _vertexShader;
+        private PixelShader _pixelShader;
+        private InputLayout _inputLayout;
 
         private const ShaderFlags defaultShaderFlags
 #if DEBUG
@@ -57,14 +56,11 @@ namespace EngineCore.Graphics
 
         private void CoreInitialize(Device device, DeviceContext deviceContext, ShaderBytecode compiledVertexShader, ShaderBytecode compiledPixelShader, InputElement[] inputElements)
         {
-            this.device = device;
-            this.deviceContext = deviceContext;
+            _deviceContext = deviceContext;
 
-            this.vertexShader = new VertexShader(device, compiledVertexShader);
-            this.pixelShader = new PixelShader(device, compiledPixelShader);
-
-            var shaderSignature = new ShaderSignature(compiledVertexShader.Data);
-            this.inputLayout = new InputLayout(device, shaderSignature, inputElements);
+            _vertexShader = new VertexShader(device, compiledVertexShader);
+            _pixelShader = new PixelShader(device, compiledPixelShader);
+            _inputLayout = new InputLayout(device, compiledVertexShader.Data, inputElements);
         }
 
         /// <summary>
@@ -72,16 +68,16 @@ namespace EngineCore.Graphics
         /// </summary>
         public void ApplyShader()
         {
-            deviceContext.InputAssembler.InputLayout = this.inputLayout;
-            deviceContext.VertexShader.Set(this.vertexShader);
-            deviceContext.PixelShader.Set(this.pixelShader);
+            _deviceContext.InputAssembler.InputLayout = _inputLayout;
+            _deviceContext.VertexShader.Set(_vertexShader);
+            _deviceContext.PixelShader.Set(_pixelShader);
         }
 
         public void Dispose()
         {
-            this.vertexShader.Dispose();
-            this.pixelShader.Dispose();
-            this.inputLayout.Dispose();
+            _vertexShader.Dispose();
+            _pixelShader.Dispose();
+            _inputLayout.Dispose();
         }
     }
 }

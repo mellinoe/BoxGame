@@ -32,11 +32,6 @@ namespace EngineCore.Graphics
         // Ambient Color Properties
         private SharpDX.Direct3D11.Buffer ambientLightBuffer;
 
-        internal void AddSelfManagedRenderable(IRenderableObjectInfo2D info)
-        {
-            renderables2D.Add(info);
-        }
-
         private Color4f ambientColor;
 
         // Misc
@@ -79,12 +74,22 @@ namespace EngineCore.Graphics
 
         public void AddRenderable(IRenderableObjectInfo renderable)
         {
-            this.renderables = this.renderables.Add(renderable);
+            renderables = renderables.Add(renderable);
         }
 
         public void RemoveRenderable(IRenderableObjectInfo renderable)
         {
-            this.renderables = this.renderables.Remove(renderable);
+            renderables = renderables.Remove(renderable);
+        }
+
+        internal void AddSelfManagedRenderable(IRenderableObjectInfo2D info)
+        {
+            renderables2D.Add(info);
+        }
+
+        internal void RemoveSelfManagedRenderable(IRenderableObjectInfo2D info)
+        {
+            renderables2D.Remove(info);
         }
 
         public IReadOnlyCollection<IRenderableObjectInfo> Renderables { get { return renderables; } }
@@ -100,7 +105,7 @@ namespace EngineCore.Graphics
             string title = "SharpDX Renderer";
             _nativeWindow = new OpenTK.NativeWindow(960, 600, title, OpenTK.GameWindowFlags.Default, OpenTK.Graphics.GraphicsMode.Default, OpenTK.DisplayDevice.Default);
             _windowScaleFactor = (float)_nativeWindow.Width / 960f;
-            this.renderables = ImmutableArray<IRenderableObjectInfo>.Empty;
+            renderables = ImmutableArray<IRenderableObjectInfo>.Empty;
             renderables2D = new List<IRenderableObjectInfo2D>();
             CreateAndInitializeDevice();
             _defaultShaders = new DefaultShaders(device, deviceContext);
@@ -129,9 +134,9 @@ namespace EngineCore.Graphics
             factory.MakeWindowAssociation(_nativeWindow.WindowInfo.Handle, WindowAssociationFlags.IgnoreAll);
 
             SetRasterizerState();
-            SetDepthBufferState();
-            SetSamplerState();
-            SetBlendState();
+            CreateDepthBufferState();
+            CreateSamplerState();
+            CreateBlendState();
             CreateConstantBuffers();
             _nativeWindow.Resize += OnWindowResized;
             PerformResizing();
@@ -149,7 +154,7 @@ namespace EngineCore.Graphics
 
         private void CreateConstantBuffers()
         {
-            this.worldViewProjectionMatrixBuffer = new SharpDX.Direct3D11.Buffer(
+            worldViewProjectionMatrixBuffer = new SharpDX.Direct3D11.Buffer(
                 device,
                 Marshal.SizeOf<MatricesBuffer>(),
                 ResourceUsage.Default,
@@ -158,7 +163,7 @@ namespace EngineCore.Graphics
                 ResourceOptionFlags.None,
                 0);
 
-            this.ambientLightBuffer = new SharpDX.Direct3D11.Buffer(
+            ambientLightBuffer = new SharpDX.Direct3D11.Buffer(
                 device,
                 Marshal.SizeOf<AmbientLightBuffer>(),
                 ResourceUsage.Default,
@@ -175,12 +180,12 @@ namespace EngineCore.Graphics
             DeviceContext.OutputMerger.SetTargets(depthStencilView, backBufferView);
         }
 
-        private void SetBlendState()
+        private void CreateBlendState()
         {
             blendState = new BlendState(Device, BlendStateDescription.Default());
         }
 
-        private void SetDepthBufferState()
+        private void CreateDepthBufferState()
         {
             DepthStencilStateDescription description = DepthStencilStateDescription.Default();
             description.DepthComparison = Comparison.LessEqual;
@@ -191,14 +196,14 @@ namespace EngineCore.Graphics
 
         private void SetRasterizerState()
         {
-            rasterizerState = new RasterizerState(device, RasterizerStateDescription.Default());
-            var desc = rasterizerState.Description;
-            desc.CullMode = CullMode.None;
+            var desc = RasterizerStateDescription.Default();
+            desc.IsMultisampleEnabled = true;
+            desc.IsFrontCounterClockwise = true;
+            desc.CullMode = CullMode.Back;
             rasterizerState = new RasterizerState(device, desc);
-            deviceContext.Rasterizer.State = rasterizerState;
         }
 
-        public void SetSamplerState()
+        public void CreateSamplerState()
         {
             SamplerStateDescription description = SamplerStateDescription.Default();
             description.Filter = Filter.MinMagMipLinear;
@@ -242,6 +247,11 @@ namespace EngineCore.Graphics
                 renderable.Render(ref viewMatrix);
             }
 
+            foreach (var renderable2D in renderables2D)
+            {
+                renderable2D.Render();
+            }
+
             deviceContext.End(statisticsQuery);
             QueryDataPipelineStatistics result;
             while (!deviceContext.GetData(statisticsQuery, out result)) { }
@@ -266,7 +276,7 @@ namespace EngineCore.Graphics
 
         private void OnWindowResized(object sender, EventArgs e)
         {
-            this.needsResizing = true;
+            needsResizing = true;
         }
 
         private void PerformResizing()
@@ -311,7 +321,7 @@ namespace EngineCore.Graphics
 
             SetRegularTargets();
 
-            this.needsResizing = false;
+            needsResizing = false;
         }
 
         internal void SetWorldMatrix(Matrix4x4 worldMatrix)
@@ -321,13 +331,13 @@ namespace EngineCore.Graphics
             var projectionTransposed = Matrix4x4.Transpose(projectionMatrix);
 
             MatricesBuffer matricesBuffer = new MatricesBuffer(ref worldTransposed, ref viewTransposed, ref projectionTransposed);
-            deviceContext.UpdateSubresource<MatricesBuffer>(ref matricesBuffer, this.worldViewProjectionMatrixBuffer);
-            deviceContext.VertexShader.SetConstantBuffer(0, this.worldViewProjectionMatrixBuffer);
+            deviceContext.UpdateSubresource<MatricesBuffer>(ref matricesBuffer, worldViewProjectionMatrixBuffer);
+            deviceContext.VertexShader.SetConstantBuffer(0, worldViewProjectionMatrixBuffer);
         }
 
         internal void RenderFrame()
         {
-            this.OnRendering();
+            OnRendering();
         }
 
         #endregion Private/Internal Implementation
@@ -351,9 +361,9 @@ namespace EngineCore.Graphics
 
         public MatricesBuffer(ref Matrix4x4 world, ref Matrix4x4 view, ref Matrix4x4 projection)
         {
-            this.worldMatrix = world;
-            this.viewMatrix = view;
-            this.projectionMatrix = projection;
+            worldMatrix = world;
+            viewMatrix = view;
+            projectionMatrix = projection;
         }
     }
 
@@ -363,7 +373,7 @@ namespace EngineCore.Graphics
         public readonly Color4f AmbientColor;
         public AmbientLightBuffer(Color4f color)
         {
-            this.AmbientColor = color;
+            AmbientColor = color;
         }
     }
     #endregion Shader Constant Buffer Definitions

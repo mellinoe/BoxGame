@@ -63,6 +63,8 @@ namespace EngineCore.Graphics.OpenGL
             GL.ClearColor(OpenTK.Color.CornflowerBlue);
             GL.Enable(EnableCap.DepthTest);
             GL.Enable(EnableCap.PolygonSmooth);
+            GL.Enable(EnableCap.CullFace);
+            GL.FrontFace(FrontFaceDirection.Ccw);
         }
 
         private void SetViewport()

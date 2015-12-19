@@ -16,25 +16,23 @@ namespace EngineCore.Graphics
 
         public SimpleVertex(Vector3 position, Vector3 normal, Color4f color, Vector2 textureCoords)
         {
-            this.Color = color;
-            this.Normal = Vector3.Normalize(normal);
-            this.Position = position;
-            this.TextureCoords = textureCoords;
+            Color = color;
+            Normal = Vector3.Normalize(normal);
+            Position = position;
+            TextureCoords = textureCoords;
         }
 
         public unsafe Vector4 GetPositionAsVector4()
-        {
-            return new Vector4(Position.X, Position.Y, Position.Z, 1);
-        }
+            => new Vector4(Position.X, Position.Y, Position.Z, 1);
 
         // Fields denoting the relative offsets of each component (from the structure's base)
 
-        public static readonly int PositionOffset = 0;
-        public static readonly int NormalOffset = 12;
-        public static readonly int ColorOffset = 24;
-        public static readonly int TexCoordOffset = 40;
+        public const int PositionOffset = 0;
+        public const int NormalOffset = 12;
+        public const int ColorOffset = 24;
+        public const int TexCoordOffset = 40;
 
-        public static unsafe int SizeInBytes { get { return sizeof(SimpleVertex); } }
+        public static unsafe int SizeInBytes => sizeof(SimpleVertex);
 
         public static readonly SharpDX.Direct3D11.InputElement[] VertexInputLayout = new SharpDX.Direct3D11.InputElement[]
         {

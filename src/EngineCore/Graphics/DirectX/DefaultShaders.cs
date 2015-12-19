@@ -13,7 +13,9 @@ namespace EngineCore.Graphics.DirectX
         private readonly string _embeddedResourceNamePrefix = "EngineCore.Graphics.DirectX.DefaultShaders";
 
         private SimpleShader _lightShader;
-        private static readonly SharpDX.Direct3D11.InputElement[] _lightShaderInputElements = SimpleVertex.VertexInputLayout;
+
+        private static readonly InputElement[] _lightShaderInputElements = SimpleVertex.VertexInputLayout;
+
         public SimpleShader LightShader { get { return _lightShader ?? (_lightShader = LoadFromEmbeddedResource("LightShader.hlsl", "VS", "PS", _lightShaderInputElements)); } }
 
         public DefaultShaders(Device device, DeviceContext context)
