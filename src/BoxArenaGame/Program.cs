@@ -50,11 +50,7 @@ namespace GameApplication
             protected override void PostSystemsStart()
             {
                 GraphicsSystem.WindowInfo.Title = s_windowTitle;
-                // Fix when the text renderer isn't OpenGL-specific
-                if (GraphicsSystem is EngineCore.Graphics.OpenGL.OpenGLGraphicsSystem)
-                {
-                    CreateFpsTracker();
-                }
+                CreateFpsTracker();
             }
 
             private void CreateFpsTracker()

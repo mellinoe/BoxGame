@@ -133,7 +133,7 @@ namespace EngineCore.Graphics
             var factory = SwapChain.GetParent<Factory>();
             factory.MakeWindowAssociation(_nativeWindow.WindowInfo.Handle, WindowAssociationFlags.IgnoreAll);
 
-            SetRasterizerState();
+            CreateRasterizerState();
             CreateDepthBufferState();
             CreateSamplerState();
             CreateBlendState();
@@ -194,7 +194,7 @@ namespace EngineCore.Graphics
             depthState = new DepthStencilState(device, description);
         }
 
-        private void SetRasterizerState()
+        private void CreateRasterizerState()
         {
             var desc = RasterizerStateDescription.Default();
             desc.IsMultisampleEnabled = true;

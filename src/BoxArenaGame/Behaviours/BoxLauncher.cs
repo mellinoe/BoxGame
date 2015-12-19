@@ -5,6 +5,8 @@ using EngineCore.Physics;
 using EngineCore.Services;
 using System.Numerics;
 using ImGuiNET;
+using System;
+using EngineCore.Graphics;
 
 namespace GameApplication.Behaviours
 {
@@ -12,6 +14,9 @@ namespace GameApplication.Behaviours
     {
         [AutoInject]
         public IInputService InputService { get; set; }
+
+        [AutoInject]
+        public IGraphicsService GraphicsService { get; set; }
 
         private GameObject _heldBox;
         private Tracker _tracker;
@@ -23,6 +28,7 @@ namespace GameApplication.Behaviours
 
         private int _numBoxesLaunched = 0;
         private int _numBoxesPlaced;
+        private bool _infoWindowOpened = true;
 
         protected override void Update()
         {
@@ -75,8 +81,18 @@ namespace GameApplication.Behaviours
                 ToggleLaunchAmount();
             }
 
-            ImGui.Text("Total boxes fired: " + _numBoxesLaunched);
-            ImGui.Text("Total boxes placed: " + _numBoxesPlaced);
+            DrawInfoWindow();
+        }
+
+        private void DrawInfoWindow()
+        {
+            ImGuiNative.igSetNextWindowPos(new Vector2(10, 10), SetCondition.Always);
+            if (ImGui.BeginWindow("Box Stats", ref _infoWindowOpened, 0.3f, WindowFlags.NoMove | WindowFlags.AlwaysAutoResize))
+            {
+                ImGui.Text("Total boxes fired: " + _numBoxesLaunched);
+                ImGui.Text("Total boxes placed: " + _numBoxesPlaced);
+            }
+            ImGui.EndWindow();
         }
 
         private void ModifyWidth(int direction)
