@@ -7,6 +7,7 @@ using Matrix4x4 = System.Numerics.Matrix4x4;
 using System.Collections.Immutable;
 using SharpDX.Mathematics.Interop;
 using EngineCore.Graphics.DirectX;
+using ImGuiNET;
 
 namespace EngineCore.Graphics
 {
@@ -255,6 +256,13 @@ namespace EngineCore.Graphics
             deviceContext.End(statisticsQuery);
             QueryDataPipelineStatistics result;
             while (!deviceContext.GetData(statisticsQuery, out result)) { }
+
+            ImGui.BeginWindow("Graphics Stats", WindowFlags.NoResize | WindowFlags.NoMove);
+            ImGui.Text($"InputAssembler Vertices: {result.IAVerticeCount}");
+            ImGui.Text($"InputAssembler Primitives: {result.IAPrimitiveCount}");
+            ImGui.Text($"Vertex Shader Invocations: {result.VSInvocationCount}");
+            ImGui.Text($"Pixel Shader Invocations: {result.PSInvocationCount}");
+            ImGui.EndWindow();
 
             swapChain.Present(0, PresentFlags.None);
         }
