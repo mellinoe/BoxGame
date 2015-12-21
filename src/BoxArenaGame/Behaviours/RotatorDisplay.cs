@@ -1,9 +1,14 @@
-﻿using System;
+﻿using EngineCore;
+using System;
 using System.Collections.Generic;
 
 namespace BoxArenaGame.Behaviours
 {
-    class RotatorDisplay
+    public class RotatorDisplay : Behaviour
     {
+        protected override void Update()
+        {
+            ImGuiEx
+        }
     }
 }

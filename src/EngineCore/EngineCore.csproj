@@ -33,6 +33,7 @@
     <Compile Include="Graphics\GameWindowResizedEventArgs.cs" />
     <Compile Include="Graphics\GraphicsSystem.cs" />
     <Compile Include="Graphics\Gui\DirectXImGuiRenderer.cs" />
+    <Compile Include="Graphics\Gui\ImGuiEx.cs" />
     <Compile Include="Graphics\Gui\OpenGLImGuiRenderer.cs" />
     <Compile Include="Graphics\ILightInfo.cs" />
     <Compile Include="Graphics\Gui\ImGuiSystem.cs" />
