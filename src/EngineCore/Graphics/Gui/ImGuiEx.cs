@@ -6,7 +6,6 @@ namespace EngineCore.Graphics.Gui
     {
         public static void Vector3()
         {
-            ImGuiNative.igDragFloat3
         }
     }
 }

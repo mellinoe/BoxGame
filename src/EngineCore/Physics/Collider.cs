@@ -1,6 +1,7 @@
 ﻿using BEPUphysics.Entities;
 using EngineCore.Components;
 using BEPUphysics;
+using System.Numerics;
 
 namespace EngineCore.Physics
 {
@@ -35,6 +36,18 @@ namespace EngineCore.Physics
         {
             get { return _physicsEntity.Mass; }
             set { _physicsEntity.Mass = value; }
+        }
+
+        public Vector3 LinearVelocity
+        {
+            get { return _physicsEntity.LinearVelocity; }
+            set { _physicsEntity.LinearVelocity = value; }
+        }
+
+        public Vector3 PhysicsPosition
+        {
+            get { return _physicsEntity.Position; }
+            set { _physicsEntity.Position = value; }
         }
 
         protected internal override void Start()
