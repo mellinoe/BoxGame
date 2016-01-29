@@ -1,11 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using ImGuiNET;
 using SharpDX.D3DCompiler;
 using SharpDX.Direct3D11;
 using System.Numerics;
 using SharpDX;
 using SharpDX.Mathematics.Interop;
+using EngineCore.Graphics.Direct3D;
 
 namespace EngineCore.Graphics.Gui
 {

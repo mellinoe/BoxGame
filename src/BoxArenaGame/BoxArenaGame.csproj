@@ -15,14 +15,13 @@
     <Compile Include="Behaviours\FullScreenToggle.cs" />
     <Compile Include="Behaviours\GravityModifier.cs" />
     <Compile Include="Behaviours\MouseClickRayCaster.cs" />
+    <Compile Include="Behaviours\TransformEditor.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Behaviours\BoxLauncher.cs" />
     <Compile Include="Behaviours\SimpleFpsController.cs" />
     <Compile Include="Behaviours\FpsLookController.cs" />
   </ItemGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Windows_Debug|x64' ">
-    <UseVSHostingProcess>true</UseVSHostingProcess>
-  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Windows_Debug|x64' " />
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Windows_Release|x64' " />
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Ubuntu_Debug|x64' " />
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Ubuntu_Release|x64' " />
@@ -57,6 +56,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="$(RefsDir)\ImGui.NET\win-x64\cimgui.dll" Condition="'$(TargetsWindows)' == 'true'">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="$(RefsDir)\ImGui.NET\ubuntu-x64\cimgui.so" Condition="'$(TargetsUbuntu)' == 'true'">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

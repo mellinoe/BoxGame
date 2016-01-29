@@ -55,7 +55,8 @@ namespace EngineCore.Physics
 
         protected override Box InitPhysicsEntity()
         {
-            return new Box(Transform.Position, _width, _height, _length);
+            var b = new Box(Transform.Position, _width, _height, _length);
+            return b;
         }
 
         protected override void OnTransformScaleManuallyChanged(System.Numerics.Vector3 obj)
