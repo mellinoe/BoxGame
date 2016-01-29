@@ -58,7 +58,7 @@ namespace EngineCore
             AddGameSystem(new EntityUpdateSystem(this));
             AddGameSystem(new BepuPhysicsSystem(this));
 
-            bool useDirectX = false;
+            bool useDirectX = true;
             if (useDirectX && RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
                 _graphicsSystem = new SharpDxGraphicsSystem(this);

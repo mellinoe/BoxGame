@@ -80,6 +80,7 @@ namespace GameApplication
                 camera.AddComponent<Camera>();
                 camera.AddComponent<BoxLauncher>();
                 var fpsLookController = camera.AddComponent(new FpsLookController(character.Transform));
+                camera.AddComponent<TransformEditor>();
 
                 new GameObject().AddComponent<FullScreenToggle>();
                 new GameObject().AddComponent<GravityModifier>();

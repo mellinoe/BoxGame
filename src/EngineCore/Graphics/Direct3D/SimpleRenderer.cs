@@ -127,7 +127,7 @@ namespace EngineCore.Graphics.Direct3D
             };
             DeviceCreationFlags flags = DeviceCreationFlags.None;
 #if DEBUG
-            flags |= DeviceCreationFlags.Debug;
+            //flags |= DeviceCreationFlags.Debug;
 #endif
             SharpDX.Direct3D11.Device.CreateWithSwapChain(SharpDX.Direct3D.DriverType.Hardware, flags, swapChainDescription, out device, out swapChain);
             deviceContext = device.ImmediateContext;

@@ -23,7 +23,7 @@ namespace EngineCore.Physics
                     {
                         system.RemoveObject(old);
                     }
-                    system.AddOject(value, GameObject);
+                    system.AddOject(value);
                 }
 
                 value.PositionUpdated += Transform.OnPhysicsUpdate;
@@ -57,6 +57,7 @@ namespace EngineCore.Physics
             Transform.ScaleChanged += OnTransformScaleManuallyChanged;
 
             PhysicsEntity = InitPhysicsEntity();
+            PhysicsEntity.CollisionInformation.Tag = this;
 
             OnTransformPositionManuallyChanged(Transform.Position);
             OnTransformRotationManuallyChanged(Transform.Rotation);

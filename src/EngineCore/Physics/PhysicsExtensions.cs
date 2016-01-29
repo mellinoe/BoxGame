@@ -1,19 +1,19 @@
 ﻿using BEPUphysics.BroadPhaseEntries;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EngineCore.Physics
 {
     public static class PhysicsExtensions
     {
-        public static GameObject GetGameObject(this BroadPhaseEntry bpe)
+        public static bool TryGetGameObject(this BroadPhaseEntry bpe, out GameObject go)
         {
-            Debug.Assert(bpe.Tag is GameObject, "BroadPhaseEntry.Tag was not set to a valid GameObject.");
-            return (GameObject)bpe.Tag;
+            if (bpe.Tag is PhysicsComponent)
+            {
+                go = ((PhysicsComponent)bpe.Tag).GameObject;
+                return true;
+            }
+
+            go = null;
+            return false;
         }
     }
 }
