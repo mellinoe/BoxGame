@@ -33,6 +33,7 @@
     <Compile Include="Graphics\GameWindowResizedEventArgs.cs" />
     <Compile Include="Graphics\GraphicsSystem.cs" />
     <Compile Include="Graphics\Gui\DirectXImGuiRenderer.cs" />
+    <Compile Include="Graphics\Gui\ImGuiEx.cs" />
     <Compile Include="Graphics\Gui\OpenGLImGuiRenderer.cs" />
     <Compile Include="Graphics\ILightInfo.cs" />
     <Compile Include="Graphics\Gui\ImGuiSystem.cs" />
@@ -106,10 +107,10 @@
   <ItemGroup>
     <Reference Include="$(RefsDir)\OpenTK\OpenTK.dll" />
     <Reference Include="$(RefsDir)\ExperimentalCollections\Microsoft.Experimental.Collections.dll" />
-    <Reference Include="$(RefsDir)\SharpDx\SharpDX.dll" />
-    <Reference Include="$(RefsDir)\SharpDx\SharpDX.D3DCompiler.dll" />
-    <Reference Include="$(RefsDir)\SharpDx\SharpDX.Direct3D11.dll" />
-    <Reference Include="$(RefsDir)\SharpDx\SharpDX.DXGI.dll" />
+    <Reference Include="$(RefsDir)\SharpDX\SharpDX.dll" />
+    <Reference Include="$(RefsDir)\SharpDX\SharpDX.D3DCompiler.dll" />
+    <Reference Include="$(RefsDir)\SharpDX\SharpDX.Direct3D11.dll" />
+    <Reference Include="$(RefsDir)\SharpDX\SharpDX.DXGI.dll" />
     <Reference Include="$(RefsDir)\ImageProcessor\ImageProcessor.dll" />
     <Reference Include="$(RefsDir)\ImGui.NET\ImGui.NET.dll" />
   </ItemGroup>
