@@ -1,6 +1,7 @@
 ﻿using EngineCore.Components;
 using EngineCore.Entities;
 using EngineCore.Graphics;
+using EngineCore.Graphics.Direct3D;
 using EngineCore.Graphics.Gui;
 using EngineCore.Graphics.OpenGL;
 using EngineCore.Physics;
@@ -10,6 +11,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Threading;
 
 #if USE_SLEEP0 && USE_THREADYIELD
@@ -57,7 +59,7 @@ namespace EngineCore
             AddGameSystem(new BepuPhysicsSystem(this));
 
             bool useDirectX = true;
-            if (useDirectX)
+            if (useDirectX && RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
                 _graphicsSystem = new SharpDxGraphicsSystem(this);
                 AddGameSystem(_graphicsSystem);

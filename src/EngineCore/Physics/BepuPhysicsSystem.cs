@@ -1,4 +1,5 @@
 ﻿using BEPUphysics;
+using BEPUphysics.BroadPhaseEntries.MobileCollidables;
 using EngineCore.Services;
 using System;
 using System.Numerics;
@@ -20,7 +21,7 @@ namespace EngineCore.Physics
             _space = new Space(_looper);
 
             game.ComponentRegistry.AddComponentRegistration<PhysicsComponent>(
-                (pc) => AddOject(pc.GetSpaceObject(), pc.GameObject),
+                (pc) => AddOject(pc.GetSpaceObject()),
                 (pc) => RemoveObject(pc.GetSpaceObject()));
         }
 
@@ -29,9 +30,8 @@ namespace EngineCore.Physics
             _space.Update(Time.DeltaTime);
         }
 
-        public void AddOject(ISpaceObject entity, GameObject gameObject)
+        public void AddOject(ISpaceObject entity)
         {
-            entity.Tag = gameObject;
             _space.Add(entity);
         }
 

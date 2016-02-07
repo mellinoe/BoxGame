@@ -1,6 +1,7 @@
 ﻿using BEPUphysics.Entities;
 using EngineCore.Components;
 using BEPUphysics;
+using System.Numerics;
 
 namespace EngineCore.Physics
 {
@@ -22,7 +23,7 @@ namespace EngineCore.Physics
                     {
                         system.RemoveObject(old);
                     }
-                    system.AddOject(value, GameObject);
+                    system.AddOject(value);
                 }
 
                 value.PositionUpdated += Transform.OnPhysicsUpdate;
@@ -37,6 +38,18 @@ namespace EngineCore.Physics
             set { _physicsEntity.Mass = value; }
         }
 
+        public Vector3 LinearVelocity
+        {
+            get { return _physicsEntity.LinearVelocity; }
+            set { _physicsEntity.LinearVelocity = value; }
+        }
+
+        public Vector3 PhysicsPosition
+        {
+            get { return _physicsEntity.Position; }
+            set { _physicsEntity.Position = value; }
+        }
+
         protected internal override void Start()
         {
             Transform.PositionChanged += OnTransformPositionManuallyChanged;
@@ -44,6 +57,7 @@ namespace EngineCore.Physics
             Transform.ScaleChanged += OnTransformScaleManuallyChanged;
 
             PhysicsEntity = InitPhysicsEntity();
+            PhysicsEntity.CollisionInformation.Tag = this;
 
             OnTransformPositionManuallyChanged(Transform.Position);
             OnTransformRotationManuallyChanged(Transform.Rotation);

@@ -27,8 +27,8 @@
     <Compile Include="Components\ComponentRegistry.cs" />
     <Compile Include="Components\Transform.cs" />
     <Compile Include="Entities\Behaviour.cs" />
-    <Compile Include="Graphics\DirectX\DefaultShaders.cs" />
-    <Compile Include="Graphics\DirectX\RenderableObjectBase.cs" />
+    <Compile Include="Graphics\Direct3D\DefaultShaders.cs" />
+    <Compile Include="Graphics\Direct3D\RenderableObjectBase.cs" />
     <Compile Include="Graphics\Formats\ObjImporter.cs" />
     <Compile Include="Graphics\GameWindowResizedEventArgs.cs" />
     <Compile Include="Graphics\GraphicsSystem.cs" />
@@ -45,7 +45,7 @@
     <Compile Include="Graphics\OpenGL\GLEx.cs" />
     <Compile Include="Graphics\OpenGL\TextRenderer.cs" />
     <Compile Include="Graphics\OpenGL\TextureBuffer.cs" />
-    <Compile Include="Graphics\DirectX\Direct3DMeshInfo.cs" />
+    <Compile Include="Graphics\Direct3D\Direct3DMeshInfo.cs" />
     <Compile Include="Graphics\OpenTKNativeWindowInfo.cs" />
     <Compile Include="Graphics\Primitives.cs" />
     <Compile Include="Graphics\Texture2D.cs" />
@@ -86,11 +86,11 @@
     <Compile Include="Entities\IUpdateableEntity.cs" />
     <Compile Include="Utility\MathUtil.cs" />
     <Compile Include="Utility\Resources.cs" />
-    <Compile Include="Graphics\DirectX\DirectionalLight.cs" />
-    <Compile Include="Graphics\DirectX\SimpleRenderer.cs" />
-    <Compile Include="Graphics\DirectX\SimpleShader.cs" />
-    <Compile Include="Graphics\DirectX\SharpDxGraphicsSystem.cs" />
-    <Compile Include="Graphics\DirectX\ShaderCache.cs" />
+    <Compile Include="Graphics\DirectionalLight.cs" />
+    <Compile Include="Graphics\Direct3D\SimpleRenderer.cs" />
+    <Compile Include="Graphics\Direct3D\SimpleShader.cs" />
+    <Compile Include="Graphics\Direct3D\SharpDxGraphicsSystem.cs" />
+    <Compile Include="Graphics\Direct3D\ShaderCache.cs" />
     <Compile Include="Physics\ConvexHullCollider.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -103,15 +103,15 @@
     <None Include="project.json" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Graphics\DirectX\DefaultShaders\LightShader.hlsl" />
+    <EmbeddedResource Include="Graphics\Direct3D\DefaultShaders\LightShader.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="$(RefsDir)\OpenTK\OpenTK.dll" />
     <Reference Include="$(RefsDir)\ExperimentalCollections\Microsoft.Experimental.Collections.dll" />
-    <Reference Include="$(RefsDir)\SharpDx\SharpDX.dll" />
-    <Reference Include="$(RefsDir)\SharpDx\SharpDX.D3DCompiler.dll" />
-    <Reference Include="$(RefsDir)\SharpDx\SharpDX.Direct3D11.dll" />
-    <Reference Include="$(RefsDir)\SharpDx\SharpDX.DXGI.dll" />
+    <Reference Include="$(RefsDir)\SharpDX\SharpDX.dll" />
+    <Reference Include="$(RefsDir)\SharpDX\SharpDX.D3DCompiler.dll" />
+    <Reference Include="$(RefsDir)\SharpDX\SharpDX.Direct3D11.dll" />
+    <Reference Include="$(RefsDir)\SharpDX\SharpDX.DXGI.dll" />
     <Reference Include="$(RefsDir)\ImageProcessor\ImageProcessor.dll" />
     <Reference Include="$(RefsDir)\ImGui.NET\ImGui.NET.dll" />
   </ItemGroup>
@@ -132,7 +132,7 @@
     <EmbeddedResource Include="Graphics\Models\WhiteSquare.png" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Graphics\DirectX\DefaultShaders\SimpleUnlitShader.hlsl" />
+    <EmbeddedResource Include="Graphics\Direct3D\DefaultShaders\SimpleUnlitShader.hlsl" />
   </ItemGroup>
   <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), dir.targets))\dir.targets" />
 </Project>

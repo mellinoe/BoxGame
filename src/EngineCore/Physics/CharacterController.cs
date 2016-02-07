@@ -12,6 +12,7 @@ namespace EngineCore.Physics
 
         protected internal override void Start()
         {
+            _bepuController.Tag = this;
             _bepuController.Body.PositionUpdated += Transform.OnPhysicsUpdate;
         }
 

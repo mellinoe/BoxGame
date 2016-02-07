@@ -143,7 +143,8 @@ namespace EngineCore.Graphics.Gui
 
         public override void Dispose()
         {
-            GL.DeleteBuffer(_fontTextureID);
+            // TODO: This needs to be disposed BEFORE the OpenGL graphics system is disposed.
+            // GL.DeleteBuffer(_fontTextureID);
         }
     }
 }

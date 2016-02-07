@@ -1,4 +1,5 @@
-﻿using EngineCore.Graphics.OpenGL;
+﻿using EngineCore.Graphics.Direct3D;
+using EngineCore.Graphics.OpenGL;
 using System;
 
 namespace EngineCore.Graphics.Gui

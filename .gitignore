@@ -252,3 +252,6 @@ Temporary Items
 Session.vim
 .netrwhist
 *~
+
+# ImGui config file
+imgui.ini
