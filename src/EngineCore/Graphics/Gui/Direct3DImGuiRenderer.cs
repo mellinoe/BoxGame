@@ -9,7 +9,7 @@ using SharpDX.Mathematics.Interop;
 
 namespace EngineCore.Graphics.Gui
 {
-    internal unsafe class DirectXImGuiRenderer : DrawListRendererBase
+    internal unsafe class Direct3DImGuiRenderer : DrawListRendererBase
     {
         private Device _device;
         private VertexShader _vertexShader;
@@ -20,7 +20,7 @@ namespace EngineCore.Graphics.Gui
         private ShaderResourceView _fontTextureView;
         private SamplerState _fontSampler;
 
-        public DirectXImGuiRenderer(SharpDxGraphicsSystem graphicsSystem)
+        public Direct3DImGuiRenderer(SharpDxGraphicsSystem graphicsSystem)
             : base(graphicsSystem.Renderer.Window, graphicsSystem.WindowInfo)
         {
             graphicsSystem.AddSelfManagedRenderable(this);
