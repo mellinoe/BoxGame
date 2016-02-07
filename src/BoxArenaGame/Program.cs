@@ -91,6 +91,7 @@ namespace GameApplication
                 sphere.AddComponent<SphereCollider>();
                 sphere.Transform.Position = new Vector3(0, 5, 10);
                 sphere.Transform.Scale = new Vector3(1);
+                sphere.AddComponent(new RotatorDisplay());
 
                 //Vector3 center;
                 //var convexShape = new ConvexHullShape(Primitives.Teapot.Vertices.Select(sv => sv.Position).ToArray(), out center);

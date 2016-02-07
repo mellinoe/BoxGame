@@ -22,7 +22,7 @@ namespace EngineCore.Graphics.Gui
             }
             else if (_graphicsSystem is SharpDxGraphicsSystem)
             {
-                _renderer = new DirectXImGuiRenderer((SharpDxGraphicsSystem)_graphicsSystem);
+                _renderer = new Direct3DImGuiRenderer((SharpDxGraphicsSystem)_graphicsSystem);
             }
         }
 
