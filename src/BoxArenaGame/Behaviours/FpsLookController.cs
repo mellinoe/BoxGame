@@ -3,6 +3,7 @@ using EngineCore.Components;
 using EngineCore.Input;
 using EngineCore.Physics;
 using EngineCore.Services;
+using ImGuiNET;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -50,7 +51,7 @@ namespace GameApplication.Behaviours
             float xDelta = newMouseX - previousMouseX;
             float yDelta = newMouseY - previousMouseY;
 
-            if (Input.GetMouseButton(MouseButton.Left) || Input.GetMouseButton(MouseButton.Right))
+            if ((Input.GetMouseButton(MouseButton.Left) || Input.GetMouseButton(MouseButton.Right)) && !ImGui.IsMouseHoveringAnyWindow())
             {
                 currentYaw += -xDelta * 0.01f;
                 currentPitch += yDelta * 0.01f;

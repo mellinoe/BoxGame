@@ -57,12 +57,19 @@
     </ProjectReference>
     <Reference Include="$(RefsDir)\OpenTK\OpenTK.dll" />
     <Reference Include="$(RefsDir)\ImageProcessor\ImageProcessor.dll" />
+    <Reference Include="$(RefsDir)\ImGui.NET\ImGui.NET.dll" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Textures\CubeFaceTextures.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Textures\Stone.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="$(RefsDir)\ImGui.NET\win-x64\cimgui.dll" Condition="'$(TargetsWindows)' == 'true'">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="$(RefsDir)\ImGui.NET\ubuntu-x64\cimgui.so" Condition="'$(TargetsUbuntu)' == 'true'">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
