@@ -1,6 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
+    <Configuration Condition="'$(Configuration)' == '' And '$(OS)' != 'Windows_NT'">Ubuntu_Debug</Configuration>
     <Configuration Condition="'$(Configuration)' == ''">Windows_Debug</Configuration>
   </PropertyGroup>
   <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), dir.props))\dir.props" />
@@ -59,10 +60,10 @@
     <Content Include="Textures\StoneTile.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="$(RefsDir)\ImGui.NET\win-x64\cimgui.dll" Condition="'$(TargetsWindows)' == 'true'">
+    <Content Include="$(RefsDir)\ImGui.NET\win-x64\cimgui.dll" Condition="'$(OSTarget)' == 'Windows_NT'">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="$(RefsDir)\ImGui.NET\ubuntu-x64\cimgui.so" Condition="'$(TargetsUbuntu)' == 'true'">
+    <Content Include="$(RefsDir)\ImGui.NET\ubuntu-x64\cimgui.so" Condition="'$(OSTarget)' == 'Ubuntu'">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
