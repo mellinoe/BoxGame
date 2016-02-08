@@ -133,16 +133,16 @@ namespace VoxelGame.Graphics
             new Vector3(-.5f,.5f,.5f),
             new Vector3(.5f,.5f,.5f),
             new Vector3(.5f,-.5f,.5f),
-            new Vector3(-.5f,-.5f,.5f)
+            new Vector3(-.5f,-.5f,.5f),
         };
 
         private static readonly Vector3[] s_topFacePositions = new Vector3[]
         {
             // Top
-            new Vector3(-.5f,.5f,.5f),
-            new Vector3(.5f,.5f,.5f),
+            new Vector3(-.5f,.5f,-.5f),
             new Vector3(.5f,.5f,-.5f),
-            new Vector3(-.5f,.5f,-.5f)
+            new Vector3(.5f,.5f,.5f),
+            new Vector3(-.5f,.5f,.5f),
         };
 
         private static readonly Vector3[] s_bottomFacePositions = new Vector3[]
@@ -151,34 +151,34 @@ namespace VoxelGame.Graphics
             new Vector3(-.5f,-.5f,.5f),
             new Vector3(.5f,-.5f,.5f),
             new Vector3(.5f,-.5f,-.5f),
-            new Vector3(-.5f,-.5f,-.5f)
+            new Vector3(-.5f,-.5f,-.5f),
         };
 
         private static readonly Vector3[] s_leftFacePositions = new Vector3[]
         {
             // Left
-            new Vector3(-.5f,-.5f,.5f),
-            new Vector3(-.5f,.5f,.5f),
             new Vector3(-.5f,.5f,-.5f),
-            new Vector3(-.5f,-.5f,-.5f)
+            new Vector3(-.5f,.5f,.5f),
+            new Vector3(-.5f,-.5f,.5f),
+            new Vector3(-.5f,-.5f,-.5f),
         };
 
         private static readonly Vector3[] s_rightFacePositions = new Vector3[]
         {
             // Right
-            new Vector3(.5f,-.5f,.5f),
             new Vector3(.5f,.5f,.5f),
             new Vector3(.5f,.5f,-.5f),
-            new Vector3(.5f,-.5f,-.5f)
+            new Vector3(.5f,-.5f,-.5f),
+            new Vector3(.5f,-.5f,.5f),
         };
 
         private static readonly Vector3[] s_backFacePositions = new Vector3[]
         {
             // Back
-            new Vector3(-.5f,.5f,-.5f),
             new Vector3(.5f,.5f,-.5f),
-            new Vector3(.5f,-.5f,-.5f),
+            new Vector3(-.5f,.5f,-.5f),
             new Vector3(-.5f,-.5f,-.5f),
+            new Vector3(.5f,-.5f,-.5f),
         };
 
         private static readonly Vector3[] s_topFaceNormals = new Vector3[]
@@ -187,7 +187,7 @@ namespace VoxelGame.Graphics
             new Vector3(0,1,0),
             new Vector3(0,1,0),
             new Vector3(0,1,0),
-            new Vector3(0,1,0)
+            new Vector3(0,1,0),
         };
 
         private static readonly Vector3[] s_bottomFaceNormals = new Vector3[]
@@ -202,37 +202,37 @@ namespace VoxelGame.Graphics
         private static readonly Vector3[] s_leftFaceNormals = new Vector3[]
         {
             // Left
-            new Vector3(1,0,0),
-            new Vector3(1,0,0),
-            new Vector3(1,0,0),
-            new Vector3(1,0,0)
-        };
-
-        private static readonly Vector3[] s_rightFaceNormals = new Vector3[]
-        {
-            // Right
             new Vector3(-1,0,0),
             new Vector3(-1,0,0),
             new Vector3(-1,0,0),
             new Vector3(-1,0,0)
         };
 
+        private static readonly Vector3[] s_rightFaceNormals = new Vector3[]
+        {
+            // Right
+            new Vector3(1,0,0),
+            new Vector3(1,0,0),
+            new Vector3(1,0,0),
+            new Vector3(1,0,0)
+        };
+
         private static readonly Vector3[] s_frontFaceNormals = new Vector3[]
         {
             // Front
-            new Vector3(0,0,-1),
-            new Vector3(0,0,-1),
-            new Vector3(0,0,-1),
-            new Vector3(0,0,-1)
+            new Vector3(0,0,1),
+            new Vector3(0,0,1),
+            new Vector3(0,0,1),
+            new Vector3(0,0,1)
         };
 
         private static readonly Vector3[] s_backFaceNormals = new Vector3[]
         {
             // Back
-            new Vector3(0,0,1),
-            new Vector3(0,0,1),
-            new Vector3(0,0,1),
-            new Vector3(0,0,1),
+            new Vector3(0,0,-1),
+            new Vector3(0,0,-1),
+            new Vector3(0,0,-1),
+            new Vector3(0,0,-1),
         };
 
         private static readonly Vector2[] s_cubeFaceTexCoords = new Vector2[]

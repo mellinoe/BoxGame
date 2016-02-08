@@ -199,7 +199,6 @@ namespace EngineCore.Graphics.Direct3D
         {
             var desc = RasterizerStateDescription.Default();
             desc.IsMultisampleEnabled = true;
-            desc.IsFrontCounterClockwise = true;
             desc.CullMode = CullMode.Back;
             rasterizerState = new RasterizerState(device, desc);
         }

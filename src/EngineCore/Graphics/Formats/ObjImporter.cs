@@ -58,9 +58,10 @@ namespace EngineCore.Graphics.Formats
                         ObjVertex v1 = ParseObjVertexFromElements(v1Split, positions, normals, textureCoords);
                         ObjVertex v2 = ParseObjVertexFromElements(v2Split, positions, normals, textureCoords);
                         ObjVertex v3 = ParseObjVertexFromElements(v3Split, positions, normals, textureCoords);
-                        objVertices[0] = v1;
+                        // Convert from counter-clockwise winding -> clockwise
+                        objVertices[2] = v1;
                         objVertices[1] = v2;
-                        objVertices[2] = v3;
+                        objVertices[0] = v3;
 
                         foreach (ObjVertex objV in objVertices)
                         {

@@ -64,7 +64,7 @@ namespace EngineCore.Graphics.OpenGL
             GL.Enable(EnableCap.DepthTest);
             GL.Enable(EnableCap.PolygonSmooth);
             GL.Enable(EnableCap.CullFace);
-            GL.FrontFace(FrontFaceDirection.Ccw);
+            GL.FrontFace(FrontFaceDirection.Cw);
         }
 
         private void SetViewport()
