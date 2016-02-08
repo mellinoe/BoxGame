@@ -13,7 +13,7 @@ namespace VoxelGame.World
 {
     public class ChunkManager : IRenderableObjectInfo
     {
-        private int _loadedChunkDistance = 10;
+        private int _loadedChunkDistance = 6;
         private NoiseGen _noiseGen = new NoiseGen(1f, 1f, 4);
         private SpatialStorageBuffer<Tuple<Chunk, OpenGLChunkRenderInfo>> _chunks;
 

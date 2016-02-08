@@ -56,15 +56,15 @@ namespace EngineCore.Entities
             new SimpleVertex(new Vector3(.5f,-.5f,-.5f),    new Vector3(0,-1,0), Color4f.Grey,       new Vector2(1, 1)),
             new SimpleVertex(new Vector3(-.5f,-.5f,-.5f),   new Vector3(0,-1,0), Color4f.Grey,       new Vector2(0, 1)),
             // Left
-            new SimpleVertex(new Vector3(-.5f,-.5f,.5f),    new Vector3(-1,0,0), Color4f.Blue,       new Vector2(0, 0)),
-            new SimpleVertex(new Vector3(-.5f,.5f,.5f),     new Vector3(-1,0,0), Color4f.Blue,       new Vector2(1, 0)),
-            new SimpleVertex(new Vector3(-.5f,.5f,-.5f),    new Vector3(-1,0,0), Color4f.Blue,       new Vector2(1, 1)),
-            new SimpleVertex(new Vector3(-.5f,-.5f,-.5f),   new Vector3(-1,0,0), Color4f.Blue,       new Vector2(0, 1)),
+            new SimpleVertex(new Vector3(-.5f,-.5f,.5f),    new Vector3(1,0,0), Color4f.Blue,       new Vector2(0, 0)),
+            new SimpleVertex(new Vector3(-.5f,.5f,.5f),     new Vector3(1,0,0), Color4f.Blue,       new Vector2(1, 0)),
+            new SimpleVertex(new Vector3(-.5f,.5f,-.5f),    new Vector3(1,0,0), Color4f.Blue,       new Vector2(1, 1)),
+            new SimpleVertex(new Vector3(-.5f,-.5f,-.5f),   new Vector3(1,0,0), Color4f.Blue,       new Vector2(0, 1)),
             // Right
-            new SimpleVertex(new Vector3(.5f,-.5f,.5f),     new Vector3(1,0,0), Color4f.Green,     new Vector2(0, 0)),
-            new SimpleVertex(new Vector3(.5f,.5f,.5f),      new Vector3(1,0,0), Color4f.Green,     new Vector2(1, 0)),
-            new SimpleVertex(new Vector3(.5f,.5f,-.5f),     new Vector3(1,0,0), Color4f.Green,     new Vector2(1, 1)),
-            new SimpleVertex(new Vector3(.5f,-.5f,-.5f),    new Vector3(1,0,0), Color4f.Green,     new Vector2(0, 1)),
+            new SimpleVertex(new Vector3(.5f,-.5f,.5f),     new Vector3(-1,0,0), Color4f.Green,     new Vector2(0, 0)),
+            new SimpleVertex(new Vector3(.5f,.5f,.5f),      new Vector3(-1,0,0), Color4f.Green,     new Vector2(1, 0)),
+            new SimpleVertex(new Vector3(.5f,.5f,-.5f),     new Vector3(-1,0,0), Color4f.Green,     new Vector2(1, 1)),
+            new SimpleVertex(new Vector3(.5f,-.5f,-.5f),    new Vector3(-1,0,0), Color4f.Green,     new Vector2(0, 1)),
             // Back
             new SimpleVertex(new Vector3(-.5f,.5f,.5f),     new Vector3(0,0,1), Color4f.Yellow,     new Vector2(0, 0)),
             new SimpleVertex(new Vector3(.5f,.5f,.5f),      new Vector3(0,0,1), Color4f.Yellow,     new Vector2(1, 0)),
