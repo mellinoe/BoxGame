@@ -26,14 +26,6 @@ namespace VoxelGame.Graphics
             GenerateMeshBuffers(_meshInfo.Mesh, out _vertexBufferId, out _indexBufferId, out _numElements);
         }
 
-        public OpenGLChunkRenderInfo(Chunk chunk, ChunkMeshInfo meshInfo, Vector3 center)
-        {
-            _chunk = chunk;
-            _meshInfo = meshInfo;
-            _chunkCenter = center;
-            GenerateMeshBuffers(_meshInfo.Mesh, out _vertexBufferId, out _indexBufferId, out _numElements);
-        }
-
         public OpenGLChunkRenderInfo(Chunk chunk, uint vertexBufferId, uint indexBufferId, IntPtr vertexBufferMapping, IntPtr indexBufferMapping, Vector3 chunkCenter)
         {
             _chunk = chunk;

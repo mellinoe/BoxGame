@@ -122,7 +122,48 @@ namespace VoxelGame.Graphics
 
         private Vector2 GetTexCoord(BlockType blockType, BlockFace blockFace, int vertexNum)
         {
-            return s_cubeFaceTexCoords[vertexNum];
+            Vector2 startCoord = GetStartingTexCoord(blockType, blockFace);
+            Vector2 texCoordSize = GetTexCoordSize();
+
+            return s_cubeFaceTexCoords[vertexNum] * texCoordSize + startCoord;
+        }
+
+        private Vector2 GetStartingTexCoord(BlockType blockType, BlockFace blockFace)
+        {
+            float u = IsSideFace(blockFace) ? 0.5f : 0.0f;
+            float v;
+            switch (blockType)
+            {
+                case BlockType.Air:
+                    throw new InvalidOperationException("Shouldn't be rendering BlockType.Air.");
+                case BlockType.Stone:
+                    v = 0f;
+                    break;
+                case BlockType.Dirt:
+                    v = 0.5f;
+                    break;
+                case BlockType.Grass:
+                    v = 0.25f;
+                    break;
+                case BlockType.Gravel:
+                    v = 0.75f;
+                    break;
+                default:
+                    throw new InvalidOperationException("No such block type: " + blockType);
+            }
+
+            return new Vector2(u, v);
+        }
+
+        private bool IsSideFace(BlockFace blockFace)
+        {
+            return blockFace == BlockFace.Front || blockFace == BlockFace.Back
+                || blockFace == BlockFace.Right || blockFace == BlockFace.Left;
+        }
+
+        private Vector2 GetTexCoordSize()
+        {
+            return new Vector2(0.5f, 0.25f);
         }
 
         private enum BlockFace { Left, Right, Front, Back, Top, Bottom }

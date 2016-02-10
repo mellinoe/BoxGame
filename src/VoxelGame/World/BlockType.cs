@@ -12,6 +12,6 @@ namespace VoxelGame.World
         Stone,
         Dirt,
         Grass,
-        Sand,
+        Gravel,
     }
 }

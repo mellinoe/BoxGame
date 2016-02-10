@@ -13,7 +13,7 @@ namespace VoxelGame.World
         public override void Start()
         {
             _graphicsSystem = (OpenGLGraphicsSystem)Game.GraphicsSystem;
-            _chunkManager = new ChunkManager(_graphicsSystem);
+            _chunkManager = new ChunkManager(_graphicsSystem, Game.Systems.GetSystem<EngineCore.Physics.BepuPhysicsSystem>());
             _graphicsSystem.AddSelfManagedRenderable(_chunkManager);
         }
 

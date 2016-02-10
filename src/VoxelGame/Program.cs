@@ -40,9 +40,17 @@ namespace VoxelGame
 
             private static void AddNoiseWorldStartingStuff()
             {
+                var character = new GameObject();
+                character.AddComponent<CharacterController>().BepuController.BodyRadius = .3f;
+                character.AddComponent<SimpleFpsController>();
+                character.Transform.Position = new Vector3(-20, 250f, -20f);
+                character.GetComponent<CharacterController>().BepuController.Body.Position = new Vector3(50f, 250f, 50f);
+
                 var camera = new GameObject();
                 camera.AddComponent<Camera>();
-                camera.AddComponent<FreeFlyMovement>();
+                camera.AddComponent<BoxLauncher>();
+                var fpsLookController = camera.AddComponent(new FpsLookController(character.Transform));
+                camera.AddComponent<BoxArenaGame.Behaviours.FullScreenToggle>();
             }
         }
     }

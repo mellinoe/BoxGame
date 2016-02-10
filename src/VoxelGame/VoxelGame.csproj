@@ -23,7 +23,9 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'OSX_Debug|x64' " />
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'OSX_Release|x64' " />
   <ItemGroup>
+    <Compile Include="$(SharedSourcePath)Behaviours\BoxLauncher.cs" />
     <Compile Include="$(SharedSourcePath)Behaviours\FreeFlyMovement.cs" />
+    <Compile Include="$(SharedSourcePath)Behaviours\FullScreenToggle.cs" />
     <Compile Include="$(SharedSourcePath)Behaviours\MouseClickRayCaster.cs" />
     <Compile Include="$(SharedSourcePath)Behaviours\SimpleFpsController.cs" />
     <Compile Include="$(SharedSourcePath)Behaviours\FpsLookController.cs" />
@@ -63,8 +65,9 @@
     <Content Include="Textures\CubeFaceTextures.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Textures\Stone.png">
+    <Content Include="$(SharedSourcePath)Textures\StoneTile.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Link>Textures\StoneTile.png</Link>
     </Content>
     <Content Include="$(RefsDir)\ImGui.NET\win-x64\cimgui.dll" Condition="'$(OSTarget)' == 'Windows_NT'">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

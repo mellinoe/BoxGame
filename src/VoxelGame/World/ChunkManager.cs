@@ -8,6 +8,10 @@ using VoxelGame.Graphics;
 using EngineCore.Graphics;
 using System.Threading.Tasks;
 using System.Diagnostics;
+using EngineCore.Physics;
+using BEPUphysics.Entities.Prefabs;
+using BEPUphysics.CollisionShapes;
+using BEPUphysics.CollisionShapes.ConvexShapes;
 
 namespace VoxelGame.World
 {
@@ -20,11 +24,11 @@ namespace VoxelGame.World
         private static Texture2D s_cubeFaceTextures = Texture2D.CreateFromFile("Textures/CubeFaceTextures.png");
         private TextureBuffer _textureBuffer = new TextureBuffer(s_cubeFaceTextures);
 
-        public ChunkManager(OpenGLGraphicsSystem graphicsSystem)
+        public ChunkManager(OpenGLGraphicsSystem graphicsSystem, BepuPhysicsSystem physicsSystem)
         {
             Stopwatch sw = Stopwatch.StartNew();
 
-            GenChunksSimpleThreaded(graphicsSystem);
+            GenChunksSimpleThreaded(graphicsSystem, physicsSystem);
 
             sw.Stop();
             Console.WriteLine("Total elapsed chunk generation time: " + sw.Elapsed.TotalSeconds);
@@ -46,7 +50,7 @@ namespace VoxelGame.World
                     }
         }
 
-        private void GenChunksSimpleThreaded(OpenGLGraphicsSystem graphicsSystem)
+        private void GenChunksSimpleThreaded(OpenGLGraphicsSystem graphicsSystem, BepuPhysicsSystem physicsSystem)
         {
             _chunks = new SpatialStorageBuffer<Tuple<Chunk, OpenGLChunkRenderInfo>>(_loadedChunkDistance);
             var tempChunks = new Chunk[_chunks.NumItems];
@@ -97,6 +101,48 @@ namespace VoxelGame.World
                         OpenGLChunkRenderInfo renderInfo = new OpenGLChunkRenderInfo(chunk, new Vector3(worldX, worldY, worldZ));
                         _chunks[chunkIndex] = Tuple.Create(chunk, renderInfo);
                     }
+
+            AddPhysicsColliders(physicsSystem);
+        }
+
+        private void AddPhysicsColliders(BepuPhysicsSystem physicsSystem)
+        {
+            for (int x = 0; x < _loadedChunkDistance; x++)
+                for (int y = 0; y < _loadedChunkDistance; y++)
+                    for (int z = 0; z < _loadedChunkDistance; z++)
+                    {
+                        int worldX = x * Chunk.ChunkLength;
+                        int worldY = y * Chunk.ChunkLength;
+                        int worldZ = z * Chunk.ChunkLength;
+
+                        Chunk chunk = _chunks[x, y, z].Item1;
+                        AddChunkPhysics(physicsSystem, chunk, new Vector3(worldX, worldY, worldZ));
+                    }
+        }
+        static int s_boxes = 0;
+        private void AddChunkPhysics(BepuPhysicsSystem physicsSystem, Chunk chunk, Vector3 chunkOrigin)
+        {
+            CompoundBody chunkBody;
+            List<CompoundShapeEntry> shapes = new List<CompoundShapeEntry>();
+
+            for (int x = 0; x < Chunk.ChunkLength; x++)
+                for (int y = 0; y < Chunk.ChunkLength; y++)
+                    for (int z = 0; z < Chunk.ChunkLength; z++)
+                    {
+                        BlockData block = chunk[x, y, z];
+                        if (block.Type != BlockType.Air)
+                        {
+                            s_boxes++;
+                            shapes.Add(
+                                new CompoundShapeEntry(
+                                    new BoxShape(
+                                        Chunk.BlockLength, Chunk.BlockLength, Chunk.BlockLength),
+                                        chunkOrigin + new Vector3(x, y, z) * Chunk.BlockLength));
+                        }
+                    }
+
+            chunkBody = new CompoundBody(shapes);
+            physicsSystem.AddOject(chunkBody);
         }
 
         // Experimental version using buffer mapping. Doesn't work well.
@@ -191,14 +237,37 @@ namespace VoxelGame.World
                     for (int z = 0; z < Chunk.ChunkLength; z++)
                     {
                         float noiseVal = _noiseGen.GetNoise(((float)(worldX + x)) * frequency, (((float)(worldY + y)) * frequency), (((float)(worldZ + z)) * frequency));
-                        if (noiseVal > .61f)
+                        float secondaryNoise = _noiseGen.GetNoise(
+                            ((float)(worldX + x)) * (frequency / 4f),
+                            (((float)(worldY + y)) * (frequency / 4f)),
+                            (((float)(worldZ + z)) * (frequency / 4f)));
+
+                        BlockType type;
+                        if (noiseVal > 0.9f)
                         {
-                            chunk[x, y, z] = new BlockData(BlockType.Stone);
+                            type = BlockType.Gravel;
+                        }
+                        else if (noiseVal > .61f)
+                        {
+                            if (secondaryNoise > 0.85f)
+                            {
+                                type = BlockType.Grass;
+                            }
+                            else if (secondaryNoise > 0.6f)
+                            {
+                                type = BlockType.Dirt;
+                            }
+                            else
+                            {
+                                type = BlockType.Stone;
+                            }
                         }
                         else
                         {
-                            chunk[x, y, z] = new BlockData(BlockType.Air);
+                            type = BlockType.Air;
                         }
+
+                        chunk[x, y, z] = new BlockData(type);
                     }
                 }
             }

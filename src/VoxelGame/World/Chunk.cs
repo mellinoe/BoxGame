@@ -9,8 +9,17 @@ namespace VoxelGame.World
 {
     public class Chunk
     {
+        /// <summary>
+        /// Length of a chunk, in number of blocks.
+        /// </summary>
         public const int ChunkLength = 16;
+        /// <summary>
+        /// Length of a single block, in units.
+        /// </summary>
         public const float BlockLength = 1f;
+        /// <summary>
+        /// Total number of blocks per chunk.
+        /// </summary>
         public const int BlocksPerChunk = ChunkLength * ChunkLength * ChunkLength;
 
         private readonly BlockData[] _blockData;
