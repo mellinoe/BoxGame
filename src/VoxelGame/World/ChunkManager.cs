@@ -29,6 +29,7 @@ namespace VoxelGame.World
             Stopwatch sw = Stopwatch.StartNew();
 
             GenChunksSimpleThreaded(graphicsSystem, physicsSystem);
+            AddPhysicsColliders(physicsSystem);
 
             sw.Stop();
             Console.WriteLine("Total elapsed chunk generation time: " + sw.Elapsed.TotalSeconds);
@@ -36,103 +37,94 @@ namespace VoxelGame.World
 
         private void GenChunksSimple()
         {
-            _chunks = new SpatialStorageBuffer<Tuple<Chunk, OpenGLChunkRenderInfo>>(_loadedChunkDistance);
+            _chunks = new SpatialStorageBuffer<Tuple<Chunk, OpenGLChunkRenderInfo>>(_loadedChunkDistance, 1, _loadedChunkDistance);
+            int y = 0;
             for (int x = 0; x < _loadedChunkDistance; x++)
-                for (int y = 0; y < _loadedChunkDistance; y++)
-                    for (int z = 0; z < _loadedChunkDistance; z++)
-                    {
-                        int worldX = x * Chunk.ChunkLength;
-                        int worldY = y * Chunk.ChunkLength;
-                        int worldZ = z * Chunk.ChunkLength;
-                        Chunk chunk = GenChunk(worldX, worldY, worldZ);
-                        OpenGLChunkRenderInfo renderInfo = new OpenGLChunkRenderInfo(chunk, new Vector3(worldX, worldY, worldZ));
-                        _chunks[x, y, z] = Tuple.Create(chunk, renderInfo);
-                    }
+                for (int z = 0; z < _loadedChunkDistance; z++)
+                {
+                    int worldX = x * Chunk.ChunkWidth;
+                    int worldY = y * Chunk.ChunkHeight;
+                    int worldZ = z * Chunk.ChunkDepth;
+                    Chunk chunk = GenChunk(worldX, worldY, worldZ);
+                    OpenGLChunkRenderInfo renderInfo = new OpenGLChunkRenderInfo(chunk, new Vector3(worldX, worldY, worldZ));
+                    _chunks[x, y, z] = Tuple.Create(chunk, renderInfo);
+                }
         }
 
         private void GenChunksSimpleThreaded(OpenGLGraphicsSystem graphicsSystem, BepuPhysicsSystem physicsSystem)
         {
-            _chunks = new SpatialStorageBuffer<Tuple<Chunk, OpenGLChunkRenderInfo>>(_loadedChunkDistance);
-            var tempChunks = new Chunk[_chunks.NumItems];
+            _chunks = new SpatialStorageBuffer<Tuple<Chunk, OpenGLChunkRenderInfo>>(_loadedChunkDistance, 1, _loadedChunkDistance);
+            var tempChunks = new SpatialStorageBuffer<Chunk>(_loadedChunkDistance, 1, _loadedChunkDistance);
             List<Task> tasks = new List<Task>();
 
+            int y = 0;
             for (int x = 0; x < _loadedChunkDistance; x++)
-                for (int y = 0; y < _loadedChunkDistance; y++)
-                    for (int z = 0; z < _loadedChunkDistance; z++)
+                for (int z = 0; z < _loadedChunkDistance; z++)
+                {
+                    int localX = x;
+                    int localY = y;
+                    int localZ = z;
+
+                    tasks.Add(Task.Run(() =>
                     {
-                        int localX = x;
-                        int localY = y;
-                        int localZ = z;
-
-                        tasks.Add(Task.Run(() =>
+                        try
                         {
-                            try
-                            {
-                                int worldX = localX * Chunk.ChunkLength;
-                                int worldY = localY * Chunk.ChunkLength;
-                                int worldZ = localZ * Chunk.ChunkLength;
+                            int worldX = localX * Chunk.ChunkWidth;
+                            int worldY = localY * Chunk.ChunkHeight;
+                            int worldZ = localZ * Chunk.ChunkDepth;
 
-                                int chunkIndex = localX + (localY * _loadedChunkDistance) + (localZ * _loadedChunkDistance * _loadedChunkDistance);
-                                tempChunks[chunkIndex] = GenChunk(worldX, worldY, worldZ);
-                            }
-                            catch (Exception e)
-                            {
-                                if (Debugger.IsAttached)
-                                    Debugger.Break();
-                                else
-                                    Console.WriteLine("Error encountered in worker thread: " + e);
-                                throw;
-                            }
-                        }));
-                    }
+                            tempChunks[localX, localY, localZ] = GenChunk(worldX, worldY, worldZ);
+                        }
+                        catch (Exception e)
+                        {
+                            Console.WriteLine("Error encountered in worker thread: " + e);
+                            throw;
+                        }
+                    }));
+                }
 
             Task.WaitAll(tasks.ToArray());
 
             for (int x = 0; x < _loadedChunkDistance; x++)
-                for (int y = 0; y < _loadedChunkDistance; y++)
-                    for (int z = 0; z < _loadedChunkDistance; z++)
-                    {
-                        int worldX = x * Chunk.ChunkLength;
-                        int worldY = y * Chunk.ChunkLength;
-                        int worldZ = z * Chunk.ChunkLength;
-                        int chunkIndex = x + (y * _loadedChunkDistance) + (z * _loadedChunkDistance * _loadedChunkDistance);
+                for (int z = 0; z < _loadedChunkDistance; z++)
+                {
+                    int worldX = x * Chunk.ChunkWidth;
+                    int worldY = y * Chunk.ChunkHeight;
+                    int worldZ = z * Chunk.ChunkDepth;
 
-                        Chunk chunk = tempChunks[chunkIndex];
-                        OpenGLChunkRenderInfo renderInfo = new OpenGLChunkRenderInfo(chunk, new Vector3(worldX, worldY, worldZ));
-                        _chunks[chunkIndex] = Tuple.Create(chunk, renderInfo);
-                    }
-
-            AddPhysicsColliders(physicsSystem);
+                    Chunk chunk = tempChunks[x, y, z];
+                    OpenGLChunkRenderInfo renderInfo = new OpenGLChunkRenderInfo(chunk, new Vector3(worldX, worldY, worldZ));
+                    _chunks[x, y, z] = Tuple.Create(chunk, renderInfo);
+                }
         }
 
         private void AddPhysicsColliders(BepuPhysicsSystem physicsSystem)
         {
+            int y = 0;
             for (int x = 0; x < _loadedChunkDistance; x++)
-                for (int y = 0; y < _loadedChunkDistance; y++)
-                    for (int z = 0; z < _loadedChunkDistance; z++)
-                    {
-                        int worldX = x * Chunk.ChunkLength;
-                        int worldY = y * Chunk.ChunkLength;
-                        int worldZ = z * Chunk.ChunkLength;
+                for (int z = 0; z < _loadedChunkDistance; z++)
+                {
+                    int worldX = x * Chunk.ChunkWidth;
+                    int worldY = y * Chunk.ChunkHeight;
+                    int worldZ = z * Chunk.ChunkDepth;
 
-                        Chunk chunk = _chunks[x, y, z].Item1;
-                        AddChunkPhysics(physicsSystem, chunk, new Vector3(worldX, worldY, worldZ));
-                    }
+                    Chunk chunk = _chunks[x, y, z].Item1;
+                    AddChunkPhysics(physicsSystem, chunk, new Vector3(worldX, worldY, worldZ));
+                }
         }
-        static int s_boxes = 0;
+
         private void AddChunkPhysics(BepuPhysicsSystem physicsSystem, Chunk chunk, Vector3 chunkOrigin)
         {
             CompoundBody chunkBody;
             List<CompoundShapeEntry> shapes = new List<CompoundShapeEntry>();
 
-            for (int x = 0; x < Chunk.ChunkLength; x++)
-                for (int y = 0; y < Chunk.ChunkLength; y++)
-                    for (int z = 0; z < Chunk.ChunkLength; z++)
+            for (int x = 0; x < Chunk.ChunkWidth; x++)
+                for (int y = 0; y < Chunk.ChunkHeight; y++)
+                    for (int z = 0; z < Chunk.ChunkDepth; z++)
                     {
                         BlockData block = chunk[x, y, z];
                         if (block.Type != BlockType.Air)
                         {
-                            s_boxes++;
                             shapes.Add(
                                 new CompoundShapeEntry(
                                     new BoxShape(
@@ -141,106 +133,33 @@ namespace VoxelGame.World
                         }
                     }
 
-            chunkBody = new CompoundBody(shapes);
-            physicsSystem.AddOject(chunkBody);
-        }
-
-        // Experimental version using buffer mapping. Doesn't work well.
-        private unsafe void GenChunksThreaded(OpenGLGraphicsSystem graphicsSystem)
-        {
-            _chunks = new SpatialStorageBuffer<Tuple<Chunk, OpenGLChunkRenderInfo>>(_loadedChunkDistance);
-            List<Task> tasks = new List<Task>();
-
-            int numChunks = _chunks.NumItems;
-            uint* vertexBufferIds = stackalloc uint[numChunks];
-            GL.GenBuffers(numChunks, vertexBufferIds);
-            uint* indexBufferIds = stackalloc uint[numChunks];
-            GL.GenBuffers(numChunks, indexBufferIds);
-
-            IntPtr* vertexBufferMappings = stackalloc IntPtr[numChunks];
-            IntPtr* indexBufferMappings = stackalloc IntPtr[numChunks];
-
-            for (int i = 0; i < _chunks.NumItems; i++)
+            if (shapes.Count != 0)
             {
-                GL.BindBuffer(BufferTarget.ArrayBuffer, vertexBufferIds[i]);
-                GL.BufferData(BufferTarget.ArrayBuffer, new IntPtr(Chunk.BlocksPerChunk * 4 * 6 * SimpleVertex.SizeInBytes), IntPtr.Zero, BufferUsageHint.DynamicDraw);
-                Console.WriteLine("Reserving " + Chunk.BlocksPerChunk * 4 * 6 * SimpleVertex.SizeInBytes + " bytes for vertexbuffer id " + vertexBufferIds[i]);
-
-                while (vertexBufferMappings[i] == IntPtr.Zero)
-                {
-                    vertexBufferMappings[i] = GL.MapBuffer(BufferTarget.ArrayBuffer, BufferAccess.WriteOnly);
-                }
-                GL.BindBuffer(BufferTarget.ElementArrayBuffer, indexBufferIds[i]);
-                GL.BufferData(BufferTarget.ElementArrayBuffer, new IntPtr(Chunk.BlocksPerChunk * 6 * 6 * 8), IntPtr.Zero, BufferUsageHint.DynamicDraw);
-                Console.WriteLine("Reserving " + Chunk.BlocksPerChunk * 6 * 6 * 8 + " bytes for indexbuffer id " + indexBufferIds[i]);
-                indexBufferMappings[i] = GL.MapBuffer(BufferTarget.ElementArrayBuffer, BufferAccess.WriteOnly);
+                chunkBody = new CompoundBody(shapes);
+                physicsSystem.AddOject(chunkBody);
             }
-
-            for (int x = 0; x < _loadedChunkDistance; x++)
-                for (int y = 0; y < _loadedChunkDistance; y++)
-                    for (int z = 0; z < _loadedChunkDistance; z++)
-                    {
-                        int localX = x;
-                        int localY = y;
-                        int localZ = z;
-
-                        tasks.Add(Task.Run(() =>
-                        {
-                            try
-                            {
-                                int worldX = localX * Chunk.ChunkLength;
-                                int worldY = localY * Chunk.ChunkLength;
-                                int worldZ = localZ * Chunk.ChunkLength;
-
-                                int chunkIndex = x + (y * _loadedChunkDistance) + (z * _loadedChunkDistance * _loadedChunkDistance);
-
-                                uint vertexBufferId = vertexBufferIds[chunkIndex];
-                                uint indexBufferId = indexBufferIds[chunkIndex];
-                                IntPtr vertexBufferMapping = vertexBufferMappings[chunkIndex];
-                                IntPtr indexBufferMapping = indexBufferMappings[chunkIndex];
-
-                                Chunk chunk = GenChunk(worldX, worldY, worldZ);
-
-                                OpenGLChunkRenderInfo renderInfo = new OpenGLChunkRenderInfo(
-                                    chunk,
-                                    vertexBufferId,
-                                    indexBufferId,
-                                    vertexBufferMapping,
-                                    indexBufferMapping,
-                                    new Vector3(worldX, worldY, worldZ));
-                                _chunks[localX, localY, localZ] = Tuple.Create(chunk, renderInfo);
-
-                                Console.WriteLine("Chunk finished generating: " + renderInfo.ChunkCenter);
-                            }
-                            catch (Exception e)
-                            {
-                                Console.WriteLine("Error encountered in worker thread: " + e);
-                                throw;
-                            }
-                        }));
-
-                        Task.WaitAll(tasks.ToArray());
-                    }
         }
-
-        public int CurrentLength { get { return _chunks.Length; } }
 
         private Chunk GenChunk(int worldX, int worldY, int worldZ)
         {
             Chunk chunk = new Chunk();
-            float frequency = 1.0f / Chunk.ChunkLength;
+            const float xzFrequency = (1.0f / Chunk.ChunkWidth); ;
+            const float yFrequency = xzFrequency;
 
-            for (int x = 0; x < Chunk.ChunkLength; x++)
+            for (int x = 0; x < Chunk.ChunkWidth; x++)
             {
-                for (int y = 0; y < Chunk.ChunkLength; y++)
+                for (int y = 0; y < Chunk.ChunkHeight; y++)
                 {
-                    for (int z = 0; z < Chunk.ChunkLength; z++)
+                    for (int z = 0; z < Chunk.ChunkDepth; z++)
                     {
-                        float noiseVal = _noiseGen.GetNoise(((float)(worldX + x)) * frequency, (((float)(worldY + y)) * frequency), (((float)(worldZ + z)) * frequency));
+                        float noiseVal = _noiseGen.GetNoise(
+                            (worldX + x) * xzFrequency,
+                            (worldY + y) * yFrequency,
+                            (worldZ + z) * xzFrequency);
                         float secondaryNoise = _noiseGen.GetNoise(
-                            ((float)(worldX + x)) * (frequency / 4f),
-                            (((float)(worldY + y)) * (frequency / 4f)),
-                            (((float)(worldZ + z)) * (frequency / 4f)));
+                            (worldX + x) * (xzFrequency / 4f),
+                            (worldY + y) * (yFrequency / 4f),
+                            (worldZ + z) * (xzFrequency / 4f));
 
                         BlockType type;
                         if (noiseVal > 0.9f)
@@ -249,7 +168,7 @@ namespace VoxelGame.World
                         }
                         else if (noiseVal > .61f)
                         {
-                            if (secondaryNoise > 0.85f)
+                            if (secondaryNoise > 0.82f)
                             {
                                 type = BlockType.Grass;
                             }
@@ -292,7 +211,7 @@ namespace VoxelGame.World
                 if (_chunks[index] != null)
                 {
                     OpenGLChunkRenderInfo renderInfo = _chunks[index].Item2;
-                    RenderSingleChunk(_chunks[index].Item2, ref viewMatrix);
+                    RenderSingleChunk(renderInfo, ref viewMatrix);
                 }
             }
 

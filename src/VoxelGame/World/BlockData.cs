@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace VoxelGame.World
+﻿namespace VoxelGame.World
 {
     public struct BlockData
     {
@@ -14,5 +8,7 @@ namespace VoxelGame.World
         {
             Type = type;
         }
+
+        public override string ToString() => Type.ToString();
     }
 }

@@ -8,28 +8,32 @@ namespace VoxelGame.World
     public class SpatialStorageBuffer<T>
     {
         private T[] _items;
-        private int _length;
+
         private int _numItems;
 
-        public SpatialStorageBuffer(int length)
+        private int _width;
+        private int _height;
+        private int _depth;
+
+        public SpatialStorageBuffer(int width, int height, int depth)
         {
-            _items = new T[length * length * length];
-            _length = length;
+            _items = new T[width * height * depth];
+            _width = width;
+            _height = height;
+            _depth = depth;
             _numItems = _items.Length;
         }
-
-        public int Length { get { return _length; } }
 
         public int NumItems { get { return _numItems; } }
 
         public void Resize(int newLength)
         {
             T[] newItems = new T[newLength];
-            for (int x = 0; x < _length; x++)
+            for (int x = 0; x < _width; x++)
             {
-                for (int y = 0; y < _length; y++)
+                for (int y = 0; y < _height; y++)
                 {
-                    for (int z = 0; z < _length; z++)
+                    for (int z = 0; z < _depth; z++)
                     {
                         newItems[x + (y * newLength) + (z * newLength * newLength)] = this[x, y, z];
                     }
@@ -37,26 +41,26 @@ namespace VoxelGame.World
             }
 
             _items = newItems;
-            _length = newLength;
+            _numItems = newLength;
         }
 
         public T this[int x, int y, int z]
         {
             get
             {
-                if (x < 0 || y < 0 || z < 0 || x >= _length || y >= _length || z >= _length)
+                if (x < 0 || y < 0 || z < 0 || x >= _width || y >= _height || z >= _depth)
                 {
-                    throw new ArgumentOutOfRangeException(string.Format("x, y, z, length = {0}, {1}, {2}, {3}", x, y, z, _length));
+                    throw new ArgumentOutOfRangeException();
                 }
-                return _items[x + (y * _length) + (z * _length * _length)];
+                return _items[x + (y * _width) + (z * _height * _width)];
             }
             set
             {
-                if (x < 0 || y < 0 || z < 0 || x >= _length || y >= _length || z >= _length)
+                if (x < 0 || y < 0 || z < 0 || x >= _width || y >= _height || z >= _depth)
                 {
-                    throw new ArgumentOutOfRangeException(string.Format("x, y, z, length = {0}, {1}, {2}, {3}", x, y, z, _length));
+                    throw new ArgumentOutOfRangeException();
                 }
-                _items[x + (y * _length) + (z * _length * _length)] = value;
+                _items[x + (y * _width) + (z * _height * _width)] = value;
             }
         }
 

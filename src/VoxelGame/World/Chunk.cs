@@ -1,69 +1,63 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace VoxelGame.World
 {
     public class Chunk
     {
         /// <summary>
-        /// Length of a chunk, in number of blocks.
+        /// Chunk length, in blocks, in the X-axis.
         /// </summary>
-        public const int ChunkLength = 16;
+        public const int ChunkWidth = 16;
+
+        /// <summary>
+        /// Chunk length, in blocks, in the Y-axis.
+        /// </summary>
+        public const int ChunkHeight = 256;
+
+        /// <summary>
+        /// Chunk length, in blocks, in the Z-axis.
+        /// </summary>
+        public const int ChunkDepth = 16;
+
         /// <summary>
         /// Length of a single block, in units.
         /// </summary>
         public const float BlockLength = 1f;
+
         /// <summary>
         /// Total number of blocks per chunk.
         /// </summary>
-        public const int BlocksPerChunk = ChunkLength * ChunkLength * ChunkLength;
+        public const int BlocksPerChunk = ChunkWidth * ChunkHeight * ChunkDepth;
 
-        private readonly BlockData[] _blockData;
+        private readonly SpatialStorageBuffer<BlockData> _blockData;
 
         public Chunk()
         {
-            _blockData = new BlockData[ChunkLength * ChunkLength * ChunkLength];
-        }
-
-        public Chunk(BlockData[] blockData)
-        {
-            _blockData = blockData;
+            _blockData = new SpatialStorageBuffer<BlockData>(ChunkWidth, ChunkHeight, ChunkDepth);
         }
 
         public BlockData this[int x, int y, int z]
         {
             get
             {
-                if (x > ChunkLength || y > ChunkLength || z > ChunkLength)
+                if (x > ChunkWidth || y > ChunkHeight || z > ChunkDepth)
                 {
-                    throw new ArgumentOutOfRangeException("A provided coordinate was not within the range [0 - " + (ChunkLength - 1) + "]");
+                    throw new ArgumentOutOfRangeException("A provided coordinate was not valid.");
                 }
                 else
                 {
-                    return _blockData[
-                    x
-                    + (y * ChunkLength)
-                    + (z * ChunkLength * ChunkLength)
-                    ];
+                    return _blockData[x, y, z];
                 }
             }
             set
             {
-                if (x > ChunkLength || y > ChunkLength || z > ChunkLength)
+                if (x > ChunkWidth || y > ChunkHeight || z > ChunkDepth)
                 {
-                    throw new ArgumentOutOfRangeException("A provided coordinate was not within the range [0 - " + ChunkLength + "]");
+                    throw new ArgumentOutOfRangeException("A provided coordinate was not valid.");
                 }
                 else
                 {
-                    _blockData[
-                        x
-                        + (y * ChunkLength)
-                        + (z * ChunkLength * ChunkLength)
-                        ] = value;
+                    _blockData[x, y, z] = value;
                 }
             }
         }
