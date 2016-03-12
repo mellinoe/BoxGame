@@ -196,7 +196,6 @@ float4 main(PS_INPUT input) : SV_Target
 
             // Build
             var textureData = io.FontAtlas.GetTexDataAsRGBA32();
-            //io.Fonts->GetTexDataAsRGBA32(&pixels, &width, &height);
 
             // Create DX11 texture
             {
@@ -211,29 +210,10 @@ float4 main(PS_INPUT input) : SV_Target
                 texDesc.BindFlags = BindFlags.ShaderResource;
                 texDesc.CpuAccessFlags = CpuAccessFlags.None;
 
-                //D3D11_TEXTURE2D_DESC texDesc;
-                //ZeroMemory(&texDesc, sizeof(texDesc));
-                //texDesc.Width = width;
-                //texDesc.Height = height;
-                //texDesc.MipLevels = 1;
-                //texDesc.ArraySize = 1;
-                //texDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
-                //texDesc.SampleDesc.Count = 1;
-                //texDesc.Usage = D3D11_USAGE_DEFAULT;
-                //texDesc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
-                //texDesc.CPUAccessFlags = 0;
-
                 SharpDX.Direct3D11.Texture2D pTexture;
                 DataRectangle subResource = new DataRectangle(new IntPtr(textureData.Pixels), texDesc.Width * 4);
                 //subResource.SlicePitch = 0;
                 pTexture = new SharpDX.Direct3D11.Texture2D(_device, texDesc, subResource);
-
-                //ID3D11Texture2D* pTexture = NULL;
-                //D3D11_SUBRESOURCE_DATA subResource;
-                //subResource.pSysMem = pixels;
-                //subResource.SysMemPitch = texDesc.Width * 4;
-                //subResource.SysMemSlicePitch = 0;
-                //g_pd3dDevice->CreateTexture2D(&texDesc, &subResource, &pTexture);
 
                 // Create texture view
                 ShaderResourceViewDescription srvDesc = new ShaderResourceViewDescription();
@@ -243,15 +223,6 @@ float4 main(PS_INPUT input) : SV_Target
                 srvDesc.Texture2D.MostDetailedMip = 0;
                 _fontTextureView = new ShaderResourceView(_device, pTexture, srvDesc);
                 pTexture.Dispose();
-
-                //D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc;
-                //ZeroMemory(&srvDesc, sizeof(srvDesc));
-                //srvDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
-                //srvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
-                //srvDesc.Texture2D.MipLevels = texDesc.MipLevels;
-                //srvDesc.Texture2D.MostDetailedMip = 0;
-                //g_pd3dDevice->CreateShaderResourceView(pTexture, &srvDesc, &g_pFontTextureView);
-                //pTexture->Release();
             }
 
             // Store our identifier
@@ -270,24 +241,10 @@ float4 main(PS_INPUT input) : SV_Target
                 samplerDesc.MinimumLod = 0f;
                 samplerDesc.MaximumLod = 0f;
                 _fontSampler = new SamplerState(_device, samplerDesc);
-
-                //D3D11_SAMPLER_DESC samplerDesc;
-                //ZeroMemory(&samplerDesc, sizeof(samplerDesc));
-                //samplerDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
-                //samplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
-                //samplerDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
-                //samplerDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
-                //samplerDesc.MipLODBias = 0.f;
-                //samplerDesc.ComparisonFunc = D3D11_COMPARISON_ALWAYS;
-                //samplerDesc.MinLOD = 0.f;
-                //samplerDesc.MaxLOD = 0.f;
-                //g_pd3dDevice->CreateSamplerState(&samplerDesc, &g_pFontSampler);
             }
 
             // Cleanup (don't clear the input data if you want to append new fonts later)
             io.FontAtlas.ClearTexData();
-            //io.Fonts->ClearInputData();
-            //io.Fonts->ClearTexData();
         }
 
         private SharpDX.Direct3D11.Buffer g_pVB;
@@ -334,11 +291,6 @@ float4 main(PS_INPUT input) : SV_Target
 
             DataBox vtx_resource = deviceContext.MapSubresource(g_pVB, 0, MapMode.WriteDiscard, MapFlags.None);
             DataBox idx_resource = deviceContext.MapSubresource(g_pIB, 0, MapMode.WriteDiscard, MapFlags.None);
-            //D3D11_MAPPED_SUBRESOURCE vtx_resource, idx_resource;
-            //if (g_pd3dDeviceContext->Map(g_pVB, 0, D3D11_MAP_WRITE_DISCARD, 0, &vtx_resource) != S_OK)
-            //    return;
-            //if (g_pd3dDeviceContext->Map(g_pIB, 0, D3D11_MAP_WRITE_DISCARD, 0, &idx_resource) != S_OK)
-            //    return;
 
             DrawVert* vtx_dst = (DrawVert*)vtx_resource.DataPointer;
             ushort* idx_dst = (ushort*)idx_resource.DataPointer;
@@ -350,14 +302,12 @@ float4 main(PS_INPUT input) : SV_Target
                     vtx_dst,
                     cmd_list->VtxBuffer.Size * sizeof(DrawVert),
                     cmd_list->VtxBuffer.Size * sizeof(DrawVert));
-                //memcpy(vtx_dst, &cmd_list->VtxBuffer[0], cmd_list->VtxBuffer.size() * sizeof(ImDrawVert));
 
                 System.Buffer.MemoryCopy(
                     cmd_list->IdxBuffer.Data,
                     idx_dst,
                     cmd_list->IdxBuffer.Size * sizeof(ushort),
                     cmd_list->IdxBuffer.Size * sizeof(ushort));
-                //memcpy(idx_dst, &cmd_list->IdxBuffer[0], cmd_list->IdxBuffer.size() * sizeof(ImDrawIdx));
 
                 vtx_dst += cmd_list->VtxBuffer.Size;
                 idx_dst += cmd_list->IdxBuffer.Size;
@@ -365,26 +315,8 @@ float4 main(PS_INPUT input) : SV_Target
             deviceContext.UnmapSubresource(g_pVB, 0);
             deviceContext.UnmapSubresource(g_pIB, 0);
 
-            //g_pd3dDeviceContext->Unmap(g_pVB, 0);
-            //g_pd3dDeviceContext->Unmap(g_pIB, 0);
-
             // Setup orthographic projection matrix into our constant buffer
             {
-                //D3D11_MAPPED_SUBRESOURCE mappedResource;
-                //if (g_pd3dDeviceContext->Map(g_pVertexConstantBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource) != S_OK)
-                //    return;
-
-                // I checked; the below is identical to calling Matrix4x4.CreateOrthographicOffCenter.
-                //float L = 0.0f;
-                //float R = ImGui.GetIO().DisplaySize.X;
-                //float B = ImGui.GetIO().DisplaySize.Y;
-                //float T = 0.0f;
-                //Matrix4x4 mvp = new Matrix4x4(
-                //    2.0f / (R - L), 0.0f, 0.0f, 0.0f,
-                //    0.0f, 2.0f / (T - B), 0.0f, 0.0f,
-                //    0.0f, 0.0f, 0.5f, 0.0f,
-                //    (R + L) / (L - R), (T + B) / (B - T), 0.5f, 1.0f);
-
                 var io = ImGui.GetIO();
                 Matrix4x4 mvp = Matrix4x4.CreateOrthographicOffCenter(
                     0.0f,
@@ -399,17 +331,11 @@ float4 main(PS_INPUT input) : SV_Target
 
                 System.Buffer.MemoryCopy(&mvp, pConstantBuffer, sizeof(Matrix4x4), sizeof(Matrix4x4));
                 deviceContext.UnmapSubresource(g_pVertexConstantBuffer, 0);
-                //deviceContext.UpdateSubresource(ref mvp, g_pVertexConstantBuffer);
-
-                //memcpy(&pConstantBuffer->mvp, mvp, sizeof(mvp));
-                //g_pd3dDeviceContext->Unmap(g_pVertexConstantBuffer, 0);
             }
 
             // Setup viewport
             {
                 RawViewportF vp = new RawViewportF();
-                //D3D11_VIEWPORT vp;
-                //memset(&vp, 0, sizeof(D3D11_VIEWPORT));
                 vp.Width = ImGui.GetIO().DisplaySize.X;
                 vp.Height = ImGui.GetIO().DisplaySize.Y;
                 vp.MinDepth = 0.0f;
@@ -417,7 +343,6 @@ float4 main(PS_INPUT input) : SV_Target
                 vp.X = 0;
                 vp.Y = 0;
                 deviceContext.Rasterizer.SetViewport(0, 0, _windowInfo.Width, _windowInfo.Height, 0, 1);
-                //g_pd3dDeviceContext->RSSetViewports(1, &vp);
             }
 
             // Bind shader and vertex buffers
@@ -430,29 +355,17 @@ float4 main(PS_INPUT input) : SV_Target
             ia.SetIndexBuffer(g_pIB, SharpDX.DXGI.Format.R16_UInt, 0);
             ia.PrimitiveTopology = SharpDX.Direct3D.PrimitiveTopology.TriangleList;
 
-            //g_pd3dDeviceContext->IASetInputLayout(g_pInputLayout);
-            //g_pd3dDeviceContext->IASetVertexBuffers(0, 1, &g_pVB, &stride, &offset);
-            //g_pd3dDeviceContext->IASetIndexBuffer(g_pIB, DXGI_FORMAT_R16_UINT, 0);
-            //g_pd3dDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-
             deviceContext.VertexShader.SetShader(_vertexShader, null, 0);
             deviceContext.VertexShader.SetConstantBuffer(0, g_pVertexConstantBuffer);
-            //g_pd3dDeviceContext->VSSetShader(g_pVertexShader, NULL, 0);
-            //g_pd3dDeviceContext->VSSetConstantBuffers(0, 1, &g_pVertexConstantBuffer);
 
             deviceContext.PixelShader.SetShader(_pixelShader, null, 0);
             deviceContext.PixelShader.SetSamplers(0, 1, _fontSampler);
-            //g_pd3dDeviceContext->PSSetShader(g_pPixelShader, NULL, 0);
-            //g_pd3dDeviceContext->PSSetSamplers(0, 1, &g_pFontSampler);
 
             // Setup render state
             RawColor4 blendFactor = new RawColor4(0f, 0f, 0f, 0f);
-            //const float[] blendFactor = { 0f, 0f, 0f, 0f };
             deviceContext.OutputMerger.SetBlendState(_blendState, blendFactor, 0xffffffff);
-            //g_pd3dDeviceContext->OMSetBlendState(g_pBlendState, blendFactor, 0xffffffff);
 
             deviceContext.Rasterizer.State = _rasterizerState;
-            //g_pd3dDeviceContext->RSSetState(g_pRasterizerState);
 
             ImGui.ScaleClipRects(draw_data, ImGui.GetIO().DisplayFramebufferScale);
 
@@ -480,19 +393,6 @@ float4 main(PS_INPUT input) : SV_Target
                         deviceContext.DrawIndexed((int)pcmd->ElemCount, idx_offset, vtx_offset);
                     }
 
-                    //const ImDrawCmd* pcmd = &cmd_list->CmdBuffer[cmd_i];
-                    //if (pcmd->UserCallback)
-                    //{
-                    //    pcmd->UserCallback(cmd_list, pcmd);
-                    //}
-                    //else
-                    //{
-                    //    const D3D11_RECT r = { (LONG)pcmd->ClipRect.x, (LONG)pcmd->ClipRect.y, (LONG)pcmd->ClipRect.z, (LONG)pcmd->ClipRect.w };
-                    //    g_pd3dDeviceContext->PSSetShaderResources(0, 1, (ID3D11ShaderResourceView**)&pcmd->TextureId);
-                    //    g_pd3dDeviceContext->RSSetScissorRects(1, &r);
-                    //    g_pd3dDeviceContext->DrawIndexed(pcmd->ElemCount, idx_offset, vtx_offset);
-                    //}
-
                     idx_offset += (int)pcmd->ElemCount;
                 }
                 vtx_offset += cmd_list->VtxBuffer.Size;
@@ -502,10 +402,6 @@ float4 main(PS_INPUT input) : SV_Target
             deviceContext.InputAssembler.InputLayout = null;
             deviceContext.PixelShader.SetShader(null, null, 0);
             deviceContext.VertexShader.SetShader(null, null, 0);
-
-            //g_pd3dDeviceContext->IASetInputLayout(NULL);
-            //g_pd3dDeviceContext->PSSetShader(NULL, NULL, 0);
-            //g_pd3dDeviceContext->VSSetShader(NULL, NULL, 0);
         }
 
         public override void Dispose()
